@@ -374,17 +374,23 @@ var table = {
                 });
             },
             // 下载模板
-            importTemplate: function() {
+            importTemplate: function(directDownload) {
                 table.set();
-                $.get(table.options.importTemplateUrl, function(result) {
-                    if (result.code == web_status.SUCCESS) {
-                        window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
-                    } else if (result.code == web_status.WARNING) {
-                        $.modal.alertWarning(result.msg)
-                    } else {
-                        $.modal.alertError(result.msg);
-                    }
-                });
+                if (directDownload){
+                    window.location.href = table.options.importTemplateUrl;
+                } else {
+                    $.get(table.options.importTemplateUrl, function(result) {
+                        if (result.code == web_status.SUCCESS) {
+                            window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+                        } else if (result.code == web_status.WARNING) {
+                            $.modal.alertWarning(result.msg)
+                        } else {
+                            $.modal.alertError(result.msg);
+                        }
+                    });
+                }
+
+
             },
             // 导入数据
             importExcel: function(formId, width, height) {
@@ -404,6 +410,21 @@ var table = {
                     btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
                     // 弹层外区域关闭
                     shadeClose: true,
+                    success: function(layero){
+
+                        if($(".select-month")){
+                            layui.use('laydate', function(){
+                                var laydate = layui.laydate;
+                                //年月选择器
+                                laydate.render({
+                                    elem: '.select-month',
+                                    type: 'month',
+                                    value: new Date()
+                                });
+                            });
+                        }
+
+                    },
                     btn1: function(index, layero){
                         var file = layero.find('#file').val();
                         if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx'))){

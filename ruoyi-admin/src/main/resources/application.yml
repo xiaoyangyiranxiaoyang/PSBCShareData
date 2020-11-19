@@ -3,9 +3,9 @@ ruoyi:
   # 名称
   name: PSBC
   # 版本
-  version: 4.5.0
+  version: 1.0.0
   # 版权年份
-  copyrightYear: 2019
+  copyrightYear: 2020
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/sharedata/uploadPath，Linux配置 /home/sharedata/uploadPath）
@@ -73,7 +73,7 @@ spring:
 # MyBatis
 mybatis:
     # 搜索指定包别名
-    typeAliasesPackage: com.ruoyi.**.domain
+    typeAliasesPackage: com.ruoyi.**.domain,com.psbc.datashare.**.domain
     # 配置mapper的扫描，找到所有的mapper.xml映射文件
     mapperLocations: classpath*:mapper/**/*Mapper.xml
     # 加载全局的配置文件

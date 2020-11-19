@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiIncomeShowMapper">
+    
+    <resultMap type="KpiIncomeShow" id="KpiIncomeShowResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="peopleNum"    column="people_num"    />
+        <result property="incomeTotalMonth"    column="income_total_month"    />
+        <result property="incomeTotalYear"    column="income_total_year"    />
+        <result property="incomeSelfMonth"    column="income_self_month"    />
+        <result property="incomeSelfYear"    column="income_self_year"    />
+        <result property="incomeSelfRise"    column="income_self_rise"    />
+        <result property="incomeSelfProgress"    column="income_self_progress"    />
+        <result property="incomeSelfPercapita"    column="income_self_percapita"    />
+        <result property="netProfitMonth"    column="net_profit_month"    />
+        <result property="netProfitYear"    column="net_profit_year"    />
+        <result property="netProfitRise"    column="net_profit_rise"    />
+        <result property="netProfitProgress"    column="net_profit_progress"    />
+        <result property="netProfitPercapita"    column="net_profit_percapita"    />
+        <result property="incomeProfitRate"    column="income_profit_rate"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiIncomeShowVo">
+        select id, district, people_num, income_total_month, income_total_year, income_self_month, income_self_year, income_self_rise, income_self_progress, income_self_percapita, net_profit_month, net_profit_year, net_profit_rise, net_profit_progress, net_profit_percapita, income_profit_rate, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_income_show
+    </sql>
+
+    <select id="selectKpiIncomeShowList" parameterType="KpiIncomeShow" resultMap="KpiIncomeShowResult">
+        <include refid="selectKpiIncomeShowVo"/>
+        <where>  
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiIncomeShowById" parameterType="Long" resultMap="KpiIncomeShowResult">
+        <include refid="selectKpiIncomeShowVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectKpiIncomeShowByDataDate" parameterType="Date" resultMap="KpiIncomeShowResult">
+        <include refid="selectKpiIncomeShowVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <insert id="insertKpiIncomeShow" parameterType="KpiIncomeShow">
+        insert into kpi_income_show
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="district != null and district != ''">district,</if>
+            <if test="peopleNum != null">people_num,</if>
+            <if test="incomeTotalMonth != null">income_total_month,</if>
+            <if test="incomeTotalYear != null">income_total_year,</if>
+            <if test="incomeSelfMonth != null">income_self_month,</if>
+            <if test="incomeSelfYear != null">income_self_year,</if>
+            <if test="incomeSelfRise != null">income_self_rise,</if>
+            <if test="incomeSelfProgress != null">income_self_progress,</if>
+            <if test="incomeSelfPercapita != null">income_self_percapita,</if>
+            <if test="netProfitMonth != null">net_profit_month,</if>
+            <if test="netProfitYear != null">net_profit_year,</if>
+            <if test="netProfitRise != null">net_profit_rise,</if>
+            <if test="netProfitProgress != null">net_profit_progress,</if>
+            <if test="netProfitPercapita != null">net_profit_percapita,</if>
+            <if test="incomeProfitRate != null">income_profit_rate,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="peopleNum != null">#{peopleNum},</if>
+            <if test="incomeTotalMonth != null">#{incomeTotalMonth},</if>
+            <if test="incomeTotalYear != null">#{incomeTotalYear},</if>
+            <if test="incomeSelfMonth != null">#{incomeSelfMonth},</if>
+            <if test="incomeSelfYear != null">#{incomeSelfYear},</if>
+            <if test="incomeSelfRise != null">#{incomeSelfRise},</if>
+            <if test="incomeSelfProgress != null">#{incomeSelfProgress},</if>
+            <if test="incomeSelfPercapita != null">#{incomeSelfPercapita},</if>
+            <if test="netProfitMonth != null">#{netProfitMonth},</if>
+            <if test="netProfitYear != null">#{netProfitYear},</if>
+            <if test="netProfitRise != null">#{netProfitRise},</if>
+            <if test="netProfitProgress != null">#{netProfitProgress},</if>
+            <if test="netProfitPercapita != null">#{netProfitPercapita},</if>
+            <if test="incomeProfitRate != null">#{incomeProfitRate},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertKpiIncomeShowBatch" parameterType="KpiIncomeShow">
+        insert into kpi_income_show(district,people_num,income_total_month,income_total_year,income_self_month,income_self_year,income_self_rise,income_self_progress,income_self_percapita,net_profit_month,net_profit_year,net_profit_rise,net_profit_progress,net_profit_percapita,income_profit_rate,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="kpiIncomeShows" item="kis" separator=",">
+            (#{kis.district},#{kis.peopleNum},#{kis.incomeTotalMonth},#{kis.incomeTotalYear},#{kis.incomeSelfMonth},#{kis.incomeSelfYear},#{kis.incomeSelfRise},#{kis.incomeSelfProgress},#{kis.incomeSelfPercapita},#{kis.netProfitMonth},#{kis.netProfitYear},#{kis.netProfitRise},#{kis.netProfitProgress},#{kis.netProfitPercapita},#{kis.incomeProfitRate},#{kis.dataDate},#{kis.delFlag},#{kis.createBy},#{kis.createTime},#{kis.updateBy},#{kis.updateTime},#{kis.remark})
+        </foreach>
+    </insert>
+
+    <update id="updateKpiIncomeShow" parameterType="KpiIncomeShow">
+        update kpi_income_show
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="peopleNum != null">people_num = #{peopleNum},</if>
+            <if test="incomeTotalMonth != null">income_total_month = #{incomeTotalMonth},</if>
+            <if test="incomeTotalYear != null">income_total_year = #{incomeTotalYear},</if>
+            <if test="incomeSelfMonth != null">income_self_month = #{incomeSelfMonth},</if>
+            <if test="incomeSelfYear != null">income_self_year = #{incomeSelfYear},</if>
+            <if test="incomeSelfRise != null">income_self_rise = #{incomeSelfRise},</if>
+            <if test="incomeSelfProgress != null">income_self_progress = #{incomeSelfProgress},</if>
+            <if test="incomeSelfPercapita != null">income_self_percapita = #{incomeSelfPercapita},</if>
+            <if test="netProfitMonth != null">net_profit_month = #{netProfitMonth},</if>
+            <if test="netProfitYear != null">net_profit_year = #{netProfitYear},</if>
+            <if test="netProfitRise != null">net_profit_rise = #{netProfitRise},</if>
+            <if test="netProfitProgress != null">net_profit_progress = #{netProfitProgress},</if>
+            <if test="netProfitPercapita != null">net_profit_percapita = #{netProfitPercapita},</if>
+            <if test="incomeProfitRate != null">income_profit_rate = #{incomeProfitRate},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiIncomeShowById" parameterType="Long">
+        delete from kpi_income_show where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiIncomeShowByDataDate" parameterType="Date">
+        delete from kpi_income_show where data_date = #{dataDate}
+    </delete>
+
+    <delete id="deleteKpiIncomeShowByIds" parameterType="String">
+        delete from kpi_income_show where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

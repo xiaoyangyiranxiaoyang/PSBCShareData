@@ -1,46 +1,5 @@
 package com.ruoyi.common.utils.poi;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataValidation;
-import org.apache.poi.ss.usermodel.DataValidationConstraint;
-import org.apache.poi.ss.usermodel.DataValidationHelper;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
 import com.ruoyi.common.annotation.Excel.Type;
@@ -53,6 +12,20 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Excel相关处理
@@ -1013,5 +986,79 @@ public class ExcelUtil<T>
             return val;
         }
         return val;
+    }
+
+    /********************** custom *********************/
+    /**
+     * 通过sheetName获取当前sheet信息
+     * row and column index begin 1
+     * @param is
+     * @param sheetName sheet名, if is block get the first sheet
+     * @return 《行号，《列号，值》》
+     * @throws Exception
+     */
+    public Map<Integer, Map<Integer, Object>> readExcelWithRowBySheetName(InputStream is, String sheetName) throws Exception {
+        Map<Integer, Map<Integer, Object>> resultMap = new HashMap();
+        int rowRecord = 0;
+        String cloRecord = "";
+        try {
+            this.wb = WorkbookFactory.create(is);
+            if (StringUtils.isNotBlank(sheetName)){
+                this.sheet = this.wb.getSheet(sheetName);
+            } else {
+                this.sheet = this.wb.getSheetAt(0);
+            }
+
+            if (sheet == null || sheet.getLastRowNum() < 0) return resultMap;
+
+            for (int i = 0; i <= sheet.getLastRowNum(); i++) { // 循环行
+                rowRecord = i + 1;
+                Row row = sheet.getRow(i);
+                Map<Integer, Object> rowMap = new LinkedHashMap<>();
+                if (row != null && row.getLastCellNum() > 0) {
+                    for (int m = 0; m < row.getLastCellNum(); m++) { // 循环列
+                        cloRecord = excelColIndexToStr(m+1);
+                        if (row.getCell(m) != null) {
+                            Object valObj = getCellValue(row, m);
+                            rowMap.put((m+1), valObj);
+                        }
+                    }
+                }
+                resultMap.put(i + 1, rowMap);
+            }
+
+            return resultMap;
+        } catch (IOException e) {
+            throw new Exception("第" + rowRecord + "行，第" + cloRecord + "列，文件读取错误");
+        } catch (IllegalStateException e) {
+            throw new Exception("第" + rowRecord + "行，第" + cloRecord + "列，请将所有单元格的格式转换成文本");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("第" + rowRecord + "行，第" + cloRecord + "列，文件解析失败");
+        } finally {
+            if (is != null)
+                is.close();
+        }
+    }
+
+    /**
+     * Excel column index begin 1
+     * @param columnIndex
+     * @return
+     */
+    public static String excelColIndexToStr(int columnIndex) {
+        if (columnIndex <= 0) {
+            return null;
+        }
+        String columnStr = "";
+        columnIndex--;
+        do {
+            if (columnStr.length() > 0) {
+                columnIndex--;
+            }
+            columnStr = ((char) (columnIndex % 26 + (int) 'A')) + columnStr;
+            columnIndex = (int) ((columnIndex - columnIndex % 26) / 26);
+        } while (columnIndex > 0);
+        return columnStr;
     }
 }
