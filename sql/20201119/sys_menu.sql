@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 19/11/2020 17:50:46
+ Date: 23/11/2020 16:21:43
 */
 
 SET NAMES utf8mb4;
@@ -130,10 +130,10 @@ INSERT INTO `sys_menu` VALUES (1058, '生成修改', 114, 2, '#', '', 'F', '0', 
 INSERT INTO `sys_menu` VALUES (1059, '生成删除', 114, 3, '#', '', 'F', '0', 'tool:gen:remove', '#', 'admin', '2020-11-09 15:58:07', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (1060, '预览代码', 114, 4, '#', '', 'F', '0', 'tool:gen:preview', '#', 'admin', '2020-11-09 15:58:07', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (1061, '生成代码', 114, 5, '#', '', 'F', '0', 'tool:gen:code', '#', 'admin', '2020-11-09 15:58:07', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (40101, '全行KPI指标（一）查询', 40006, 1, '#', '', 'F', '0', 'datashare/kpi:incomeshow:list', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (40102, '全行KPI指标（一）新增', 40006, 2, '#', '', 'F', '0', 'datashare/kpi:incomeshow:add', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (40103, '全行KPI指标（一）修改', 40006, 3, '#', '', 'F', '0', 'datashare/kpi:incomeshow:edit', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (40104, '全行KPI指标（一）删除', 40006, 4, '#', '', 'F', '0', 'datashare/kpi:incomeshow:remove', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (40105, '全行KPI指标（一）导出', 40006, 5, '#', '', 'F', '0', 'datashare/kpi:incomeshow:export', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (40101, '全行KPI指标（一）查询', 401, 1, '#', '', 'F', '0', 'datashare/kpi:incomeshow:list', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (40102, '全行KPI指标（一）新增', 401, 2, '#', '', 'F', '0', 'datashare/kpi:incomeshow:add', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (40103, '全行KPI指标（一）修改', 401, 3, '#', '', 'F', '0', 'datashare/kpi:incomeshow:edit', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (40104, '全行KPI指标（一）删除', 401, 4, '#', '', 'F', '0', 'datashare/kpi:incomeshow:remove', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (40105, '全行KPI指标（一）导出', 401, 5, '#', '', 'F', '0', 'datashare/kpi:incomeshow:export', '#', 'admin', '2020-11-18 11:34:20', '', NULL, '');
 
 SET FOREIGN_KEY_CHECKS = 1;
