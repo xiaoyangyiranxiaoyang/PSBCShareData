@@ -113,6 +113,7 @@ public class KpiIncomeShowServiceImpl implements IKpiIncomeShowService
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public String importKpiIncomeShow(InputStream is, String dataMonth, String operName) {
+        String rrMsg = "导入数据失败";
         try {
             String dataDateStr =  LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01";
             if (StringUtils.isNotBlank(dataMonth)){
@@ -132,7 +133,9 @@ public class KpiIncomeShowServiceImpl implements IKpiIncomeShowService
                 if (columnDataMap != null && !columnDataMap.isEmpty()){
                     KpiIncomeShow one = new KpiIncomeShow();
                     // 地区
-                    one.setDistrict(Convert.toStr(columnDataMap.get(1)));
+                    String district = Convert.toStr(columnDataMap.get(1));
+                    district = district.replaceAll("\\s*", "");
+                    one.setDistrict(district); // 替换空白字符（空格、制表符、换页符等）
                     // 从业人数
                     one.setPeopleNum(Convert.toLong(columnDataMap.get(2)));
                     // 总收入
@@ -170,9 +173,10 @@ public class KpiIncomeShowServiceImpl implements IKpiIncomeShowService
                 // 导入当月的数据
                 kpiIncomeShowMapper.insertKpiIncomeShowBatch(datasToInsert);
             }
+            rrMsg = "导入数据成功!";
         } catch (Exception e){
             throw new BusinessException("导入数据失败", e);
         }
-        return null;
+        return rrMsg;
     }
 }

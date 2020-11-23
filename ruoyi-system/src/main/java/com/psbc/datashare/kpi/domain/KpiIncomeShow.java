@@ -8,7 +8,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 全行KPI指标（一）对象 kpi_income_show
+ * 全行KPI指标（一）对象 kpi_show_income
  * 
  * @author mql
  * @date 2020-11-18

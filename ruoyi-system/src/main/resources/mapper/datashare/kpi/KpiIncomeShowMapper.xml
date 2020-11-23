@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectKpiIncomeShowVo">
-        select id, district, people_num, income_total_month, income_total_year, income_self_month, income_self_year, income_self_rise, income_self_progress, income_self_percapita, net_profit_month, net_profit_year, net_profit_rise, net_profit_progress, net_profit_percapita, income_profit_rate, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_income_show
+        select id, district, people_num, income_total_month, income_total_year, income_self_month, income_self_year, income_self_rise, income_self_progress, income_self_percapita, net_profit_month, net_profit_year, net_profit_rise, net_profit_progress, net_profit_percapita, income_profit_rate, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_income
     </sql>
 
     <select id="selectKpiIncomeShowList" parameterType="KpiIncomeShow" resultMap="KpiIncomeShowResult">
@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertKpiIncomeShow" parameterType="KpiIncomeShow">
-        insert into kpi_income_show
+        insert into kpi_show_income
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
             <if test="district != null and district != ''">district,</if>
@@ -106,7 +106,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <insert id="insertKpiIncomeShowBatch" parameterType="KpiIncomeShow">
-        insert into kpi_income_show(district,people_num,income_total_month,income_total_year,income_self_month,income_self_year,income_self_rise,income_self_progress,income_self_percapita,net_profit_month,net_profit_year,net_profit_rise,net_profit_progress,net_profit_percapita,income_profit_rate,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        insert into kpi_show_income(district,people_num,income_total_month,income_total_year,income_self_month,income_self_year,income_self_rise,income_self_progress,income_self_percapita,net_profit_month,net_profit_year,net_profit_rise,net_profit_progress,net_profit_percapita,income_profit_rate,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
         values
         <foreach collection="kpiIncomeShows" item="kis" separator=",">
             (#{kis.district},#{kis.peopleNum},#{kis.incomeTotalMonth},#{kis.incomeTotalYear},#{kis.incomeSelfMonth},#{kis.incomeSelfYear},#{kis.incomeSelfRise},#{kis.incomeSelfProgress},#{kis.incomeSelfPercapita},#{kis.netProfitMonth},#{kis.netProfitYear},#{kis.netProfitRise},#{kis.netProfitProgress},#{kis.netProfitPercapita},#{kis.incomeProfitRate},#{kis.dataDate},#{kis.delFlag},#{kis.createBy},#{kis.createTime},#{kis.updateBy},#{kis.updateTime},#{kis.remark})
@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateKpiIncomeShow" parameterType="KpiIncomeShow">
-        update kpi_income_show
+        update kpi_show_income
         <trim prefix="SET" suffixOverrides=",">
             <if test="district != null and district != ''">district = #{district},</if>
             <if test="peopleNum != null">people_num = #{peopleNum},</if>
@@ -143,15 +143,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteKpiIncomeShowById" parameterType="Long">
-        delete from kpi_income_show where id = #{id}
+        delete from kpi_show_income where id = #{id}
     </delete>
 
     <delete id="deleteKpiIncomeShowByDataDate" parameterType="Date">
-        delete from kpi_income_show where data_date = #{dataDate}
+        delete from kpi_show_income where data_date = #{dataDate}
     </delete>
 
     <delete id="deleteKpiIncomeShowByIds" parameterType="String">
-        delete from kpi_income_show where id in 
+        delete from kpi_show_income where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
