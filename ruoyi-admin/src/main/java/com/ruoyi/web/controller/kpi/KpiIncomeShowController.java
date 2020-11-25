@@ -75,6 +75,13 @@ public class KpiIncomeShowController extends BaseController
         return util.exportExcel(list, "incomeshow");
     }
 
+    /**
+     * 导入全行KPI指标（一）数据
+     * @param file
+     * @param dataMonth
+     * @return
+     * @throws Exception
+     */
     @Log(title = "全行KPI指标（一）", businessType = BusinessType.IMPORT)
     @RequiresPermissions("datashare/kpi:incomeshow:import")
     @PostMapping("/importData")
@@ -86,6 +93,10 @@ public class KpiIncomeShowController extends BaseController
         return AjaxResult.success(message);
     }
 
+    /**
+     * 全行KPI指标（一）导入模板下载
+     * @param response
+     */
     @RequiresPermissions("datashare/kpi:incomeshow:view")
     @GetMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
@@ -98,7 +109,7 @@ public class KpiIncomeShowController extends BaseController
             FileUtils.writeBytes(f, response.getOutputStream());
         } catch (Exception e) {
             logger.error("下载文件（Template-KPI1.xls ）异常{}", e.getMessage());
-            throw new BusinessException("下载文件（Template-KPI1.xls ），请联系网站管理员！");
+            throw new BusinessException("下载文件（Template-KPI1.xls）异常，请联系网站管理员！");
         }
     }
 

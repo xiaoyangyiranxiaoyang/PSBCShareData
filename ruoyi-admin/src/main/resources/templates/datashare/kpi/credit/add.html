@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增全行KPI指标（二）')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-credit-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">地区：</label>
+                <div class="col-sm-8">
+                    <input name="district" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">存款合计-余额：</label>
+                <div class="col-sm-8">
+                    <input name="depositBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">存款合计-月增：</label>
+                <div class="col-sm-8">
+                    <input name="depositGrowthM" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">存款合计-年增：</label>
+                <div class="col-sm-8">
+                    <input name="depositGrowthY" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮储自营-余额：</label>
+                <div class="col-sm-8">
+                    <input name="selfBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮储自营-月增：</label>
+                <div class="col-sm-8">
+                    <input name="selfGrowthM" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮储自营-年增：</label>
+                <div class="col-sm-8">
+                    <input name="selfGrowthY" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮储代理-余额：</label>
+                <div class="col-sm-8">
+                    <input name="agentBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮储代理-月增：</label>
+                <div class="col-sm-8">
+                    <input name="agentGrowthM" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮储代理-年增：</label>
+                <div class="col-sm-8">
+                    <input name="agentGrowthY" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司存款-余额：</label>
+                <div class="col-sm-8">
+                    <input name="companyBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司存款-月增：</label>
+                <div class="col-sm-8">
+                    <input name="companyGrowthM" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司存款-年增：</label>
+                <div class="col-sm-8">
+                    <input name="companyGrowthY" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">不良率：</label>
+                <div class="col-sm-8">
+                    <input name="unhealthyRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">逾期率：</label>
+                <div class="col-sm-8">
+                    <input name="overdueRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="dataDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">删除标志：</label>
+                <div class="col-sm-8">
+                    <input name="delFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "datashare/kpi/credit"
+        $("#form-credit-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-credit-add').serialize());
+            }
+        }
+
+        $("input[name='dataDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -393,7 +393,7 @@ var table = {
 
             },
             // 导入数据
-            importExcel: function(formId, width, height) {
+            importExcel: function(formId, width, height, title) {
             	table.set();
             	var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
             	var _width = $.common.isEmpty(width) ? "400" : width;
@@ -405,7 +405,7 @@ var table = {
                     //不固定
                     maxmin: true,
                     shade: 0.3,
-                    title: '导入' + table.options.modalName + '数据',
+                    title: title ? title : ('导入' + table.options.modalName + '数据'),
                     content: $('#' + currentId).html(),
                     btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
                     // 弹层外区域关闭

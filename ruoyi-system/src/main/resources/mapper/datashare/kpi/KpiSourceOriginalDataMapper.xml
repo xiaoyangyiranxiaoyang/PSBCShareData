@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiSourceOriginalDataMapper">
+    
+    <resultMap type="KpiSourceOriginalData" id="KpiSourceOriginalDataResult">
+        <result property="id"    column="id"    />
+        <result property="indicatorNum"    column="indicator_num"    />
+        <result property="indicatorName"    column="indicator_name"    />
+        <result property="quanSheng"    column="quan_sheng"    />
+        <result property="benBu"    column="ben_bu"    />
+        <result property="jiGuan"    column="ji_guan"    />
+        <result property="chengXi"    column="cheng_xi"    />
+        <result property="daTong"    column="da_tong"    />
+        <result property="haiDong"    column="hai_dong"    />
+        <result property="chengZhong"    column="cheng_zhong"    />
+        <result property="haiNan"    column="hai_nan"    />
+        <result property="yuShu"    column="yu_shu"    />
+        <result property="haiXi"    column="hai_xi"    />
+        <result property="haiBei"    column="hai_bei"    />
+        <result property="huangNan"    column="huang_nan"    />
+        <result property="guoLuo"    column="guo_luo"    />
+        <result property="geErMu"    column="ge_er_mu"    />
+        <result property="yingYiBu"    column="ying_yi_bu"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiSourceOriginalDataVo">
+        select id, indicator_num, indicator_name, quan_sheng, ben_bu, ji_guan, cheng_xi, da_tong, hai_dong, cheng_zhong, hai_nan, yu_shu, hai_xi, hai_bei, huang_nan, guo_luo, ge_er_mu, ying_yi_bu, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_original_data
+    </sql>
+
+    <select id="selectKpiSourceOriginalDataList" parameterType="KpiSourceOriginalData" resultMap="KpiSourceOriginalDataResult">
+        <include refid="selectKpiSourceOriginalDataVo"/>
+        <where>  
+            <if test="indicatorNum != null  and indicatorNum != ''"> and indicator_num = #{indicatorNum}</if>
+            <if test="indicatorName != null  and indicatorName != ''"> and indicator_name like concat('%', #{indicatorName}, '%')</if>
+            <if test="quanSheng != null "> and quan_sheng = #{quanSheng}</if>
+            <if test="benBu != null "> and ben_bu = #{benBu}</if>
+            <if test="jiGuan != null "> and ji_guan = #{jiGuan}</if>
+            <if test="chengXi != null "> and cheng_xi = #{chengXi}</if>
+            <if test="daTong != null "> and da_tong = #{daTong}</if>
+            <if test="haiDong != null "> and hai_dong = #{haiDong}</if>
+            <if test="chengZhong != null "> and cheng_zhong = #{chengZhong}</if>
+            <if test="haiNan != null "> and hai_nan = #{haiNan}</if>
+            <if test="yuShu != null "> and yu_shu = #{yuShu}</if>
+            <if test="haiXi != null "> and hai_xi = #{haiXi}</if>
+            <if test="haiBei != null "> and hai_bei = #{haiBei}</if>
+            <if test="huangNan != null "> and huang_nan = #{huangNan}</if>
+            <if test="guoLuo != null "> and guo_luo = #{guoLuo}</if>
+            <if test="geErMu != null "> and ge_er_mu = #{geErMu}</if>
+            <if test="yingYiBu != null "> and ying_yi_bu = #{yingYiBu}</if>
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiSourceOriginalDataById" parameterType="Long" resultMap="KpiSourceOriginalDataResult">
+        <include refid="selectKpiSourceOriginalDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiSourceOriginalData" parameterType="KpiSourceOriginalData" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_source_original_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="indicatorNum != null and indicatorNum != ''">indicator_num,</if>
+            <if test="indicatorName != null">indicator_name,</if>
+            <if test="quanSheng != null">quan_sheng,</if>
+            <if test="benBu != null">ben_bu,</if>
+            <if test="jiGuan != null">ji_guan,</if>
+            <if test="chengXi != null">cheng_xi,</if>
+            <if test="daTong != null">da_tong,</if>
+            <if test="haiDong != null">hai_dong,</if>
+            <if test="chengZhong != null">cheng_zhong,</if>
+            <if test="haiNan != null">hai_nan,</if>
+            <if test="yuShu != null">yu_shu,</if>
+            <if test="haiXi != null">hai_xi,</if>
+            <if test="haiBei != null">hai_bei,</if>
+            <if test="huangNan != null">huang_nan,</if>
+            <if test="guoLuo != null">guo_luo,</if>
+            <if test="geErMu != null">ge_er_mu,</if>
+            <if test="yingYiBu != null">ying_yi_bu,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="indicatorNum != null and indicatorNum != ''">#{indicatorNum},</if>
+            <if test="indicatorName != null">#{indicatorName},</if>
+            <if test="quanSheng != null">#{quanSheng},</if>
+            <if test="benBu != null">#{benBu},</if>
+            <if test="jiGuan != null">#{jiGuan},</if>
+            <if test="chengXi != null">#{chengXi},</if>
+            <if test="daTong != null">#{daTong},</if>
+            <if test="haiDong != null">#{haiDong},</if>
+            <if test="chengZhong != null">#{chengZhong},</if>
+            <if test="haiNan != null">#{haiNan},</if>
+            <if test="yuShu != null">#{yuShu},</if>
+            <if test="haiXi != null">#{haiXi},</if>
+            <if test="haiBei != null">#{haiBei},</if>
+            <if test="huangNan != null">#{huangNan},</if>
+            <if test="guoLuo != null">#{guoLuo},</if>
+            <if test="geErMu != null">#{geErMu},</if>
+            <if test="yingYiBu != null">#{yingYiBu},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiSourceOriginalData" parameterType="KpiSourceOriginalData">
+        update kpi_source_original_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="indicatorNum != null and indicatorNum != ''">indicator_num = #{indicatorNum},</if>
+            <if test="indicatorName != null">indicator_name = #{indicatorName},</if>
+            <if test="quanSheng != null">quan_sheng = #{quanSheng},</if>
+            <if test="benBu != null">ben_bu = #{benBu},</if>
+            <if test="jiGuan != null">ji_guan = #{jiGuan},</if>
+            <if test="chengXi != null">cheng_xi = #{chengXi},</if>
+            <if test="daTong != null">da_tong = #{daTong},</if>
+            <if test="haiDong != null">hai_dong = #{haiDong},</if>
+            <if test="chengZhong != null">cheng_zhong = #{chengZhong},</if>
+            <if test="haiNan != null">hai_nan = #{haiNan},</if>
+            <if test="yuShu != null">yu_shu = #{yuShu},</if>
+            <if test="haiXi != null">hai_xi = #{haiXi},</if>
+            <if test="haiBei != null">hai_bei = #{haiBei},</if>
+            <if test="huangNan != null">huang_nan = #{huangNan},</if>
+            <if test="guoLuo != null">guo_luo = #{guoLuo},</if>
+            <if test="geErMu != null">ge_er_mu = #{geErMu},</if>
+            <if test="yingYiBu != null">ying_yi_bu = #{yingYiBu},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiSourceOriginalDataById" parameterType="Long">
+        delete from kpi_source_original_data where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiSourceOriginalDataByIds" parameterType="String">
+        delete from kpi_source_original_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

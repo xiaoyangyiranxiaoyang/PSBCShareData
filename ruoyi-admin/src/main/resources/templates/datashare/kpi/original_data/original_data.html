@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('数据原（商业银行日报）列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>指标号：</label>
+                                <input type="text" name="indicatorNum"/>
+                            </li>
+                            <li>
+                                <label>指标名称：</label>
+                                <input type="text" name="indicatorName"/>
+                            </li>
+                            <li>
+                                <label>青海生分行：</label>
+                                <input type="text" name="quanSheng"/>
+                            </li>
+                            <li>
+                                <label>青海省分行本部：</label>
+                                <input type="text" name="benBu"/>
+                            </li>
+                            <li>
+                                <label>青海省分行机关：</label>
+                                <input type="text" name="jiGuan"/>
+                            </li>
+                            <li>
+                                <label>西宁市城西支行：</label>
+                                <input type="text" name="chengXi"/>
+                            </li>
+                            <li>
+                                <label>大通支行：</label>
+                                <input type="text" name="daTong"/>
+                            </li>
+                            <li>
+                                <label>青海省海东市支行：</label>
+                                <input type="text" name="haiDong"/>
+                            </li>
+                            <li>
+                                <label>西宁市城中支行：</label>
+                                <input type="text" name="chengZhong"/>
+                            </li>
+                            <li>
+                                <label>青海省海南藏族自治州支行：</label>
+                                <input type="text" name="haiNan"/>
+                            </li>
+                            <li>
+                                <label>青海省玉树藏族自治州支行：</label>
+                                <input type="text" name="yuShu"/>
+                            </li>
+                            <li>
+                                <label>海西蒙古族藏族自治州支行：</label>
+                                <input type="text" name="haiXi"/>
+                            </li>
+                            <li>
+                                <label>青海省海北藏族自治州支行：</label>
+                                <input type="text" name="haiBei"/>
+                            </li>
+                            <li>
+                                <label>黄南藏族自治州支行：</label>
+                                <input type="text" name="huangNan"/>
+                            </li>
+                            <li>
+                                <label>青海省果洛藏族自治州支行：</label>
+                                <input type="text" name="guoLuo"/>
+                            </li>
+                            <li>
+                                <label>格尔木市支行：</label>
+                                <input type="text" name="geErMu"/>
+                            </li>
+                            <li>
+                                <label>青海省分行(营业部)：</label>
+                                <input type="text" name="yingYiBu"/>
+                            </li>
+                            <li class="select-time">
+                                <label>数据日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDataDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDataDate]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:original_data:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:original_data:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:original_data:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:original_data:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('datashare/kpi:original_data:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('datashare/kpi:original_data:remove')}]];
+        var prefix = ctx + "datashare/kpi/original_data";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "数据原（商业银行日报）",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'indicatorNum',
+                    title: '指标号'
+                },
+                {
+                    field: 'indicatorName',
+                    title: '指标名称'
+                },
+                {
+                    field: 'quanSheng',
+                    title: '青海生分行'
+                },
+                {
+                    field: 'benBu',
+                    title: '青海省分行本部'
+                },
+                {
+                    field: 'jiGuan',
+                    title: '青海省分行机关'
+                },
+                {
+                    field: 'chengXi',
+                    title: '西宁市城西支行'
+                },
+                {
+                    field: 'daTong',
+                    title: '大通支行'
+                },
+                {
+                    field: 'haiDong',
+                    title: '青海省海东市支行'
+                },
+                {
+                    field: 'chengZhong',
+                    title: '西宁市城中支行'
+                },
+                {
+                    field: 'haiNan',
+                    title: '青海省海南藏族自治州支行'
+                },
+                {
+                    field: 'yuShu',
+                    title: '青海省玉树藏族自治州支行'
+                },
+                {
+                    field: 'haiXi',
+                    title: '海西蒙古族藏族自治州支行'
+                },
+                {
+                    field: 'haiBei',
+                    title: '青海省海北藏族自治州支行'
+                },
+                {
+                    field: 'huangNan',
+                    title: '黄南藏族自治州支行'
+                },
+                {
+                    field: 'guoLuo',
+                    title: '青海省果洛藏族自治州支行'
+                },
+                {
+                    field: 'geErMu',
+                    title: '格尔木市支行'
+                },
+                {
+                    field: 'yingYiBu',
+                    title: '青海省分行(营业部)'
+                },
+                {
+                    field: 'dataDate',
+                    title: '数据日期'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

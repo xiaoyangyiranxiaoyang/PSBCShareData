@@ -1002,7 +1002,7 @@ public class ExcelUtil<T>
         int rowRecord = 0;
         String cloRecord = "";
         try {
-            this.wb = WorkbookFactory.create(is);
+            this.wb = WorkbookFactory.create(is); // 此方式会关闭输入流
             if (StringUtils.isNotBlank(sheetName)){
                 this.sheet = this.wb.getSheet(sheetName);
             } else {
@@ -1029,15 +1029,76 @@ public class ExcelUtil<T>
 
             return resultMap;
         } catch (IOException e) {
+            e.printStackTrace();
             throw new Exception("第" + rowRecord + "行，第" + cloRecord + "列，文件读取错误");
         } catch (IllegalStateException e) {
+            e.printStackTrace();
             throw new Exception("第" + rowRecord + "行，第" + cloRecord + "列，请将所有单元格的格式转换成文本");
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("第" + rowRecord + "行，第" + cloRecord + "列，文件解析失败");
         } finally {
-            if (is != null)
+            if (is != null){
                 is.close();
+            }
+        }
+    }
+
+    /**
+     * 通过获取当前Excel所有sheet的数据
+     * row and column index begin 1
+     * @param is
+     * @return 《sheet名称，《行号，《列号，值》》》
+     * @throws Exception
+     */
+    public Map<String,Map<Integer, Map<Integer, Object>>> readExcelWithRowForAllSheet(InputStream is) throws Exception {
+        Map<String,Map<Integer, Map<Integer, Object>>> resultMap = new HashMap();
+        int rowRecord = 0;
+        String cloRecord = "";
+        String sheetName = "";
+
+        try {
+            this.wb = WorkbookFactory.create(is); // 此方式会关闭输入流
+            int sheetNum = this.wb.getNumberOfSheets();
+            for (int s = 0; s < sheetNum; s ++){
+                this.sheet = this.wb.getSheetAt(s);
+                sheetName = sheet.getSheetName();
+
+                Map<Integer, Map<Integer, Object>> sheetDataMap = new HashMap<>();
+                resultMap.put(sheetName, sheetDataMap);
+
+                for (int i = 0; i <= sheet.getLastRowNum(); i++) { // 循环行
+                    rowRecord = i + 1;
+                    Row row = sheet.getRow(i);
+                    Map<Integer, Object> rowMap = new LinkedHashMap<>();
+                    if (row != null && row.getLastCellNum() > 0) {
+                        for (int m = 0; m < row.getLastCellNum(); m++) { // 循环列
+                            cloRecord = excelColIndexToStr(m+1);
+                            if (row.getCell(m) != null) {
+                                Object valObj = getCellValue(row, m);
+                                rowMap.put((m+1), valObj);
+                            }
+                        }
+                    }
+                    sheetDataMap.put(i + 1, rowMap);
+                }
+
+            }
+
+            return resultMap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Exception("sheet:" + sheetName + " 第" + rowRecord + "行，第" + cloRecord + "列，文件读取错误, msg: " + e.getMessage());
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            throw new Exception("sheet:" + sheetName + " 第" + rowRecord + "行，第" + cloRecord + "列，请将所有单元格的格式转换成文本, msg: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("sheet:" + sheetName + " 第" + rowRecord + "行，第" + cloRecord + "列，文件解析失败, msg: " + e.getMessage());
+        } finally {
+            if (is != null){
+                is.close();
+            }
         }
     }
 

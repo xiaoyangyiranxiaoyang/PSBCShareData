@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiSourceSavingDataMapper">
+    
+    <resultMap type="KpiSourceSavingData" id="KpiSourceSavingDataResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="dailyBalance"    column="daily_balance"    />
+        <result property="dailyBalanceSelf"    column="daily_balance_self"    />
+        <result property="dailyBalanceAgent"    column="daily_balance_agent"    />
+        <result property="dailyIncrease"    column="daily_increase"    />
+        <result property="dailyIncreaseSelf"    column="daily_increase_self"    />
+        <result property="dailyIncreaseAgent"    column="daily_increase_agent"    />
+        <result property="monthlyIncrease"    column="monthly_increase"    />
+        <result property="monthlyIncreaseSelf"    column="monthly_increase_self"    />
+        <result property="monthlyIncreaseAgent"    column="monthly_increase_agent"    />
+        <result property="yearlyIncrease"    column="yearly_increase"    />
+        <result property="yearlyIncreaseSelf"    column="yearly_increase_self"    />
+        <result property="yearlyIncreaseAgent"    column="yearly_increase_agent"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiSourceSavingDataVo">
+        select id, district, daily_balance, daily_balance_self, daily_balance_agent, daily_increase, daily_increase_self, daily_increase_agent, monthly_increase, monthly_increase_self, monthly_increase_agent, yearly_increase, yearly_increase_self, yearly_increase_agent, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_saving_data
+    </sql>
+
+    <select id="selectKpiSourceSavingDataList" parameterType="KpiSourceSavingData" resultMap="KpiSourceSavingDataResult">
+        <include refid="selectKpiSourceSavingDataVo"/>
+        <where>  
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="dailyBalance != null "> and daily_balance = #{dailyBalance}</if>
+            <if test="dailyBalanceSelf != null "> and daily_balance_self = #{dailyBalanceSelf}</if>
+            <if test="dailyBalanceAgent != null "> and daily_balance_agent = #{dailyBalanceAgent}</if>
+            <if test="dailyIncrease != null "> and daily_increase = #{dailyIncrease}</if>
+            <if test="dailyIncreaseSelf != null "> and daily_increase_self = #{dailyIncreaseSelf}</if>
+            <if test="dailyIncreaseAgent != null "> and daily_increase_agent = #{dailyIncreaseAgent}</if>
+            <if test="monthlyIncrease != null "> and monthly_increase = #{monthlyIncrease}</if>
+            <if test="monthlyIncreaseSelf != null "> and monthly_increase_self = #{monthlyIncreaseSelf}</if>
+            <if test="monthlyIncreaseAgent != null "> and monthly_increase_agent = #{monthlyIncreaseAgent}</if>
+            <if test="yearlyIncrease != null "> and yearly_increase = #{yearlyIncrease}</if>
+            <if test="yearlyIncreaseSelf != null "> and yearly_increase_self = #{yearlyIncreaseSelf}</if>
+            <if test="yearlyIncreaseAgent != null "> and yearly_increase_agent = #{yearlyIncreaseAgent}</if>
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiSourceSavingDataById" parameterType="Long" resultMap="KpiSourceSavingDataResult">
+        <include refid="selectKpiSourceSavingDataVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiSourceSavingData" parameterType="KpiSourceSavingData" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_source_saving_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">district,</if>
+            <if test="dailyBalance != null">daily_balance,</if>
+            <if test="dailyBalanceSelf != null">daily_balance_self,</if>
+            <if test="dailyBalanceAgent != null">daily_balance_agent,</if>
+            <if test="dailyIncrease != null">daily_increase,</if>
+            <if test="dailyIncreaseSelf != null">daily_increase_self,</if>
+            <if test="dailyIncreaseAgent != null">daily_increase_agent,</if>
+            <if test="monthlyIncrease != null">monthly_increase,</if>
+            <if test="monthlyIncreaseSelf != null">monthly_increase_self,</if>
+            <if test="monthlyIncreaseAgent != null">monthly_increase_agent,</if>
+            <if test="yearlyIncrease != null">yearly_increase,</if>
+            <if test="yearlyIncreaseSelf != null">yearly_increase_self,</if>
+            <if test="yearlyIncreaseAgent != null">yearly_increase_agent,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="dailyBalance != null">#{dailyBalance},</if>
+            <if test="dailyBalanceSelf != null">#{dailyBalanceSelf},</if>
+            <if test="dailyBalanceAgent != null">#{dailyBalanceAgent},</if>
+            <if test="dailyIncrease != null">#{dailyIncrease},</if>
+            <if test="dailyIncreaseSelf != null">#{dailyIncreaseSelf},</if>
+            <if test="dailyIncreaseAgent != null">#{dailyIncreaseAgent},</if>
+            <if test="monthlyIncrease != null">#{monthlyIncrease},</if>
+            <if test="monthlyIncreaseSelf != null">#{monthlyIncreaseSelf},</if>
+            <if test="monthlyIncreaseAgent != null">#{monthlyIncreaseAgent},</if>
+            <if test="yearlyIncrease != null">#{yearlyIncrease},</if>
+            <if test="yearlyIncreaseSelf != null">#{yearlyIncreaseSelf},</if>
+            <if test="yearlyIncreaseAgent != null">#{yearlyIncreaseAgent},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiSourceSavingData" parameterType="KpiSourceSavingData">
+        update kpi_source_saving_data
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="dailyBalance != null">daily_balance = #{dailyBalance},</if>
+            <if test="dailyBalanceSelf != null">daily_balance_self = #{dailyBalanceSelf},</if>
+            <if test="dailyBalanceAgent != null">daily_balance_agent = #{dailyBalanceAgent},</if>
+            <if test="dailyIncrease != null">daily_increase = #{dailyIncrease},</if>
+            <if test="dailyIncreaseSelf != null">daily_increase_self = #{dailyIncreaseSelf},</if>
+            <if test="dailyIncreaseAgent != null">daily_increase_agent = #{dailyIncreaseAgent},</if>
+            <if test="monthlyIncrease != null">monthly_increase = #{monthlyIncrease},</if>
+            <if test="monthlyIncreaseSelf != null">monthly_increase_self = #{monthlyIncreaseSelf},</if>
+            <if test="monthlyIncreaseAgent != null">monthly_increase_agent = #{monthlyIncreaseAgent},</if>
+            <if test="yearlyIncrease != null">yearly_increase = #{yearlyIncrease},</if>
+            <if test="yearlyIncreaseSelf != null">yearly_increase_self = #{yearlyIncreaseSelf},</if>
+            <if test="yearlyIncreaseAgent != null">yearly_increase_agent = #{yearlyIncreaseAgent},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiSourceSavingDataById" parameterType="Long">
+        delete from kpi_source_saving_data where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiSourceSavingDataByIds" parameterType="String">
+        delete from kpi_source_saving_data where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

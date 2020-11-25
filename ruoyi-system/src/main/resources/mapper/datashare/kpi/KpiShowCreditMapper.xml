@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiShowCreditMapper">
+    
+    <resultMap type="KpiShowCredit" id="KpiShowCreditResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="depositBalance"    column="deposit_balance"    />
+        <result property="depositGrowthM"    column="deposit_growth_m"    />
+        <result property="depositGrowthY"    column="deposit_growth_y"    />
+        <result property="selfBalance"    column="self_balance"    />
+        <result property="selfGrowthM"    column="self_growth_m"    />
+        <result property="selfGrowthY"    column="self_growth_y"    />
+        <result property="agentBalance"    column="agent_balance"    />
+        <result property="agentGrowthM"    column="agent_growth_m"    />
+        <result property="agentGrowthY"    column="agent_growth_y"    />
+        <result property="companyBalance"    column="company_balance"    />
+        <result property="companyGrowthM"    column="company_growth_m"    />
+        <result property="companyGrowthY"    column="company_growth_y"    />
+        <result property="unhealthyRate"    column="unhealthy_rate"    />
+        <result property="overdueRate"    column="overdue_rate"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiShowCreditVo">
+        select id, district, deposit_balance, deposit_growth_m, deposit_growth_y, self_balance, self_growth_m, self_growth_y, agent_balance, agent_growth_m, agent_growth_y, company_balance, company_growth_m, company_growth_y, unhealthy_rate, overdue_rate, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_credit
+    </sql>
+
+    <select id="selectKpiShowCreditList" parameterType="KpiShowCredit" resultMap="KpiShowCreditResult">
+        <include refid="selectKpiShowCreditVo"/>
+        <where>  
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiShowCreditById" parameterType="Long" resultMap="KpiShowCreditResult">
+        <include refid="selectKpiShowCreditVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiShowCredit" parameterType="KpiShowCredit" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_show_credit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">district,</if>
+            <if test="depositBalance != null">deposit_balance,</if>
+            <if test="depositGrowthM != null">deposit_growth_m,</if>
+            <if test="depositGrowthY != null">deposit_growth_y,</if>
+            <if test="selfBalance != null">self_balance,</if>
+            <if test="selfGrowthM != null">self_growth_m,</if>
+            <if test="selfGrowthY != null">self_growth_y,</if>
+            <if test="agentBalance != null">agent_balance,</if>
+            <if test="agentGrowthM != null">agent_growth_m,</if>
+            <if test="agentGrowthY != null">agent_growth_y,</if>
+            <if test="companyBalance != null">company_balance,</if>
+            <if test="companyGrowthM != null">company_growth_m,</if>
+            <if test="companyGrowthY != null">company_growth_y,</if>
+            <if test="unhealthyRate != null">unhealthy_rate,</if>
+            <if test="overdueRate != null">overdue_rate,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="depositBalance != null">#{depositBalance},</if>
+            <if test="depositGrowthM != null">#{depositGrowthM},</if>
+            <if test="depositGrowthY != null">#{depositGrowthY},</if>
+            <if test="selfBalance != null">#{selfBalance},</if>
+            <if test="selfGrowthM != null">#{selfGrowthM},</if>
+            <if test="selfGrowthY != null">#{selfGrowthY},</if>
+            <if test="agentBalance != null">#{agentBalance},</if>
+            <if test="agentGrowthM != null">#{agentGrowthM},</if>
+            <if test="agentGrowthY != null">#{agentGrowthY},</if>
+            <if test="companyBalance != null">#{companyBalance},</if>
+            <if test="companyGrowthM != null">#{companyGrowthM},</if>
+            <if test="companyGrowthY != null">#{companyGrowthY},</if>
+            <if test="unhealthyRate != null">#{unhealthyRate},</if>
+            <if test="overdueRate != null">#{overdueRate},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiShowCredit" parameterType="KpiShowCredit">
+        update kpi_show_credit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="depositBalance != null">deposit_balance = #{depositBalance},</if>
+            <if test="depositGrowthM != null">deposit_growth_m = #{depositGrowthM},</if>
+            <if test="depositGrowthY != null">deposit_growth_y = #{depositGrowthY},</if>
+            <if test="selfBalance != null">self_balance = #{selfBalance},</if>
+            <if test="selfGrowthM != null">self_growth_m = #{selfGrowthM},</if>
+            <if test="selfGrowthY != null">self_growth_y = #{selfGrowthY},</if>
+            <if test="agentBalance != null">agent_balance = #{agentBalance},</if>
+            <if test="agentGrowthM != null">agent_growth_m = #{agentGrowthM},</if>
+            <if test="agentGrowthY != null">agent_growth_y = #{agentGrowthY},</if>
+            <if test="companyBalance != null">company_balance = #{companyBalance},</if>
+            <if test="companyGrowthM != null">company_growth_m = #{companyGrowthM},</if>
+            <if test="companyGrowthY != null">company_growth_y = #{companyGrowthY},</if>
+            <if test="unhealthyRate != null">unhealthy_rate = #{unhealthyRate},</if>
+            <if test="overdueRate != null">overdue_rate = #{overdueRate},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiShowCreditById" parameterType="Long">
+        delete from kpi_show_credit where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiShowCreditByIds" parameterType="String">
+        delete from kpi_show_credit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

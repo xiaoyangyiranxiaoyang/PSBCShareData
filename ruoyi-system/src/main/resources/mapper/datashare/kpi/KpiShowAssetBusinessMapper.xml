@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiShowAssetBusinessMapper">
+    
+    <resultMap type="KpiShowAssetBusiness" id="KpiShowAssetBusinessResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="totalBalance"    column="total_balance"    />
+        <result property="totalGrowthM"    column="total_growth_m"    />
+        <result property="totalGrowthY"    column="total_growth_y"    />
+        <result property="totalDaily"    column="total_daily"    />
+        <result property="smallAmountBalance"    column="small_amount_balance"    />
+        <result property="smallAmountGrowthM"    column="small_amount_growth_m"    />
+        <result property="smallAmountGrowthY"    column="small_amount_growth_y"    />
+        <result property="smallAmountDaily"    column="small_amount_daily"    />
+        <result property="consumptionBalance"    column="consumption_balance"    />
+        <result property="consumptionGrowthM"    column="consumption_growth_m"    />
+        <result property="consumptionGrowthY"    column="consumption_growth_y"    />
+        <result property="consumptionDaily"    column="consumption_daily"    />
+        <result property="smallBusinessBalance"    column="small_business_balance"    />
+        <result property="smallBusinessGrowthM"    column="small_business_growth_m"    />
+        <result property="smallBusinessGrowthY"    column="small_business_growth_y"    />
+        <result property="smallBusinessDaily"    column="small_business_daily"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiShowAssetBusinessVo">
+        select id, district, total_balance, total_growth_m, total_growth_y, total_daily, small_amount_balance, small_amount_growth_m, small_amount_growth_y, small_amount_daily, consumption_balance, consumption_growth_m, consumption_growth_y, consumption_daily, small_business_balance, small_business_growth_m, small_business_growth_y, small_business_daily, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_asset_business
+    </sql>
+
+    <select id="selectKpiShowAssetBusinessList" parameterType="KpiShowAssetBusiness" resultMap="KpiShowAssetBusinessResult">
+        <include refid="selectKpiShowAssetBusinessVo"/>
+        <where>  
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiShowAssetBusinessById" parameterType="Long" resultMap="KpiShowAssetBusinessResult">
+        <include refid="selectKpiShowAssetBusinessVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiShowAssetBusiness" parameterType="KpiShowAssetBusiness" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_show_asset_business
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">district,</if>
+            <if test="totalBalance != null">total_balance,</if>
+            <if test="totalGrowthM != null">total_growth_m,</if>
+            <if test="totalGrowthY != null">total_growth_y,</if>
+            <if test="totalDaily != null">total_daily,</if>
+            <if test="smallAmountBalance != null">small_amount_balance,</if>
+            <if test="smallAmountGrowthM != null">small_amount_growth_m,</if>
+            <if test="smallAmountGrowthY != null">small_amount_growth_y,</if>
+            <if test="smallAmountDaily != null">small_amount_daily,</if>
+            <if test="consumptionBalance != null">consumption_balance,</if>
+            <if test="consumptionGrowthM != null">consumption_growth_m,</if>
+            <if test="consumptionGrowthY != null">consumption_growth_y,</if>
+            <if test="consumptionDaily != null">consumption_daily,</if>
+            <if test="smallBusinessBalance != null">small_business_balance,</if>
+            <if test="smallBusinessGrowthM != null">small_business_growth_m,</if>
+            <if test="smallBusinessGrowthY != null">small_business_growth_y,</if>
+            <if test="smallBusinessDaily != null">small_business_daily,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="totalBalance != null">#{totalBalance},</if>
+            <if test="totalGrowthM != null">#{totalGrowthM},</if>
+            <if test="totalGrowthY != null">#{totalGrowthY},</if>
+            <if test="totalDaily != null">#{totalDaily},</if>
+            <if test="smallAmountBalance != null">#{smallAmountBalance},</if>
+            <if test="smallAmountGrowthM != null">#{smallAmountGrowthM},</if>
+            <if test="smallAmountGrowthY != null">#{smallAmountGrowthY},</if>
+            <if test="smallAmountDaily != null">#{smallAmountDaily},</if>
+            <if test="consumptionBalance != null">#{consumptionBalance},</if>
+            <if test="consumptionGrowthM != null">#{consumptionGrowthM},</if>
+            <if test="consumptionGrowthY != null">#{consumptionGrowthY},</if>
+            <if test="consumptionDaily != null">#{consumptionDaily},</if>
+            <if test="smallBusinessBalance != null">#{smallBusinessBalance},</if>
+            <if test="smallBusinessGrowthM != null">#{smallBusinessGrowthM},</if>
+            <if test="smallBusinessGrowthY != null">#{smallBusinessGrowthY},</if>
+            <if test="smallBusinessDaily != null">#{smallBusinessDaily},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiShowAssetBusiness" parameterType="KpiShowAssetBusiness">
+        update kpi_show_asset_business
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="totalBalance != null">total_balance = #{totalBalance},</if>
+            <if test="totalGrowthM != null">total_growth_m = #{totalGrowthM},</if>
+            <if test="totalGrowthY != null">total_growth_y = #{totalGrowthY},</if>
+            <if test="totalDaily != null">total_daily = #{totalDaily},</if>
+            <if test="smallAmountBalance != null">small_amount_balance = #{smallAmountBalance},</if>
+            <if test="smallAmountGrowthM != null">small_amount_growth_m = #{smallAmountGrowthM},</if>
+            <if test="smallAmountGrowthY != null">small_amount_growth_y = #{smallAmountGrowthY},</if>
+            <if test="smallAmountDaily != null">small_amount_daily = #{smallAmountDaily},</if>
+            <if test="consumptionBalance != null">consumption_balance = #{consumptionBalance},</if>
+            <if test="consumptionGrowthM != null">consumption_growth_m = #{consumptionGrowthM},</if>
+            <if test="consumptionGrowthY != null">consumption_growth_y = #{consumptionGrowthY},</if>
+            <if test="consumptionDaily != null">consumption_daily = #{consumptionDaily},</if>
+            <if test="smallBusinessBalance != null">small_business_balance = #{smallBusinessBalance},</if>
+            <if test="smallBusinessGrowthM != null">small_business_growth_m = #{smallBusinessGrowthM},</if>
+            <if test="smallBusinessGrowthY != null">small_business_growth_y = #{smallBusinessGrowthY},</if>
+            <if test="smallBusinessDaily != null">small_business_daily = #{smallBusinessDaily},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiShowAssetBusinessById" parameterType="Long">
+        delete from kpi_show_asset_business where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiShowAssetBusinessByIds" parameterType="String">
+        delete from kpi_show_asset_business where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiSourceOverdueMapper">
+    
+    <resultMap type="KpiSourceOverdue" id="KpiSourceOverdueResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="personalBusinessBalance"    column="personal_business_balance"    />
+        <result property="personalBusinessBalanceLast"    column="personal_business_balance_last"    />
+        <result property="personalBusinessBalanceBy"    column="personal_business_balance_by"    />
+        <result property="personalBusinessRate"    column="personal_business_rate"    />
+        <result property="personalBusinessRateLast"    column="personal_business_rate_last"    />
+        <result property="personalBusinessRateBy"    column="personal_business_rate_by"    />
+        <result property="personalConsumerBalance"    column="personal_consumer_balance"    />
+        <result property="personalConsumerBalanceLast"    column="personal_consumer_balance_last"    />
+        <result property="personalConsumerBalanceBy"    column="personal_consumer_balance_by"    />
+        <result property="personalConsumerRate"    column="personal_consumer_rate"    />
+        <result property="personalConsumerRateLast"    column="personal_consumer_rate_last"    />
+        <result property="personalConsumerRateBy"    column="personal_consumer_rate_by"    />
+        <result property="smallBusinessbalance"    column="small_businessbalance"    />
+        <result property="smallBusinessbalanceLast"    column="small_businessbalance_last"    />
+        <result property="smallBusinessbalanceBy"    column="small_businessbalance_by"    />
+        <result property="smallBusinessrate"    column="small_businessrate"    />
+        <result property="smallBusinessrateLast"    column="small_businessrate_last"    />
+        <result property="smallBusinessrateBy"    column="small_businessrate_by"    />
+        <result property="creditCardBalance"    column="credit_card_balance"    />
+        <result property="creditCardBalanceLast"    column="credit_card_balance_last"    />
+        <result property="creditCardBalanceBy"    column="credit_card_balance_by"    />
+        <result property="creditCardRate"    column="credit_card_rate"    />
+        <result property="creditCardRateLast"    column="credit_card_rate_last"    />
+        <result property="creditCardRateBy"    column="credit_card_rate_by"    />
+        <result property="retailBalance"    column="retail_balance"    />
+        <result property="retailBalanceLast"    column="retail_balance_last"    />
+        <result property="retailBalanceBy"    column="retail_balance_by"    />
+        <result property="retailRate"    column="retail_rate"    />
+        <result property="retailRateLast"    column="retail_rate_last"    />
+        <result property="retailRateBy"    column="retail_rate_by"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiSourceOverdueVo">
+        select id, district, personal_business_balance, personal_business_balance_last, personal_business_balance_by, personal_business_rate, personal_business_rate_last, personal_business_rate_by, personal_consumer_balance, personal_consumer_balance_last, personal_consumer_balance_by, personal_consumer_rate, personal_consumer_rate_last, personal_consumer_rate_by, small_businessbalance, small_businessbalance_last, small_businessbalance_by, small_businessrate, small_businessrate_last, small_businessrate_by, credit_card_balance, credit_card_balance_last, credit_card_balance_by, credit_card_rate, credit_card_rate_last, credit_card_rate_by, retail_balance, retail_balance_last, retail_balance_by, retail_rate, retail_rate_last, retail_rate_by, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_overdue
+    </sql>
+
+    <select id="selectKpiSourceOverdueList" parameterType="KpiSourceOverdue" resultMap="KpiSourceOverdueResult">
+        <include refid="selectKpiSourceOverdueVo"/>
+        <where>  
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="personalBusinessBalance != null "> and personal_business_balance = #{personalBusinessBalance}</if>
+            <if test="personalBusinessBalanceLast != null "> and personal_business_balance_last = #{personalBusinessBalanceLast}</if>
+            <if test="personalBusinessBalanceBy != null "> and personal_business_balance_by = #{personalBusinessBalanceBy}</if>
+            <if test="personalBusinessRate != null "> and personal_business_rate = #{personalBusinessRate}</if>
+            <if test="personalBusinessRateLast != null "> and personal_business_rate_last = #{personalBusinessRateLast}</if>
+            <if test="personalBusinessRateBy != null "> and personal_business_rate_by = #{personalBusinessRateBy}</if>
+            <if test="personalConsumerBalance != null "> and personal_consumer_balance = #{personalConsumerBalance}</if>
+            <if test="personalConsumerBalanceLast != null "> and personal_consumer_balance_last = #{personalConsumerBalanceLast}</if>
+            <if test="personalConsumerBalanceBy != null "> and personal_consumer_balance_by = #{personalConsumerBalanceBy}</if>
+            <if test="personalConsumerRate != null "> and personal_consumer_rate = #{personalConsumerRate}</if>
+            <if test="personalConsumerRateLast != null "> and personal_consumer_rate_last = #{personalConsumerRateLast}</if>
+            <if test="personalConsumerRateBy != null "> and personal_consumer_rate_by = #{personalConsumerRateBy}</if>
+            <if test="smallBusinessbalance != null "> and small_businessbalance = #{smallBusinessbalance}</if>
+            <if test="smallBusinessbalanceLast != null "> and small_businessbalance_last = #{smallBusinessbalanceLast}</if>
+            <if test="smallBusinessbalanceBy != null "> and small_businessbalance_by = #{smallBusinessbalanceBy}</if>
+            <if test="smallBusinessrate != null "> and small_businessrate = #{smallBusinessrate}</if>
+            <if test="smallBusinessrateLast != null "> and small_businessrate_last = #{smallBusinessrateLast}</if>
+            <if test="smallBusinessrateBy != null "> and small_businessrate_by = #{smallBusinessrateBy}</if>
+            <if test="creditCardBalance != null "> and credit_card_balance = #{creditCardBalance}</if>
+            <if test="creditCardBalanceLast != null "> and credit_card_balance_last = #{creditCardBalanceLast}</if>
+            <if test="creditCardBalanceBy != null "> and credit_card_balance_by = #{creditCardBalanceBy}</if>
+            <if test="creditCardRate != null "> and credit_card_rate = #{creditCardRate}</if>
+            <if test="creditCardRateLast != null "> and credit_card_rate_last = #{creditCardRateLast}</if>
+            <if test="creditCardRateBy != null "> and credit_card_rate_by = #{creditCardRateBy}</if>
+            <if test="retailBalance != null "> and retail_balance = #{retailBalance}</if>
+            <if test="retailBalanceLast != null "> and retail_balance_last = #{retailBalanceLast}</if>
+            <if test="retailBalanceBy != null "> and retail_balance_by = #{retailBalanceBy}</if>
+            <if test="retailRate != null "> and retail_rate = #{retailRate}</if>
+            <if test="retailRateLast != null "> and retail_rate_last = #{retailRateLast}</if>
+            <if test="retailRateBy != null "> and retail_rate_by = #{retailRateBy}</if>
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiSourceOverdueById" parameterType="Long" resultMap="KpiSourceOverdueResult">
+        <include refid="selectKpiSourceOverdueVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiSourceOverdue" parameterType="KpiSourceOverdue" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_source_overdue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">district,</if>
+            <if test="personalBusinessBalance != null">personal_business_balance,</if>
+            <if test="personalBusinessBalanceLast != null">personal_business_balance_last,</if>
+            <if test="personalBusinessBalanceBy != null">personal_business_balance_by,</if>
+            <if test="personalBusinessRate != null">personal_business_rate,</if>
+            <if test="personalBusinessRateLast != null">personal_business_rate_last,</if>
+            <if test="personalBusinessRateBy != null">personal_business_rate_by,</if>
+            <if test="personalConsumerBalance != null">personal_consumer_balance,</if>
+            <if test="personalConsumerBalanceLast != null">personal_consumer_balance_last,</if>
+            <if test="personalConsumerBalanceBy != null">personal_consumer_balance_by,</if>
+            <if test="personalConsumerRate != null">personal_consumer_rate,</if>
+            <if test="personalConsumerRateLast != null">personal_consumer_rate_last,</if>
+            <if test="personalConsumerRateBy != null">personal_consumer_rate_by,</if>
+            <if test="smallBusinessbalance != null">small_businessbalance,</if>
+            <if test="smallBusinessbalanceLast != null">small_businessbalance_last,</if>
+            <if test="smallBusinessbalanceBy != null">small_businessbalance_by,</if>
+            <if test="smallBusinessrate != null">small_businessrate,</if>
+            <if test="smallBusinessrateLast != null">small_businessrate_last,</if>
+            <if test="smallBusinessrateBy != null">small_businessrate_by,</if>
+            <if test="creditCardBalance != null">credit_card_balance,</if>
+            <if test="creditCardBalanceLast != null">credit_card_balance_last,</if>
+            <if test="creditCardBalanceBy != null">credit_card_balance_by,</if>
+            <if test="creditCardRate != null">credit_card_rate,</if>
+            <if test="creditCardRateLast != null">credit_card_rate_last,</if>
+            <if test="creditCardRateBy != null">credit_card_rate_by,</if>
+            <if test="retailBalance != null">retail_balance,</if>
+            <if test="retailBalanceLast != null">retail_balance_last,</if>
+            <if test="retailBalanceBy != null">retail_balance_by,</if>
+            <if test="retailRate != null">retail_rate,</if>
+            <if test="retailRateLast != null">retail_rate_last,</if>
+            <if test="retailRateBy != null">retail_rate_by,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="personalBusinessBalance != null">#{personalBusinessBalance},</if>
+            <if test="personalBusinessBalanceLast != null">#{personalBusinessBalanceLast},</if>
+            <if test="personalBusinessBalanceBy != null">#{personalBusinessBalanceBy},</if>
+            <if test="personalBusinessRate != null">#{personalBusinessRate},</if>
+            <if test="personalBusinessRateLast != null">#{personalBusinessRateLast},</if>
+            <if test="personalBusinessRateBy != null">#{personalBusinessRateBy},</if>
+            <if test="personalConsumerBalance != null">#{personalConsumerBalance},</if>
+            <if test="personalConsumerBalanceLast != null">#{personalConsumerBalanceLast},</if>
+            <if test="personalConsumerBalanceBy != null">#{personalConsumerBalanceBy},</if>
+            <if test="personalConsumerRate != null">#{personalConsumerRate},</if>
+            <if test="personalConsumerRateLast != null">#{personalConsumerRateLast},</if>
+            <if test="personalConsumerRateBy != null">#{personalConsumerRateBy},</if>
+            <if test="smallBusinessbalance != null">#{smallBusinessbalance},</if>
+            <if test="smallBusinessbalanceLast != null">#{smallBusinessbalanceLast},</if>
+            <if test="smallBusinessbalanceBy != null">#{smallBusinessbalanceBy},</if>
+            <if test="smallBusinessrate != null">#{smallBusinessrate},</if>
+            <if test="smallBusinessrateLast != null">#{smallBusinessrateLast},</if>
+            <if test="smallBusinessrateBy != null">#{smallBusinessrateBy},</if>
+            <if test="creditCardBalance != null">#{creditCardBalance},</if>
+            <if test="creditCardBalanceLast != null">#{creditCardBalanceLast},</if>
+            <if test="creditCardBalanceBy != null">#{creditCardBalanceBy},</if>
+            <if test="creditCardRate != null">#{creditCardRate},</if>
+            <if test="creditCardRateLast != null">#{creditCardRateLast},</if>
+            <if test="creditCardRateBy != null">#{creditCardRateBy},</if>
+            <if test="retailBalance != null">#{retailBalance},</if>
+            <if test="retailBalanceLast != null">#{retailBalanceLast},</if>
+            <if test="retailBalanceBy != null">#{retailBalanceBy},</if>
+            <if test="retailRate != null">#{retailRate},</if>
+            <if test="retailRateLast != null">#{retailRateLast},</if>
+            <if test="retailRateBy != null">#{retailRateBy},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiSourceOverdue" parameterType="KpiSourceOverdue">
+        update kpi_source_overdue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="personalBusinessBalance != null">personal_business_balance = #{personalBusinessBalance},</if>
+            <if test="personalBusinessBalanceLast != null">personal_business_balance_last = #{personalBusinessBalanceLast},</if>
+            <if test="personalBusinessBalanceBy != null">personal_business_balance_by = #{personalBusinessBalanceBy},</if>
+            <if test="personalBusinessRate != null">personal_business_rate = #{personalBusinessRate},</if>
+            <if test="personalBusinessRateLast != null">personal_business_rate_last = #{personalBusinessRateLast},</if>
+            <if test="personalBusinessRateBy != null">personal_business_rate_by = #{personalBusinessRateBy},</if>
+            <if test="personalConsumerBalance != null">personal_consumer_balance = #{personalConsumerBalance},</if>
+            <if test="personalConsumerBalanceLast != null">personal_consumer_balance_last = #{personalConsumerBalanceLast},</if>
+            <if test="personalConsumerBalanceBy != null">personal_consumer_balance_by = #{personalConsumerBalanceBy},</if>
+            <if test="personalConsumerRate != null">personal_consumer_rate = #{personalConsumerRate},</if>
+            <if test="personalConsumerRateLast != null">personal_consumer_rate_last = #{personalConsumerRateLast},</if>
+            <if test="personalConsumerRateBy != null">personal_consumer_rate_by = #{personalConsumerRateBy},</if>
+            <if test="smallBusinessbalance != null">small_businessbalance = #{smallBusinessbalance},</if>
+            <if test="smallBusinessbalanceLast != null">small_businessbalance_last = #{smallBusinessbalanceLast},</if>
+            <if test="smallBusinessbalanceBy != null">small_businessbalance_by = #{smallBusinessbalanceBy},</if>
+            <if test="smallBusinessrate != null">small_businessrate = #{smallBusinessrate},</if>
+            <if test="smallBusinessrateLast != null">small_businessrate_last = #{smallBusinessrateLast},</if>
+            <if test="smallBusinessrateBy != null">small_businessrate_by = #{smallBusinessrateBy},</if>
+            <if test="creditCardBalance != null">credit_card_balance = #{creditCardBalance},</if>
+            <if test="creditCardBalanceLast != null">credit_card_balance_last = #{creditCardBalanceLast},</if>
+            <if test="creditCardBalanceBy != null">credit_card_balance_by = #{creditCardBalanceBy},</if>
+            <if test="creditCardRate != null">credit_card_rate = #{creditCardRate},</if>
+            <if test="creditCardRateLast != null">credit_card_rate_last = #{creditCardRateLast},</if>
+            <if test="creditCardRateBy != null">credit_card_rate_by = #{creditCardRateBy},</if>
+            <if test="retailBalance != null">retail_balance = #{retailBalance},</if>
+            <if test="retailBalanceLast != null">retail_balance_last = #{retailBalanceLast},</if>
+            <if test="retailBalanceBy != null">retail_balance_by = #{retailBalanceBy},</if>
+            <if test="retailRate != null">retail_rate = #{retailRate},</if>
+            <if test="retailRateLast != null">retail_rate_last = #{retailRateLast},</if>
+            <if test="retailRateBy != null">retail_rate_by = #{retailRateBy},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiSourceOverdueById" parameterType="Long">
+        delete from kpi_source_overdue where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiSourceOverdueByIds" parameterType="String">
+        delete from kpi_source_overdue where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

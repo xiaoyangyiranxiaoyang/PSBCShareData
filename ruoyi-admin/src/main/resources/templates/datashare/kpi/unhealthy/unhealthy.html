@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('零售信贷不良列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>地区：</label>
+                                <input type="text" name="district"/>
+                            </li>
+                            <li>
+                                <label>个人经营性贷款-不良余额：</label>
+                                <input type="text" name="personalBusinessBalance"/>
+                            </li>
+                            <li>
+                                <label>个人经营性贷款-不良余额较上期：</label>
+                                <input type="text" name="personalBusinessBalanceLast"/>
+                            </li>
+                            <li>
+                                <label>个人经营性贷款-不良余额较年初：</label>
+                                <input type="text" name="personalBusinessBalanceBy"/>
+                            </li>
+                            <li>
+                                <label>个人经营性贷款-不良率：</label>
+                                <input type="text" name="personalBusinessRate"/>
+                            </li>
+                            <li>
+                                <label>个人经营性贷款-不良率较上期：</label>
+                                <input type="text" name="personalBusinessRateLast"/>
+                            </li>
+                            <li>
+                                <label>个人经营性贷款-不良率较年初：</label>
+                                <input type="text" name="personalBusinessRateBy"/>
+                            </li>
+                            <li>
+                                <label>个人消费贷款-不良余额：</label>
+                                <input type="text" name="personalConsumerBalance"/>
+                            </li>
+                            <li>
+                                <label>个人消费贷款-不良余额较上期：</label>
+                                <input type="text" name="personalConsumerBalanceLast"/>
+                            </li>
+                            <li>
+                                <label>个人消费贷款-不良余额较年初：</label>
+                                <input type="text" name="personalConsumerBalanceBy"/>
+                            </li>
+                            <li>
+                                <label>个人消费贷款-不良率：</label>
+                                <input type="text" name="personalConsumerRate"/>
+                            </li>
+                            <li>
+                                <label>个人消费贷款-不良率较上期：</label>
+                                <input type="text" name="personalConsumerRateLast"/>
+                            </li>
+                            <li>
+                                <label>个人消费贷款-不良率较年初：</label>
+                                <input type="text" name="personalConsumerRateBy"/>
+                            </li>
+                            <li>
+                                <label>小企业贷款-不良余额：</label>
+                                <input type="text" name="smallBusinessbalance"/>
+                            </li>
+                            <li>
+                                <label>小企业贷款-不良余额较上期：</label>
+                                <input type="text" name="smallBusinessbalanceLast"/>
+                            </li>
+                            <li>
+                                <label>小企业贷款-不良余额较年初：</label>
+                                <input type="text" name="smallBusinessbalanceBy"/>
+                            </li>
+                            <li>
+                                <label>小企业贷款-不良率：</label>
+                                <input type="text" name="smallBusinessrate"/>
+                            </li>
+                            <li>
+                                <label>小企业贷款-不良率较上期：</label>
+                                <input type="text" name="smallBusinessrateLast"/>
+                            </li>
+                            <li>
+                                <label>小企业贷款-不良率较年初：</label>
+                                <input type="text" name="smallBusinessrateBy"/>
+                            </li>
+                            <li>
+                                <label>信用卡业务-不良余额：</label>
+                                <input type="text" name="creditCardBalance"/>
+                            </li>
+                            <li>
+                                <label>信用卡业务-不良余额较上期：</label>
+                                <input type="text" name="creditCardBalanceLast"/>
+                            </li>
+                            <li>
+                                <label>信用卡业务-不良余额较年初：</label>
+                                <input type="text" name="creditCardBalanceBy"/>
+                            </li>
+                            <li>
+                                <label>信用卡业务-不良率：</label>
+                                <input type="text" name="creditCardRate"/>
+                            </li>
+                            <li>
+                                <label>信用卡业务-不良率较上期：</label>
+                                <input type="text" name="creditCardRateLast"/>
+                            </li>
+                            <li>
+                                <label>信用卡业务-不良率较年初：</label>
+                                <input type="text" name="creditCardRateBy"/>
+                            </li>
+                            <li>
+                                <label>零售-不良余额：</label>
+                                <input type="text" name="retailBalance"/>
+                            </li>
+                            <li>
+                                <label>零售-不良余额较上期：</label>
+                                <input type="text" name="retailBalanceLast"/>
+                            </li>
+                            <li>
+                                <label>零售-不良余额较年初：</label>
+                                <input type="text" name="retailBalanceBy"/>
+                            </li>
+                            <li>
+                                <label>零售-不良率：</label>
+                                <input type="text" name="retailRate"/>
+                            </li>
+                            <li>
+                                <label>零售-不良率较上期：</label>
+                                <input type="text" name="retailRateLast"/>
+                            </li>
+                            <li>
+                                <label>零售-不良率较年初：</label>
+                                <input type="text" name="retailRateBy"/>
+                            </li>
+                            <li class="select-time">
+                                <label>数据日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDataDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDataDate]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:unhealthy:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:unhealthy:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:unhealthy:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:unhealthy:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('datashare/kpi:unhealthy:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('datashare/kpi:unhealthy:remove')}]];
+        var prefix = ctx + "datashare/kpi/unhealthy";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "零售信贷不良",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'district',
+                    title: '地区'
+                },
+                {
+                    field: 'personalBusinessBalance',
+                    title: '个人经营性贷款-不良余额'
+                },
+                {
+                    field: 'personalBusinessBalanceLast',
+                    title: '个人经营性贷款-不良余额较上期'
+                },
+                {
+                    field: 'personalBusinessBalanceBy',
+                    title: '个人经营性贷款-不良余额较年初'
+                },
+                {
+                    field: 'personalBusinessRate',
+                    title: '个人经营性贷款-不良率'
+                },
+                {
+                    field: 'personalBusinessRateLast',
+                    title: '个人经营性贷款-不良率较上期'
+                },
+                {
+                    field: 'personalBusinessRateBy',
+                    title: '个人经营性贷款-不良率较年初'
+                },
+                {
+                    field: 'personalConsumerBalance',
+                    title: '个人消费贷款-不良余额'
+                },
+                {
+                    field: 'personalConsumerBalanceLast',
+                    title: '个人消费贷款-不良余额较上期'
+                },
+                {
+                    field: 'personalConsumerBalanceBy',
+                    title: '个人消费贷款-不良余额较年初'
+                },
+                {
+                    field: 'personalConsumerRate',
+                    title: '个人消费贷款-不良率'
+                },
+                {
+                    field: 'personalConsumerRateLast',
+                    title: '个人消费贷款-不良率较上期'
+                },
+                {
+                    field: 'personalConsumerRateBy',
+                    title: '个人消费贷款-不良率较年初'
+                },
+                {
+                    field: 'smallBusinessbalance',
+                    title: '小企业贷款-不良余额'
+                },
+                {
+                    field: 'smallBusinessbalanceLast',
+                    title: '小企业贷款-不良余额较上期'
+                },
+                {
+                    field: 'smallBusinessbalanceBy',
+                    title: '小企业贷款-不良余额较年初'
+                },
+                {
+                    field: 'smallBusinessrate',
+                    title: '小企业贷款-不良率'
+                },
+                {
+                    field: 'smallBusinessrateLast',
+                    title: '小企业贷款-不良率较上期'
+                },
+                {
+                    field: 'smallBusinessrateBy',
+                    title: '小企业贷款-不良率较年初'
+                },
+                {
+                    field: 'creditCardBalance',
+                    title: '信用卡业务-不良余额'
+                },
+                {
+                    field: 'creditCardBalanceLast',
+                    title: '信用卡业务-不良余额较上期'
+                },
+                {
+                    field: 'creditCardBalanceBy',
+                    title: '信用卡业务-不良余额较年初'
+                },
+                {
+                    field: 'creditCardRate',
+                    title: '信用卡业务-不良率'
+                },
+                {
+                    field: 'creditCardRateLast',
+                    title: '信用卡业务-不良率较上期'
+                },
+                {
+                    field: 'creditCardRateBy',
+                    title: '信用卡业务-不良率较年初'
+                },
+                {
+                    field: 'retailBalance',
+                    title: '零售-不良余额'
+                },
+                {
+                    field: 'retailBalanceLast',
+                    title: '零售-不良余额较上期'
+                },
+                {
+                    field: 'retailBalanceBy',
+                    title: '零售-不良余额较年初'
+                },
+                {
+                    field: 'retailRate',
+                    title: '零售-不良率'
+                },
+                {
+                    field: 'retailRateLast',
+                    title: '零售-不良率较上期'
+                },
+                {
+                    field: 'retailRateBy',
+                    title: '零售-不良率较年初'
+                },
+                {
+                    field: 'dataDate',
+                    title: '数据日期'
+                },
+                {
+                    field: 'remark',
+                    title: '备注'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

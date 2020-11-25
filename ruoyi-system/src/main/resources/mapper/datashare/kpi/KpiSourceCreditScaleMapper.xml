@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.kpi.mapper.KpiSourceCreditScaleMapper">
+    
+    <resultMap type="KpiSourceCreditScale" id="KpiSourceCreditScaleResult">
+        <result property="id"    column="id"    />
+        <result property="district"    column="district"    />
+        <result property="microloans"    column="microloans"    />
+        <result property="individualBusiness"    column="individual_business"    />
+        <result property="homeMortgage"    column="home_mortgage"    />
+        <result property="otherConsumer"    column="other_consumer"    />
+        <result property="personalOther"    column="personal_other"    />
+        <result property="smallBusiness"    column="small_business"    />
+        <result property="supplyChain"    column="supply_chain"    />
+        <result property="domesticTradeFinance"    column="domestic_trade_finance"    />
+        <result property="internationalTradeFinance"    column="international_trade_finance"    />
+        <result property="otherCompany"    column="other_company"    />
+        <result property="dedicatedFinancing"    column="dedicated_financing"    />
+        <result property="smallBusinessFactoring"    column="small_business_factoring"    />
+        <result property="corporateOther"    column="corporate_other"    />
+        <result property="corporationOverdraft"    column="corporation_overdraft"    />
+        <result property="threeFarmersCompany"    column="three_farmers_company"    />
+        <result property="internationalCompany"    column="international_company"    />
+        <result property="mergersAcquisitions"    column="mergers_acquisitions"    />
+        <result property="variousAdvances"    column="various_advances"    />
+        <result property="rediscount"    column="rediscount"    />
+        <result property="directPaste"    column="direct_paste"    />
+        <result property="personalOverdraft"    column="personal_overdraft"    />
+        <result property="unitOverdraft"    column="unit_overdraft"    />
+        <result property="foreignCurrency"    column="foreign_currency"    />
+        <result property="buyForfeitingRmb"    column="buy_forfeiting_rmb"    />
+        <result property="buyForfeitingForeign"    column="buy_forfeiting_foreign"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectKpiSourceCreditScaleVo">
+        select id, district, microloans, individual_business, home_mortgage, other_consumer, personal_other, small_business, supply_chain, domestic_trade_finance, international_trade_finance, other_company, dedicated_financing, small_business_factoring, corporate_other, corporation_overdraft, three_farmers_company, international_company, mergers_acquisitions, various_advances, rediscount, direct_paste, personal_overdraft, unit_overdraft, foreign_currency, buy_forfeiting_rmb, buy_forfeiting_foreign, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_credit_scale
+    </sql>
+
+    <select id="selectKpiSourceCreditScaleList" parameterType="KpiSourceCreditScale" resultMap="KpiSourceCreditScaleResult">
+        <include refid="selectKpiSourceCreditScaleVo"/>
+        <where>  
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+            <if test="microloans != null "> and microloans = #{microloans}</if>
+            <if test="individualBusiness != null "> and individual_business = #{individualBusiness}</if>
+            <if test="homeMortgage != null "> and home_mortgage = #{homeMortgage}</if>
+            <if test="otherConsumer != null "> and other_consumer = #{otherConsumer}</if>
+            <if test="personalOther != null "> and personal_other = #{personalOther}</if>
+            <if test="smallBusiness != null "> and small_business = #{smallBusiness}</if>
+            <if test="supplyChain != null "> and supply_chain = #{supplyChain}</if>
+            <if test="domesticTradeFinance != null "> and domestic_trade_finance = #{domesticTradeFinance}</if>
+            <if test="internationalTradeFinance != null "> and international_trade_finance = #{internationalTradeFinance}</if>
+            <if test="otherCompany != null "> and other_company = #{otherCompany}</if>
+            <if test="dedicatedFinancing != null "> and dedicated_financing = #{dedicatedFinancing}</if>
+            <if test="smallBusinessFactoring != null "> and small_business_factoring = #{smallBusinessFactoring}</if>
+            <if test="corporateOther != null "> and corporate_other = #{corporateOther}</if>
+            <if test="corporationOverdraft != null "> and corporation_overdraft = #{corporationOverdraft}</if>
+            <if test="threeFarmersCompany != null "> and three_farmers_company = #{threeFarmersCompany}</if>
+            <if test="internationalCompany != null "> and international_company = #{internationalCompany}</if>
+            <if test="mergersAcquisitions != null "> and mergers_acquisitions = #{mergersAcquisitions}</if>
+            <if test="variousAdvances != null "> and various_advances = #{variousAdvances}</if>
+            <if test="rediscount != null "> and rediscount = #{rediscount}</if>
+            <if test="directPaste != null "> and direct_paste = #{directPaste}</if>
+            <if test="personalOverdraft != null "> and personal_overdraft = #{personalOverdraft}</if>
+            <if test="unitOverdraft != null "> and unit_overdraft = #{unitOverdraft}</if>
+            <if test="foreignCurrency != null "> and foreign_currency = #{foreignCurrency}</if>
+            <if test="buyForfeitingRmb != null "> and buy_forfeiting_rmb = #{buyForfeitingRmb}</if>
+            <if test="buyForfeitingForeign != null "> and buy_forfeiting_foreign = #{buyForfeitingForeign}</if>
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectKpiSourceCreditScaleById" parameterType="Long" resultMap="KpiSourceCreditScaleResult">
+        <include refid="selectKpiSourceCreditScaleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertKpiSourceCreditScale" parameterType="KpiSourceCreditScale" useGeneratedKeys="true" keyProperty="id">
+        insert into kpi_source_credit_scale
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">district,</if>
+            <if test="microloans != null">microloans,</if>
+            <if test="individualBusiness != null">individual_business,</if>
+            <if test="homeMortgage != null">home_mortgage,</if>
+            <if test="otherConsumer != null">other_consumer,</if>
+            <if test="personalOther != null">personal_other,</if>
+            <if test="smallBusiness != null">small_business,</if>
+            <if test="supplyChain != null">supply_chain,</if>
+            <if test="domesticTradeFinance != null">domestic_trade_finance,</if>
+            <if test="internationalTradeFinance != null">international_trade_finance,</if>
+            <if test="otherCompany != null">other_company,</if>
+            <if test="dedicatedFinancing != null">dedicated_financing,</if>
+            <if test="smallBusinessFactoring != null">small_business_factoring,</if>
+            <if test="corporateOther != null">corporate_other,</if>
+            <if test="corporationOverdraft != null">corporation_overdraft,</if>
+            <if test="threeFarmersCompany != null">three_farmers_company,</if>
+            <if test="internationalCompany != null">international_company,</if>
+            <if test="mergersAcquisitions != null">mergers_acquisitions,</if>
+            <if test="variousAdvances != null">various_advances,</if>
+            <if test="rediscount != null">rediscount,</if>
+            <if test="directPaste != null">direct_paste,</if>
+            <if test="personalOverdraft != null">personal_overdraft,</if>
+            <if test="unitOverdraft != null">unit_overdraft,</if>
+            <if test="foreignCurrency != null">foreign_currency,</if>
+            <if test="buyForfeitingRmb != null">buy_forfeiting_rmb,</if>
+            <if test="buyForfeitingForeign != null">buy_forfeiting_foreign,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="district != null and district != ''">#{district},</if>
+            <if test="microloans != null">#{microloans},</if>
+            <if test="individualBusiness != null">#{individualBusiness},</if>
+            <if test="homeMortgage != null">#{homeMortgage},</if>
+            <if test="otherConsumer != null">#{otherConsumer},</if>
+            <if test="personalOther != null">#{personalOther},</if>
+            <if test="smallBusiness != null">#{smallBusiness},</if>
+            <if test="supplyChain != null">#{supplyChain},</if>
+            <if test="domesticTradeFinance != null">#{domesticTradeFinance},</if>
+            <if test="internationalTradeFinance != null">#{internationalTradeFinance},</if>
+            <if test="otherCompany != null">#{otherCompany},</if>
+            <if test="dedicatedFinancing != null">#{dedicatedFinancing},</if>
+            <if test="smallBusinessFactoring != null">#{smallBusinessFactoring},</if>
+            <if test="corporateOther != null">#{corporateOther},</if>
+            <if test="corporationOverdraft != null">#{corporationOverdraft},</if>
+            <if test="threeFarmersCompany != null">#{threeFarmersCompany},</if>
+            <if test="internationalCompany != null">#{internationalCompany},</if>
+            <if test="mergersAcquisitions != null">#{mergersAcquisitions},</if>
+            <if test="variousAdvances != null">#{variousAdvances},</if>
+            <if test="rediscount != null">#{rediscount},</if>
+            <if test="directPaste != null">#{directPaste},</if>
+            <if test="personalOverdraft != null">#{personalOverdraft},</if>
+            <if test="unitOverdraft != null">#{unitOverdraft},</if>
+            <if test="foreignCurrency != null">#{foreignCurrency},</if>
+            <if test="buyForfeitingRmb != null">#{buyForfeitingRmb},</if>
+            <if test="buyForfeitingForeign != null">#{buyForfeitingForeign},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKpiSourceCreditScale" parameterType="KpiSourceCreditScale">
+        update kpi_source_credit_scale
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="district != null and district != ''">district = #{district},</if>
+            <if test="microloans != null">microloans = #{microloans},</if>
+            <if test="individualBusiness != null">individual_business = #{individualBusiness},</if>
+            <if test="homeMortgage != null">home_mortgage = #{homeMortgage},</if>
+            <if test="otherConsumer != null">other_consumer = #{otherConsumer},</if>
+            <if test="personalOther != null">personal_other = #{personalOther},</if>
+            <if test="smallBusiness != null">small_business = #{smallBusiness},</if>
+            <if test="supplyChain != null">supply_chain = #{supplyChain},</if>
+            <if test="domesticTradeFinance != null">domestic_trade_finance = #{domesticTradeFinance},</if>
+            <if test="internationalTradeFinance != null">international_trade_finance = #{internationalTradeFinance},</if>
+            <if test="otherCompany != null">other_company = #{otherCompany},</if>
+            <if test="dedicatedFinancing != null">dedicated_financing = #{dedicatedFinancing},</if>
+            <if test="smallBusinessFactoring != null">small_business_factoring = #{smallBusinessFactoring},</if>
+            <if test="corporateOther != null">corporate_other = #{corporateOther},</if>
+            <if test="corporationOverdraft != null">corporation_overdraft = #{corporationOverdraft},</if>
+            <if test="threeFarmersCompany != null">three_farmers_company = #{threeFarmersCompany},</if>
+            <if test="internationalCompany != null">international_company = #{internationalCompany},</if>
+            <if test="mergersAcquisitions != null">mergers_acquisitions = #{mergersAcquisitions},</if>
+            <if test="variousAdvances != null">various_advances = #{variousAdvances},</if>
+            <if test="rediscount != null">rediscount = #{rediscount},</if>
+            <if test="directPaste != null">direct_paste = #{directPaste},</if>
+            <if test="personalOverdraft != null">personal_overdraft = #{personalOverdraft},</if>
+            <if test="unitOverdraft != null">unit_overdraft = #{unitOverdraft},</if>
+            <if test="foreignCurrency != null">foreign_currency = #{foreignCurrency},</if>
+            <if test="buyForfeitingRmb != null">buy_forfeiting_rmb = #{buyForfeitingRmb},</if>
+            <if test="buyForfeitingForeign != null">buy_forfeiting_foreign = #{buyForfeitingForeign},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteKpiSourceCreditScaleById" parameterType="Long">
+        delete from kpi_source_credit_scale where id = #{id}
+    </delete>
+
+    <delete id="deleteKpiSourceCreditScaleByIds" parameterType="String">
+        delete from kpi_source_credit_scale where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiSourceCreditScaleResult">
+        <include refid="selectKpiSourceCreditScaleVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_source_credit_scale where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="KpiSourceCreditScale">
+        insert into kpi_source_credit_scale(id, district, microloans, individual_business, home_mortgage, other_consumer, personal_other, small_business, supply_chain, domestic_trade_finance, international_trade_finance, other_company, dedicated_financing, small_business_factoring, corporate_other, corporation_overdraft, three_farmers_company, international_company, mergers_acquisitions, various_advances, rediscount, direct_paste, personal_overdraft, unit_overdraft, foreign_currency, buy_forfeiting_rmb, buy_forfeiting_foreign, data_date, del_flag, create_by, create_time, update_by, update_time, remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.district},#{kk.microloans},#{kk.individualBusiness},#{kk.homeMortgage},#{kk.otherConsumer},#{kk.personalOther},#{kk.smallBusiness},#{kk.supplyChain},#{kk.domesticTradeFinance},#{kk.internationalTradeFinance},#{kk.otherCompany},#{kk.dedicatedFinancing},#{kk.smallBusinessFactoring},#{kk.corporateOther},#{kk.corporationOverdraft},#{kk.threeFarmersCompany},#{kk.internationalCompany},#{kk.mergersAcquisitions},#{kk.variousAdvances},#{kk.rediscount},#{kk.directPaste},#{kk.personalOverdraft},#{kk.unitOverdraft},#{kk.foreignCurrency},#{kk.buyForfeitingRmb},#{kk.buyForfeitingForeign},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+
+</mapper>

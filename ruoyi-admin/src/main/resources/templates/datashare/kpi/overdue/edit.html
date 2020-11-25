@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改零售信贷逾期')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-overdue-edit" th:object="${kpiSourceOverdue}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">地区：</label>
+                <div class="col-sm-8">
+                    <input name="district" th:field="*{district}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-逾期余额：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessBalance" th:field="*{personalBusinessBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-逾期余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessBalanceLast" th:field="*{personalBusinessBalanceLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-逾期余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessBalanceBy" th:field="*{personalBusinessBalanceBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-逾期率：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessRate" th:field="*{personalBusinessRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-逾期率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessRateLast" th:field="*{personalBusinessRateLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-逾期率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessRateBy" th:field="*{personalBusinessRateBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-逾期余额：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerBalance" th:field="*{personalConsumerBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-逾期余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerBalanceLast" th:field="*{personalConsumerBalanceLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-逾期余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerBalanceBy" th:field="*{personalConsumerBalanceBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-逾期率：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerRate" th:field="*{personalConsumerRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-逾期率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerRateLast" th:field="*{personalConsumerRateLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-逾期率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerRateBy" th:field="*{personalConsumerRateBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-逾期余额：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessbalance" th:field="*{smallBusinessbalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-逾期余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessbalanceLast" th:field="*{smallBusinessbalanceLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-逾期余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessbalanceBy" th:field="*{smallBusinessbalanceBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-逾期率：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessrate" th:field="*{smallBusinessrate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-逾期率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessrateLast" th:field="*{smallBusinessrateLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-逾期率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessrateBy" th:field="*{smallBusinessrateBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-逾期余额：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardBalance" th:field="*{creditCardBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-逾期余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardBalanceLast" th:field="*{creditCardBalanceLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-逾期余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardBalanceBy" th:field="*{creditCardBalanceBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-逾期率：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardRate" th:field="*{creditCardRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-逾期率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardRateLast" th:field="*{creditCardRateLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-逾期率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardRateBy" th:field="*{creditCardRateBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-逾期余额：</label>
+                <div class="col-sm-8">
+                    <input name="retailBalance" th:field="*{retailBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-逾期余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="retailBalanceLast" th:field="*{retailBalanceLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-逾期余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="retailBalanceBy" th:field="*{retailBalanceBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-逾期率：</label>
+                <div class="col-sm-8">
+                    <input name="retailRate" th:field="*{retailRate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-逾期率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="retailRateLast" th:field="*{retailRateLast}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-逾期率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="retailRateBy" th:field="*{retailRateBy}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="dataDate" th:value="${#dates.format(kpiSourceOverdue.dataDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "datashare/kpi/overdue";
+        $("#form-overdue-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-overdue-edit').serialize());
+            }
+        }
+
+        $("input[name='dataDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

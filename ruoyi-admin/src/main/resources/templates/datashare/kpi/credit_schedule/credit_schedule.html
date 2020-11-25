@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('全行KPI指标（二）-附表列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time">
+                                <label>数据日期：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDataDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDataDate]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:credit_schedule:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:credit_schedule:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:credit_schedule:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:credit_schedule:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('datashare/kpi:credit_schedule:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('datashare/kpi:credit_schedule:remove')}]];
+        var prefix = ctx + "datashare/kpi/credit_schedule";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "全行KPI指标（二）-附表",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'district',
+                    title: '地区'
+                },
+                {
+                    field: 'totalBalance',
+                    title: '合计-余额'
+                },
+                {
+                    field: 'totalGrowthM',
+                    title: '合计-月增'
+                },
+                {
+                    field: 'totalGrowthY',
+                    title: '合计-年增'
+                },
+                {
+                    field: 'retailBalance',
+                    title: '个人零售贷款-余额'
+                },
+                {
+                    field: 'retailGrowthM',
+                    title: '个人零售贷款-月增'
+                },
+                {
+                    field: 'retailGrowthY',
+                    title: '个人零售贷款-年增'
+                },
+                {
+                    field: 'smallBusinessBalance',
+                    title: '小企业贷款-余额'
+                },
+                {
+                    field: 'smallBusinessGrowthM',
+                    title: '小企业贷款-月增'
+                },
+                {
+                    field: 'smallBusinessGrowthY',
+                    title: '小企业贷款-年增'
+                },
+                {
+                    field: 'companyBalance',
+                    title: '公司贷款-余额'
+                },
+                {
+                    field: 'companyGrowthM',
+                    title: '公司贷款-月增'
+                },
+                {
+                    field: 'companyGrowthY',
+                    title: '公司贷款-年增'
+                },
+                {
+                    field: 'supplyChainBalance',
+                    title: '供应链-余额'
+                },
+                {
+                    field: 'supplyChainGrowthM',
+                    title: '供应链-月增'
+                },
+                {
+                    field: 'supplyChainGrowthY',
+                    title: '供应链-年增'
+                },
+                {
+                    field: 'billFinancingBalance',
+                    title: '票据融资-余额'
+                },
+                {
+                    field: 'billFinancingGrowthM',
+                    title: '票据融资-月增'
+                },
+                {
+                    field: 'billFinancingGrowthY',
+                    title: '票据融资-年增'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改全行资产业务情况表')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-assetbusiness-edit" th:object="${kpiShowAssetBusiness}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">地区：</label>
+                <div class="col-sm-8">
+                    <input name="district" th:field="*{district}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合计-余额：</label>
+                <div class="col-sm-8">
+                    <input name="totalBalance" th:field="*{totalBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合计-月增：</label>
+                <div class="col-sm-8">
+                    <input name="totalGrowthM" th:field="*{totalGrowthM}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合计-年增：</label>
+                <div class="col-sm-8">
+                    <input name="totalGrowthY" th:field="*{totalGrowthY}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">合计-日均：</label>
+                <div class="col-sm-8">
+                    <input name="totalDaily" th:field="*{totalDaily}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">三农贷款(小额)-余额：</label>
+                <div class="col-sm-8">
+                    <input name="smallAmountBalance" th:field="*{smallAmountBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">三农贷款(小额)-月增：</label>
+                <div class="col-sm-8">
+                    <input name="smallAmountGrowthM" th:field="*{smallAmountGrowthM}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">三农贷款(小额)-年增：</label>
+                <div class="col-sm-8">
+                    <input name="smallAmountGrowthY" th:field="*{smallAmountGrowthY}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">三农贷款(小额)-日均：</label>
+                <div class="col-sm-8">
+                    <input name="smallAmountDaily" th:field="*{smallAmountDaily}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">消费贷款-余额：</label>
+                <div class="col-sm-8">
+                    <input name="consumptionBalance" th:field="*{consumptionBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">消费贷款-月增：</label>
+                <div class="col-sm-8">
+                    <input name="consumptionGrowthM" th:field="*{consumptionGrowthM}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">消费贷款-年增：</label>
+                <div class="col-sm-8">
+                    <input name="consumptionGrowthY" th:field="*{consumptionGrowthY}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">消费贷款-日均：</label>
+                <div class="col-sm-8">
+                    <input name="consumptionDaily" th:field="*{consumptionDaily}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-余额：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessBalance" th:field="*{smallBusinessBalance}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-月增：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessGrowthM" th:field="*{smallBusinessGrowthM}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-年增：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessGrowthY" th:field="*{smallBusinessGrowthY}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-日均：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessDaily" th:field="*{smallBusinessDaily}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="dataDate" th:value="${#dates.format(kpiShowAssetBusiness.dataDate, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control">[[*{remark}]]</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "datashare/kpi/assetbusiness";
+        $("#form-assetbusiness-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-assetbusiness-edit').serialize());
+            }
+        }
+
+        $("input[name='dataDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增零售信贷不良')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-unhealthy-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">地区：</label>
+                <div class="col-sm-8">
+                    <input name="district" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-不良余额：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-不良余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessBalanceLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-不良余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessBalanceBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-不良率：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-不良率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessRateLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人经营性贷款-不良率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalBusinessRateBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-不良余额：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-不良余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerBalanceLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-不良余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerBalanceBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-不良率：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-不良率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerRateLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个人消费贷款-不良率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="personalConsumerRateBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-不良余额：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessbalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-不良余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessbalanceLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-不良余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessbalanceBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-不良率：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessrate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-不良率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessrateLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">小企业贷款-不良率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="smallBusinessrateBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-不良余额：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-不良余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardBalanceLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-不良余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardBalanceBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-不良率：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-不良率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardRateLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">信用卡业务-不良率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="creditCardRateBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-不良余额：</label>
+                <div class="col-sm-8">
+                    <input name="retailBalance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-不良余额较上期：</label>
+                <div class="col-sm-8">
+                    <input name="retailBalanceLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-不良余额较年初：</label>
+                <div class="col-sm-8">
+                    <input name="retailBalanceBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-不良率：</label>
+                <div class="col-sm-8">
+                    <input name="retailRate" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-不良率较上期：</label>
+                <div class="col-sm-8">
+                    <input name="retailRateLast" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">零售-不良率较年初：</label>
+                <div class="col-sm-8">
+                    <input name="retailRateBy" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="dataDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">删除标志：</label>
+                <div class="col-sm-8">
+                    <input name="delFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "datashare/kpi/unhealthy"
+        $("#form-unhealthy-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-unhealthy-add').serialize());
+            }
+        }
+
+        $("input[name='dataDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>
