@@ -7,7 +7,7 @@ import com.psbc.datashare.kpi.domain.KpiSourceUnhealthy;
  * 零售信贷不良Service接口
  * 
  * @author mql
- * @date 2020-11-25
+ * @date 2020-11-26
  */
 public interface IKpiSourceUnhealthyService 
 {

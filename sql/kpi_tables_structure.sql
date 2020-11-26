@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 24/11/2020 18:19:44
+ Date: 26/11/2020 09:41:25
 */
 
 SET NAMES utf8mb4;
@@ -141,6 +141,13 @@ CREATE TABLE `kpi_show_credit_schedule`  (
   `bill_financing_balance` decimal(12, 6) NULL DEFAULT NULL COMMENT '票据融资-余额',
   `bill_financing_growth_m` decimal(12, 6) NULL DEFAULT NULL COMMENT '票据融资-月增',
   `bill_financing_growth_y` decimal(12, 6) NULL DEFAULT NULL COMMENT '票据融资-年增',
+  `data_date` date NOT NULL COMMENT '数据日期',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '全行KPI指标表（二）展示结果数据附表(贷款)' ROW_FORMAT = Dynamic;
 
@@ -173,7 +180,7 @@ CREATE TABLE `kpi_show_income`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 214 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '全行KPI指标表（一）展示数据表(收入KPI)' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '全行KPI指标表（一）展示数据表(收入KPI)' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for kpi_source_credit_scale
@@ -269,12 +276,12 @@ CREATE TABLE `kpi_source_overdue`  (
   `personal_consumer_rate` decimal(12, 6) NULL DEFAULT NULL COMMENT '个人消费贷款-逾期率',
   `personal_consumer_rate_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '个人消费贷款-逾期率较上期',
   `personal_consumer_rate_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '个人消费贷款-逾期率较年初',
-  `small_businessbalance` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期余额',
-  `small_businessbalance_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期余额较上期',
-  `small_businessbalance_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期余额较年初',
-  `small_businessrate` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期率',
-  `small_businessrate_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期率较上期',
-  `small_businessrate_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期率较年初',
+  `small_business_balance` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期余额',
+  `small_business_balance_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期余额较上期',
+  `small_business_balance_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期余额较年初',
+  `small_business_rate` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期率',
+  `small_business_rate_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期率较上期',
+  `small_business_rate_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-逾期率较年初',
   `credit_card_balance` decimal(12, 6) NULL DEFAULT NULL COMMENT '信用卡业务-逾期余额',
   `credit_card_balance_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '信用卡业务-逾期余额较上期',
   `credit_card_balance_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '信用卡业务-逾期余额较年初',
@@ -345,12 +352,12 @@ CREATE TABLE `kpi_source_unhealthy`  (
   `personal_consumer_rate` decimal(12, 6) NULL DEFAULT NULL COMMENT '个人消费贷款-不良率',
   `personal_consumer_rate_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '个人消费贷款-不良率较上期',
   `personal_consumer_rate_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '个人消费贷款-不良率较年初',
-  `small_businessbalance` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良余额',
-  `small_businessbalance_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良余额较上期',
-  `small_businessbalance_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良余额较年初',
-  `small_businessrate` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良率',
-  `small_businessrate_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良率较上期',
-  `small_businessrate_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良率较年初',
+  `small_business_balance` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良余额',
+  `small_business_balance_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良余额较上期',
+  `small_business_balance_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良余额较年初',
+  `small_business_rate` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良率',
+  `small_business_rate_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良率较上期',
+  `small_business_rate_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '小企业贷款-不良率较年初',
   `credit_card_balance` decimal(12, 6) NULL DEFAULT NULL COMMENT '信用卡业务-不良余额',
   `credit_card_balance_last` decimal(12, 6) NULL DEFAULT NULL COMMENT '信用卡业务-不良余额较上期',
   `credit_card_balance_by` decimal(12, 6) NULL DEFAULT NULL COMMENT '信用卡业务-不良余额较年初',

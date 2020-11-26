@@ -9,72 +9,72 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * 信贷规模Mapper接口
- * 
+ *
  * @author mql
  * @date 2020-11-25
  */
-public interface KpiSourceCreditScaleMapper 
-{
+public interface KpiSourceCreditScaleMapper {
     /**
      * 查询信贷规模
-     * 
+     *
      * @param id 信贷规模ID
      * @return 信贷规模
      */
-    public KpiSourceCreditScale selectKpiSourceCreditScaleById(Long id);
+    KpiSourceCreditScale selectKpiSourceCreditScaleById(Long id);
 
     /**
      * 查询信贷规模列表
-     * 
+     *
      * @param kpiSourceCreditScale 信贷规模
      * @return 信贷规模集合
      */
-    public List<KpiSourceCreditScale> selectKpiSourceCreditScaleList(KpiSourceCreditScale kpiSourceCreditScale);
+    List<KpiSourceCreditScale> selectKpiSourceCreditScaleList(KpiSourceCreditScale kpiSourceCreditScale);
 
     /**
      * 新增信贷规模
-     * 
+     *
      * @param kpiSourceCreditScale 信贷规模
      * @return 结果
      */
-    public int insertKpiSourceCreditScale(KpiSourceCreditScale kpiSourceCreditScale);
+    int insertKpiSourceCreditScale(KpiSourceCreditScale kpiSourceCreditScale);
 
     /**
      * 修改信贷规模
-     * 
+     *
      * @param kpiSourceCreditScale 信贷规模
      * @return 结果
      */
-    public int updateKpiSourceCreditScale(KpiSourceCreditScale kpiSourceCreditScale);
+    int updateKpiSourceCreditScale(KpiSourceCreditScale kpiSourceCreditScale);
 
     /**
      * 删除信贷规模
-     * 
+     *
      * @param id 信贷规模ID
      * @return 结果
      */
-    public int deleteKpiSourceCreditScaleById(Long id);
+    int deleteKpiSourceCreditScaleById(Long id);
 
     /**
      * 批量删除信贷规模
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteKpiSourceCreditScaleByIds(String[] ids);
+    int deleteKpiSourceCreditScaleByIds(String[] ids);
 
 
     /**
-     * 查询全行KPI指标（一）
+     * 查询
      *
-     * @param dataDate 全行KPI指标（一）数据日期
+     * @param dataDate 数据日期
      * @return 全行KPI指标（一）
      */
     List<KpiSourceCreditScale> selectByDataDate(Date dataDate);
 
 
     /**
-     * 删除全行KPI指标（一）
+     * 删除
+     *
      * @param dataDate 数据日期
      * @return
      */
@@ -83,6 +83,7 @@ public interface KpiSourceCreditScaleMapper
 
     /**
      * 批量插入数据
+     *
      * @param list
      * @return
      */

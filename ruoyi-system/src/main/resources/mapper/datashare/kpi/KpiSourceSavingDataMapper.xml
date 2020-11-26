@@ -143,4 +143,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiSourceSavingDataResult">
+        <include refid="selectKpiSourceSavingDataVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_source_saving_data where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="KpiSourceSavingData">
+        insert into kpi_source_saving_data(id,district,daily_balance,daily_balance_self,daily_balance_agent,daily_increase,daily_increase_self,daily_increase_agent,monthly_increase,monthly_increase_self,monthly_increase_agent,yearly_increase,yearly_increase_self,yearly_increase_agent,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.district},#{kk.dailyBalance},#{kk.dailyBalanceSelf},#{kk.dailyBalanceAgent},#{kk.dailyIncrease},#{kk.dailyIncreaseSelf},#{kk.dailyIncreaseAgent},#{kk.monthlyIncrease},#{kk.monthlyIncreaseSelf},#{kk.monthlyIncreaseAgent},#{kk.yearlyIncrease},#{kk.yearlyIncreaseSelf},#{kk.yearlyIncreaseAgent},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+
 </mapper>

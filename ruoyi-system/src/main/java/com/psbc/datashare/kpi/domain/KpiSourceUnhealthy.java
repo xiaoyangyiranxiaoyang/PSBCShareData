@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 零售信贷不良对象 kpi_source_unhealthy
  * 
  * @author mql
- * @date 2020-11-25
+ * @date 2020-11-26
  */
 public class KpiSourceUnhealthy extends BaseEntity
 {
@@ -74,27 +74,27 @@ public class KpiSourceUnhealthy extends BaseEntity
 
     /** 小企业贷款-不良余额 */
     @Excel(name = "小企业贷款-不良余额")
-    private BigDecimal smallBusinessbalance;
+    private BigDecimal smallBusinessBalance;
 
     /** 小企业贷款-不良余额较上期 */
     @Excel(name = "小企业贷款-不良余额较上期")
-    private BigDecimal smallBusinessbalanceLast;
+    private BigDecimal smallBusinessBalanceLast;
 
     /** 小企业贷款-不良余额较年初 */
     @Excel(name = "小企业贷款-不良余额较年初")
-    private BigDecimal smallBusinessbalanceBy;
+    private BigDecimal smallBusinessBalanceBy;
 
     /** 小企业贷款-不良率 */
     @Excel(name = "小企业贷款-不良率")
-    private BigDecimal smallBusinessrate;
+    private BigDecimal smallBusinessRate;
 
     /** 小企业贷款-不良率较上期 */
     @Excel(name = "小企业贷款-不良率较上期")
-    private BigDecimal smallBusinessrateLast;
+    private BigDecimal smallBusinessRateLast;
 
     /** 小企业贷款-不良率较年初 */
     @Excel(name = "小企业贷款-不良率较年初")
-    private BigDecimal smallBusinessrateBy;
+    private BigDecimal smallBusinessRateBy;
 
     /** 信用卡业务-不良余额 */
     @Excel(name = "信用卡业务-不良余额")
@@ -277,59 +277,59 @@ public class KpiSourceUnhealthy extends BaseEntity
     {
         return personalConsumerRateBy;
     }
-    public void setSmallBusinessbalance(BigDecimal smallBusinessbalance) 
+    public void setSmallBusinessBalance(BigDecimal smallBusinessBalance) 
     {
-        this.smallBusinessbalance = smallBusinessbalance;
+        this.smallBusinessBalance = smallBusinessBalance;
     }
 
-    public BigDecimal getSmallBusinessbalance() 
+    public BigDecimal getSmallBusinessBalance() 
     {
-        return smallBusinessbalance;
+        return smallBusinessBalance;
     }
-    public void setSmallBusinessbalanceLast(BigDecimal smallBusinessbalanceLast) 
+    public void setSmallBusinessBalanceLast(BigDecimal smallBusinessBalanceLast) 
     {
-        this.smallBusinessbalanceLast = smallBusinessbalanceLast;
-    }
-
-    public BigDecimal getSmallBusinessbalanceLast() 
-    {
-        return smallBusinessbalanceLast;
-    }
-    public void setSmallBusinessbalanceBy(BigDecimal smallBusinessbalanceBy) 
-    {
-        this.smallBusinessbalanceBy = smallBusinessbalanceBy;
+        this.smallBusinessBalanceLast = smallBusinessBalanceLast;
     }
 
-    public BigDecimal getSmallBusinessbalanceBy() 
+    public BigDecimal getSmallBusinessBalanceLast() 
     {
-        return smallBusinessbalanceBy;
+        return smallBusinessBalanceLast;
     }
-    public void setSmallBusinessrate(BigDecimal smallBusinessrate) 
+    public void setSmallBusinessBalanceBy(BigDecimal smallBusinessBalanceBy) 
     {
-        this.smallBusinessrate = smallBusinessrate;
-    }
-
-    public BigDecimal getSmallBusinessrate() 
-    {
-        return smallBusinessrate;
-    }
-    public void setSmallBusinessrateLast(BigDecimal smallBusinessrateLast) 
-    {
-        this.smallBusinessrateLast = smallBusinessrateLast;
+        this.smallBusinessBalanceBy = smallBusinessBalanceBy;
     }
 
-    public BigDecimal getSmallBusinessrateLast() 
+    public BigDecimal getSmallBusinessBalanceBy() 
     {
-        return smallBusinessrateLast;
+        return smallBusinessBalanceBy;
     }
-    public void setSmallBusinessrateBy(BigDecimal smallBusinessrateBy) 
+    public void setSmallBusinessRate(BigDecimal smallBusinessRate) 
     {
-        this.smallBusinessrateBy = smallBusinessrateBy;
+        this.smallBusinessRate = smallBusinessRate;
     }
 
-    public BigDecimal getSmallBusinessrateBy() 
+    public BigDecimal getSmallBusinessRate() 
     {
-        return smallBusinessrateBy;
+        return smallBusinessRate;
+    }
+    public void setSmallBusinessRateLast(BigDecimal smallBusinessRateLast) 
+    {
+        this.smallBusinessRateLast = smallBusinessRateLast;
+    }
+
+    public BigDecimal getSmallBusinessRateLast() 
+    {
+        return smallBusinessRateLast;
+    }
+    public void setSmallBusinessRateBy(BigDecimal smallBusinessRateBy) 
+    {
+        this.smallBusinessRateBy = smallBusinessRateBy;
+    }
+
+    public BigDecimal getSmallBusinessRateBy() 
+    {
+        return smallBusinessRateBy;
     }
     public void setCreditCardBalance(BigDecimal creditCardBalance) 
     {
@@ -475,12 +475,12 @@ public class KpiSourceUnhealthy extends BaseEntity
             .append("personalConsumerRate", getPersonalConsumerRate())
             .append("personalConsumerRateLast", getPersonalConsumerRateLast())
             .append("personalConsumerRateBy", getPersonalConsumerRateBy())
-            .append("smallBusinessbalance", getSmallBusinessbalance())
-            .append("smallBusinessbalanceLast", getSmallBusinessbalanceLast())
-            .append("smallBusinessbalanceBy", getSmallBusinessbalanceBy())
-            .append("smallBusinessrate", getSmallBusinessrate())
-            .append("smallBusinessrateLast", getSmallBusinessrateLast())
-            .append("smallBusinessrateBy", getSmallBusinessrateBy())
+            .append("smallBusinessBalance", getSmallBusinessBalance())
+            .append("smallBusinessBalanceLast", getSmallBusinessBalanceLast())
+            .append("smallBusinessBalanceBy", getSmallBusinessBalanceBy())
+            .append("smallBusinessRate", getSmallBusinessRate())
+            .append("smallBusinessRateLast", getSmallBusinessRateLast())
+            .append("smallBusinessRateBy", getSmallBusinessRateBy())
             .append("creditCardBalance", getCreditCardBalance())
             .append("creditCardBalanceLast", getCreditCardBalanceLast())
             .append("creditCardBalanceBy", getCreditCardBalanceBy())

@@ -7,7 +7,7 @@ import com.psbc.datashare.kpi.domain.KpiSourceOverdue;
  * 零售信贷逾期Service接口
  * 
  * @author mql
- * @date 2020-11-25
+ * @date 2020-11-26
  */
 public interface IKpiSourceOverdueService 
 {

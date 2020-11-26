@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psbc.datashare.kpi.mapper.KpiSourceOverdueMapper">
-    
+
     <resultMap type="KpiSourceOverdue" id="KpiSourceOverdueResult">
         <result property="id"    column="id"    />
         <result property="district"    column="district"    />
@@ -19,12 +19,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="personalConsumerRate"    column="personal_consumer_rate"    />
         <result property="personalConsumerRateLast"    column="personal_consumer_rate_last"    />
         <result property="personalConsumerRateBy"    column="personal_consumer_rate_by"    />
-        <result property="smallBusinessbalance"    column="small_businessbalance"    />
-        <result property="smallBusinessbalanceLast"    column="small_businessbalance_last"    />
-        <result property="smallBusinessbalanceBy"    column="small_businessbalance_by"    />
-        <result property="smallBusinessrate"    column="small_businessrate"    />
-        <result property="smallBusinessrateLast"    column="small_businessrate_last"    />
-        <result property="smallBusinessrateBy"    column="small_businessrate_by"    />
+        <result property="smallBusinessBalance"    column="small_business_balance"    />
+        <result property="smallBusinessBalanceLast"    column="small_business_balance_last"    />
+        <result property="smallBusinessBalanceBy"    column="small_business_balance_by"    />
+        <result property="smallBusinessRate"    column="small_business_rate"    />
+        <result property="smallBusinessRateLast"    column="small_business_rate_last"    />
+        <result property="smallBusinessRateBy"    column="small_business_rate_by"    />
         <result property="creditCardBalance"    column="credit_card_balance"    />
         <result property="creditCardBalanceLast"    column="credit_card_balance_last"    />
         <result property="creditCardBalanceBy"    column="credit_card_balance_by"    />
@@ -47,12 +47,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectKpiSourceOverdueVo">
-        select id, district, personal_business_balance, personal_business_balance_last, personal_business_balance_by, personal_business_rate, personal_business_rate_last, personal_business_rate_by, personal_consumer_balance, personal_consumer_balance_last, personal_consumer_balance_by, personal_consumer_rate, personal_consumer_rate_last, personal_consumer_rate_by, small_businessbalance, small_businessbalance_last, small_businessbalance_by, small_businessrate, small_businessrate_last, small_businessrate_by, credit_card_balance, credit_card_balance_last, credit_card_balance_by, credit_card_rate, credit_card_rate_last, credit_card_rate_by, retail_balance, retail_balance_last, retail_balance_by, retail_rate, retail_rate_last, retail_rate_by, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_overdue
+        select id, district, personal_business_balance, personal_business_balance_last, personal_business_balance_by, personal_business_rate, personal_business_rate_last, personal_business_rate_by, personal_consumer_balance, personal_consumer_balance_last, personal_consumer_balance_by, personal_consumer_rate, personal_consumer_rate_last, personal_consumer_rate_by, small_business_balance, small_business_balance_last, small_business_balance_by, small_business_rate, small_business_rate_last, small_business_rate_by, credit_card_balance, credit_card_balance_last, credit_card_balance_by, credit_card_rate, credit_card_rate_last, credit_card_rate_by, retail_balance, retail_balance_last, retail_balance_by, retail_rate, retail_rate_last, retail_rate_by, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_overdue
     </sql>
 
     <select id="selectKpiSourceOverdueList" parameterType="KpiSourceOverdue" resultMap="KpiSourceOverdueResult">
         <include refid="selectKpiSourceOverdueVo"/>
-        <where>  
+        <where>
             <if test="district != null  and district != ''"> and district = #{district}</if>
             <if test="personalBusinessBalance != null "> and personal_business_balance = #{personalBusinessBalance}</if>
             <if test="personalBusinessBalanceLast != null "> and personal_business_balance_last = #{personalBusinessBalanceLast}</if>
@@ -66,12 +66,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="personalConsumerRate != null "> and personal_consumer_rate = #{personalConsumerRate}</if>
             <if test="personalConsumerRateLast != null "> and personal_consumer_rate_last = #{personalConsumerRateLast}</if>
             <if test="personalConsumerRateBy != null "> and personal_consumer_rate_by = #{personalConsumerRateBy}</if>
-            <if test="smallBusinessbalance != null "> and small_businessbalance = #{smallBusinessbalance}</if>
-            <if test="smallBusinessbalanceLast != null "> and small_businessbalance_last = #{smallBusinessbalanceLast}</if>
-            <if test="smallBusinessbalanceBy != null "> and small_businessbalance_by = #{smallBusinessbalanceBy}</if>
-            <if test="smallBusinessrate != null "> and small_businessrate = #{smallBusinessrate}</if>
-            <if test="smallBusinessrateLast != null "> and small_businessrate_last = #{smallBusinessrateLast}</if>
-            <if test="smallBusinessrateBy != null "> and small_businessrate_by = #{smallBusinessrateBy}</if>
+            <if test="smallBusinessBalance != null "> and small_business_balance = #{smallBusinessBalance}</if>
+            <if test="smallBusinessBalanceLast != null "> and small_business_balance_last = #{smallBusinessBalanceLast}</if>
+            <if test="smallBusinessBalanceBy != null "> and small_business_balance_by = #{smallBusinessBalanceBy}</if>
+            <if test="smallBusinessRate != null "> and small_business_rate = #{smallBusinessRate}</if>
+            <if test="smallBusinessRateLast != null "> and small_business_rate_last = #{smallBusinessRateLast}</if>
+            <if test="smallBusinessRateBy != null "> and small_business_rate_by = #{smallBusinessRateBy}</if>
             <if test="creditCardBalance != null "> and credit_card_balance = #{creditCardBalance}</if>
             <if test="creditCardBalanceLast != null "> and credit_card_balance_last = #{creditCardBalanceLast}</if>
             <if test="creditCardBalanceBy != null "> and credit_card_balance_by = #{creditCardBalanceBy}</if>
@@ -87,12 +87,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dataDate != null "> and data_date = #{dataDate}</if>
         </where>
     </select>
-    
+
     <select id="selectKpiSourceOverdueById" parameterType="Long" resultMap="KpiSourceOverdueResult">
         <include refid="selectKpiSourceOverdueVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertKpiSourceOverdue" parameterType="KpiSourceOverdue" useGeneratedKeys="true" keyProperty="id">
         insert into kpi_source_overdue
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -109,12 +109,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="personalConsumerRate != null">personal_consumer_rate,</if>
             <if test="personalConsumerRateLast != null">personal_consumer_rate_last,</if>
             <if test="personalConsumerRateBy != null">personal_consumer_rate_by,</if>
-            <if test="smallBusinessbalance != null">small_businessbalance,</if>
-            <if test="smallBusinessbalanceLast != null">small_businessbalance_last,</if>
-            <if test="smallBusinessbalanceBy != null">small_businessbalance_by,</if>
-            <if test="smallBusinessrate != null">small_businessrate,</if>
-            <if test="smallBusinessrateLast != null">small_businessrate_last,</if>
-            <if test="smallBusinessrateBy != null">small_businessrate_by,</if>
+            <if test="smallBusinessBalance != null">small_business_balance,</if>
+            <if test="smallBusinessBalanceLast != null">small_business_balance_last,</if>
+            <if test="smallBusinessBalanceBy != null">small_business_balance_by,</if>
+            <if test="smallBusinessRate != null">small_business_rate,</if>
+            <if test="smallBusinessRateLast != null">small_business_rate_last,</if>
+            <if test="smallBusinessRateBy != null">small_business_rate_by,</if>
             <if test="creditCardBalance != null">credit_card_balance,</if>
             <if test="creditCardBalanceLast != null">credit_card_balance_last,</if>
             <if test="creditCardBalanceBy != null">credit_card_balance_by,</if>
@@ -134,7 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="district != null and district != ''">#{district},</if>
             <if test="personalBusinessBalance != null">#{personalBusinessBalance},</if>
@@ -149,12 +149,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="personalConsumerRate != null">#{personalConsumerRate},</if>
             <if test="personalConsumerRateLast != null">#{personalConsumerRateLast},</if>
             <if test="personalConsumerRateBy != null">#{personalConsumerRateBy},</if>
-            <if test="smallBusinessbalance != null">#{smallBusinessbalance},</if>
-            <if test="smallBusinessbalanceLast != null">#{smallBusinessbalanceLast},</if>
-            <if test="smallBusinessbalanceBy != null">#{smallBusinessbalanceBy},</if>
-            <if test="smallBusinessrate != null">#{smallBusinessrate},</if>
-            <if test="smallBusinessrateLast != null">#{smallBusinessrateLast},</if>
-            <if test="smallBusinessrateBy != null">#{smallBusinessrateBy},</if>
+            <if test="smallBusinessBalance != null">#{smallBusinessBalance},</if>
+            <if test="smallBusinessBalanceLast != null">#{smallBusinessBalanceLast},</if>
+            <if test="smallBusinessBalanceBy != null">#{smallBusinessBalanceBy},</if>
+            <if test="smallBusinessRate != null">#{smallBusinessRate},</if>
+            <if test="smallBusinessRateLast != null">#{smallBusinessRateLast},</if>
+            <if test="smallBusinessRateBy != null">#{smallBusinessRateBy},</if>
             <if test="creditCardBalance != null">#{creditCardBalance},</if>
             <if test="creditCardBalanceLast != null">#{creditCardBalanceLast},</if>
             <if test="creditCardBalanceBy != null">#{creditCardBalanceBy},</if>
@@ -174,7 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateKpiSourceOverdue" parameterType="KpiSourceOverdue">
@@ -193,12 +193,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="personalConsumerRate != null">personal_consumer_rate = #{personalConsumerRate},</if>
             <if test="personalConsumerRateLast != null">personal_consumer_rate_last = #{personalConsumerRateLast},</if>
             <if test="personalConsumerRateBy != null">personal_consumer_rate_by = #{personalConsumerRateBy},</if>
-            <if test="smallBusinessbalance != null">small_businessbalance = #{smallBusinessbalance},</if>
-            <if test="smallBusinessbalanceLast != null">small_businessbalance_last = #{smallBusinessbalanceLast},</if>
-            <if test="smallBusinessbalanceBy != null">small_businessbalance_by = #{smallBusinessbalanceBy},</if>
-            <if test="smallBusinessrate != null">small_businessrate = #{smallBusinessrate},</if>
-            <if test="smallBusinessrateLast != null">small_businessrate_last = #{smallBusinessrateLast},</if>
-            <if test="smallBusinessrateBy != null">small_businessrate_by = #{smallBusinessrateBy},</if>
+            <if test="smallBusinessBalance != null">small_business_balance = #{smallBusinessBalance},</if>
+            <if test="smallBusinessBalanceLast != null">small_business_balance_last = #{smallBusinessBalanceLast},</if>
+            <if test="smallBusinessBalanceBy != null">small_business_balance_by = #{smallBusinessBalanceBy},</if>
+            <if test="smallBusinessRate != null">small_business_rate = #{smallBusinessRate},</if>
+            <if test="smallBusinessRateLast != null">small_business_rate_last = #{smallBusinessRateLast},</if>
+            <if test="smallBusinessRateBy != null">small_business_rate_by = #{smallBusinessRateBy},</if>
             <if test="creditCardBalance != null">credit_card_balance = #{creditCardBalance},</if>
             <if test="creditCardBalanceLast != null">credit_card_balance_last = #{creditCardBalanceLast},</if>
             <if test="creditCardBalanceBy != null">credit_card_balance_by = #{creditCardBalanceBy},</if>
@@ -227,10 +227,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteKpiSourceOverdueByIds" parameterType="String">
-        delete from kpi_source_overdue where id in 
+        delete from kpi_source_overdue where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiSourceOverdueResult">
+        <include refid="selectKpiSourceOverdueVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_source_overdue where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="KpiSourceOverdue">
+        insert into kpi_source_overdue(id,district,personal_business_balance,personal_business_balance_last,personal_business_balance_by,personal_business_rate,personal_business_rate_last,personal_business_rate_by,personal_consumer_balance,personal_consumer_balance_last,personal_consumer_balance_by,personal_consumer_rate,personal_consumer_rate_last,personal_consumer_rate_by,small_business_balance,small_business_balance_last,small_business_balance_by,small_business_rate,small_business_rate_last,small_business_rate_by,credit_card_balance,credit_card_balance_last,credit_card_balance_by,credit_card_rate,credit_card_rate_last,credit_card_rate_by,retail_balance,retail_balance_last,retail_balance_by,retail_rate,retail_rate_last,retail_rate_by,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.district},#{kk.personalBusinessBalance},#{kk.personalBusinessBalanceLast},#{kk.personalBusinessBalanceBy},#{kk.personalBusinessRate},#{kk.personalBusinessRateLast},#{kk.personalBusinessRateBy},#{kk.personalConsumerBalance},#{kk.personalConsumerBalanceLast},#{kk.personalConsumerBalanceBy},#{kk.personalConsumerRate},#{kk.personalConsumerRateLast},#{kk.personalConsumerRateBy},#{kk.smallBusinessBalance},#{kk.smallBusinessBalanceLast},#{kk.smallBusinesBalanceBy},#{kk.smallBusinessRate},#{kk.smallBusinessRateLast},#{kk.smallBusinesRateBy},#{kk.creditCardBalance},#{kk.creditCardBalanceLast},#{kk.creditCardBalanceBy},#{kk.creditCardRate},#{kk.creditCardRateLast},#{kk.creditCardRateBy},#{kk.retailBalance},#{kk.retailBalanceLast},#{kk.retailBalanceBy},#{kk.retailRate},#{kk.retailRateLast},#{kk.retailRateBy},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
 
 </mapper>

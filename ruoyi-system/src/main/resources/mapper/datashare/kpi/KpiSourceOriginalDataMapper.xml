@@ -1,71 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.psbc.datashare.kpi.mapper.KpiSourceOriginalDataMapper">
-    
+
     <resultMap type="KpiSourceOriginalData" id="KpiSourceOriginalDataResult">
-        <result property="id"    column="id"    />
-        <result property="indicatorNum"    column="indicator_num"    />
-        <result property="indicatorName"    column="indicator_name"    />
-        <result property="quanSheng"    column="quan_sheng"    />
-        <result property="benBu"    column="ben_bu"    />
-        <result property="jiGuan"    column="ji_guan"    />
-        <result property="chengXi"    column="cheng_xi"    />
-        <result property="daTong"    column="da_tong"    />
-        <result property="haiDong"    column="hai_dong"    />
-        <result property="chengZhong"    column="cheng_zhong"    />
-        <result property="haiNan"    column="hai_nan"    />
-        <result property="yuShu"    column="yu_shu"    />
-        <result property="haiXi"    column="hai_xi"    />
-        <result property="haiBei"    column="hai_bei"    />
-        <result property="huangNan"    column="huang_nan"    />
-        <result property="guoLuo"    column="guo_luo"    />
-        <result property="geErMu"    column="ge_er_mu"    />
-        <result property="yingYiBu"    column="ying_yi_bu"    />
-        <result property="dataDate"    column="data_date"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="id" column="id"/>
+        <result property="indicatorNum" column="indicator_num"/>
+        <result property="indicatorName" column="indicator_name"/>
+        <result property="quanSheng" column="quan_sheng"/>
+        <result property="benBu" column="ben_bu"/>
+        <result property="jiGuan" column="ji_guan"/>
+        <result property="chengXi" column="cheng_xi"/>
+        <result property="daTong" column="da_tong"/>
+        <result property="haiDong" column="hai_dong"/>
+        <result property="chengZhong" column="cheng_zhong"/>
+        <result property="haiNan" column="hai_nan"/>
+        <result property="yuShu" column="yu_shu"/>
+        <result property="haiXi" column="hai_xi"/>
+        <result property="haiBei" column="hai_bei"/>
+        <result property="huangNan" column="huang_nan"/>
+        <result property="guoLuo" column="guo_luo"/>
+        <result property="geErMu" column="ge_er_mu"/>
+        <result property="yingYiBu" column="ying_yi_bu"/>
+        <result property="dataDate" column="data_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectKpiSourceOriginalDataVo">
         select id, indicator_num, indicator_name, quan_sheng, ben_bu, ji_guan, cheng_xi, da_tong, hai_dong, cheng_zhong, hai_nan, yu_shu, hai_xi, hai_bei, huang_nan, guo_luo, ge_er_mu, ying_yi_bu, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_source_original_data
     </sql>
 
-    <select id="selectKpiSourceOriginalDataList" parameterType="KpiSourceOriginalData" resultMap="KpiSourceOriginalDataResult">
+    <select id="selectKpiSourceOriginalDataList" parameterType="KpiSourceOriginalData"
+            resultMap="KpiSourceOriginalDataResult">
         <include refid="selectKpiSourceOriginalDataVo"/>
-        <where>  
-            <if test="indicatorNum != null  and indicatorNum != ''"> and indicator_num = #{indicatorNum}</if>
-            <if test="indicatorName != null  and indicatorName != ''"> and indicator_name like concat('%', #{indicatorName}, '%')</if>
-            <if test="quanSheng != null "> and quan_sheng = #{quanSheng}</if>
-            <if test="benBu != null "> and ben_bu = #{benBu}</if>
-            <if test="jiGuan != null "> and ji_guan = #{jiGuan}</if>
-            <if test="chengXi != null "> and cheng_xi = #{chengXi}</if>
-            <if test="daTong != null "> and da_tong = #{daTong}</if>
-            <if test="haiDong != null "> and hai_dong = #{haiDong}</if>
-            <if test="chengZhong != null "> and cheng_zhong = #{chengZhong}</if>
-            <if test="haiNan != null "> and hai_nan = #{haiNan}</if>
-            <if test="yuShu != null "> and yu_shu = #{yuShu}</if>
-            <if test="haiXi != null "> and hai_xi = #{haiXi}</if>
-            <if test="haiBei != null "> and hai_bei = #{haiBei}</if>
-            <if test="huangNan != null "> and huang_nan = #{huangNan}</if>
-            <if test="guoLuo != null "> and guo_luo = #{guoLuo}</if>
-            <if test="geErMu != null "> and ge_er_mu = #{geErMu}</if>
-            <if test="yingYiBu != null "> and ying_yi_bu = #{yingYiBu}</if>
-            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        <where>
+            <if test="indicatorNum != null  and indicatorNum != ''">and indicator_num = #{indicatorNum}</if>
+            <if test="indicatorName != null  and indicatorName != ''">and indicator_name like concat('%',
+                #{indicatorName}, '%')
+            </if>
+            <if test="quanSheng != null ">and quan_sheng = #{quanSheng}</if>
+            <if test="benBu != null ">and ben_bu = #{benBu}</if>
+            <if test="jiGuan != null ">and ji_guan = #{jiGuan}</if>
+            <if test="chengXi != null ">and cheng_xi = #{chengXi}</if>
+            <if test="daTong != null ">and da_tong = #{daTong}</if>
+            <if test="haiDong != null ">and hai_dong = #{haiDong}</if>
+            <if test="chengZhong != null ">and cheng_zhong = #{chengZhong}</if>
+            <if test="haiNan != null ">and hai_nan = #{haiNan}</if>
+            <if test="yuShu != null ">and yu_shu = #{yuShu}</if>
+            <if test="haiXi != null ">and hai_xi = #{haiXi}</if>
+            <if test="haiBei != null ">and hai_bei = #{haiBei}</if>
+            <if test="huangNan != null ">and huang_nan = #{huangNan}</if>
+            <if test="guoLuo != null ">and guo_luo = #{guoLuo}</if>
+            <if test="geErMu != null ">and ge_er_mu = #{geErMu}</if>
+            <if test="yingYiBu != null ">and ying_yi_bu = #{yingYiBu}</if>
+            <if test="dataDate != null ">and data_date = #{dataDate}</if>
         </where>
     </select>
-    
+
     <select id="selectKpiSourceOriginalDataById" parameterType="Long" resultMap="KpiSourceOriginalDataResult">
         <include refid="selectKpiSourceOriginalDataVo"/>
         where id = #{id}
     </select>
-        
-    <insert id="insertKpiSourceOriginalData" parameterType="KpiSourceOriginalData" useGeneratedKeys="true" keyProperty="id">
+
+    <insert id="insertKpiSourceOriginalData" parameterType="KpiSourceOriginalData" useGeneratedKeys="true"
+            keyProperty="id">
         insert into kpi_source_original_data
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="indicatorNum != null and indicatorNum != ''">indicator_num,</if>
@@ -92,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="indicatorNum != null and indicatorNum != ''">#{indicatorNum},</if>
             <if test="indicatorName != null">#{indicatorName},</if>
@@ -118,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateKpiSourceOriginalData" parameterType="KpiSourceOriginalData">
@@ -157,10 +161,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteKpiSourceOriginalDataByIds" parameterType="String">
-        delete from kpi_source_original_data where id in 
+        delete from kpi_source_original_data where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
 
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiSourceOriginalDataResult">
+        <include refid="selectKpiSourceOriginalDataVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_source_original_data where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="KpiSourceOriginalData">
+        insert into
+        kpi_source_original_data(id,indicator_num,indicator_name,quan_sheng,ben_bu,ji_guan,cheng_xi,da_tong,hai_dong,cheng_zhong,hai_nan,yu_shu,hai_xi,hai_bei,huang_nan,guo_luo,ge_er_mu,ying_yi_bu,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.indicatorNum},#{kk.indicatorName},#{kk.quanSheng},#{kk.benBu},#{kk.jiGuan},#{kk.chengXi},#{kk.daTong},#{kk.haiDong},#{kk.chengZhong},#{kk.haiNan},#{kk.yuShu},#{kk.haiXi},#{kk.haiBei},#{kk.huangNan},#{kk.guoLuo},#{kk.geErMu},#{kk.yingYiBu},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
 </mapper>
