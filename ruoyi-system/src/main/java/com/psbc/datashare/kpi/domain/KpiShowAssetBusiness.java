@@ -88,6 +88,18 @@ public class KpiShowAssetBusiness extends BaseEntity
     @Excel(name = "小企业贷款-日均")
     private BigDecimal smallBusinessDaily;
 
+    /** 公司贷款-余额 */
+    @Excel(name = "公司贷款-余额")
+    private BigDecimal companyBalance;
+
+    /** 公司贷款-月增 */
+    @Excel(name = "公司贷款-月增")
+    private BigDecimal companyGrowthM;
+
+    /** 公司贷款-年增 */
+    @Excel(name = "公司贷款-年增")
+    private BigDecimal companyGrowthY;
+
     /** 数据日期 */
     private Date dataDate;
 
@@ -255,6 +267,33 @@ public class KpiShowAssetBusiness extends BaseEntity
     public BigDecimal getSmallBusinessDaily() 
     {
         return smallBusinessDaily;
+    }
+    public void setCompanyBalance(BigDecimal companyBalance)
+    {
+        this.companyBalance = companyBalance;
+    }
+
+    public BigDecimal getCompanyBalance()
+    {
+        return companyBalance;
+    }
+    public void setCompanyGrowthM(BigDecimal companyGrowthM)
+    {
+        this.companyGrowthM = companyGrowthM;
+    }
+
+    public BigDecimal getCompanyGrowthM()
+    {
+        return companyGrowthM;
+    }
+    public void setCompanyGrowthY(BigDecimal companyGrowthY)
+    {
+        this.companyGrowthY = companyGrowthY;
+    }
+
+    public BigDecimal getCompanyGrowthY()
+    {
+        return companyGrowthY;
     }
     public void setDataDate(Date dataDate) 
     {

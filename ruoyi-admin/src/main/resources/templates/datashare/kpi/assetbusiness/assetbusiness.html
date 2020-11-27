@@ -1,152 +1,385 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('全行资产业务情况表列表')" />
+    <th:block th:include="include :: header('全行资产业务情况表列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li class="select-time">
-                                <label>数据日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDataDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDataDate]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('formId','bootstrap-table');$.table.search('formId','bootstrap-table1')"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:assetbusiness:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:assetbusiness:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:assetbusiness:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:assetbusiness:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+       <div class="btn-group-sm" id="toolbar" role="group">
+           <!-- <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:assetbusiness:add">
+               <i class="fa fa-plus"></i> 添加
+           </a>
+           <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+              shiro:hasPermission="datashare/kpi:assetbusiness:edit">
+               <i class="fa fa-edit"></i> 修改
+           </a>
+           <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+              shiro:hasPermission="datashare/kpi:assetbusiness:remove">
+               <i class="fa fa-remove"></i> 删除
+           </a> -->
+           <!--<a class="btn btn-warning" onclick="$.table.exportExcel()"
+              shiro:hasPermission="datashare/kpi:assetbusiness:export">
+               <i class="fa fa-download"></i> 导出
+           </a>-->
+       </div>
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+            <span>附表</span>
+            <table id="bootstrap-table1"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:remove')}]];
-        var prefix = ctx + "datashare/kpi/assetbusiness";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:remove')}]];
+    var prefix = ctx + "datashare/kpi/assetbusiness";
+    var prefix1 = ctx + "datashare/kpi/assetbusiness_schedule";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "全行资产业务情况表",
-                columns: [{
-                    checkbox: true
-                },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible: false
-                },
-                {
-                    field: 'district',
-                    title: '地区'
-                },
-                {
-                    field: 'totalBalance',
-                    title: '合计-余额'
-                },
-                {
-                    field: 'totalGrowthM',
-                    title: '合计-月增'
-                },
-                {
-                    field: 'totalGrowthY',
-                    title: '合计-年增'
-                },
-                {
-                    field: 'totalDaily',
-                    title: '合计-日均'
-                },
-                {
-                    field: 'smallAmountBalance',
-                    title: '三农贷款(小额)-余额'
-                },
-                {
-                    field: 'smallAmountGrowthM',
-                    title: '三农贷款(小额)-月增'
-                },
-                {
-                    field: 'smallAmountGrowthY',
-                    title: '三农贷款(小额)-年增'
-                },
-                {
-                    field: 'smallAmountDaily',
-                    title: '三农贷款(小额)-日均'
-                },
-                {
-                    field: 'consumptionBalance',
-                    title: '消费贷款-余额'
-                },
-                {
-                    field: 'consumptionGrowthM',
-                    title: '消费贷款-月增'
-                },
-                {
-                    field: 'consumptionGrowthY',
-                    title: '消费贷款-年增'
-                },
-                {
-                    field: 'consumptionDaily',
-                    title: '消费贷款-日均'
-                },
-                {
-                    field: 'smallBusinessBalance',
-                    title: '小企业贷款-余额'
-                },
-                {
-                    field: 'smallBusinessGrowthM',
-                    title: '小企业贷款-月增'
-                },
-                {
-                    field: 'smallBusinessGrowthY',
-                    title: '小企业贷款-年增'
-                },
-                {
-                    field: 'smallBusinessDaily',
-                    title: '小企业贷款-日均'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }]
-            };
-            $.table.init(options);
+    $(function () {
+        var nowDate = new Date();
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1;
+        var monthStr = year+"-"+(month < 10 ? "0"+month : month);
+        $("#search_month").val(monthStr);
+        // 搜索时间选择器初始化
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            //年月选择器
+            laydate.render({
+                elem: '#search_month',
+                type: 'month',
+                value: new Date()
+            });
         });
-    </script>
+
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "全行资产业务情况表",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false, // 不启用分页
+            sortable: false,
+            columns: [
+                [
+                    {
+                        title: '全行资产业务情况表',
+                        align: 'center',
+                        colspan: 20
+                    }
+                ],
+                [
+                    {
+                        rowspan: 2,
+                        field: 'district',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '地区'
+                    },
+                    {
+                        title: '合计',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '三农贷款',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '消费贷款',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '小企业贷款',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '公司贷款',
+                        align: 'center',
+                        colspan: 3
+                    }
+                ],
+                [
+                    {
+                        field: 'totalBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'totalGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'totalGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'totalDaily',
+                        align: 'center',
+                        title: '日均'
+                    },
+                    {
+                        field: 'smallAmountBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'smallAmountGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'smallAmountGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'smallAmountDaily',
+                        align: 'center',
+                        title: '日均'
+                    },
+                    {
+                        field: 'consumptionBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'consumptionGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'consumptionGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'consumptionDaily',
+                        align: 'center',
+                        title: '日均'
+                    },
+                    {
+                        field: 'smallBusinessBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'smallBusinessGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'smallBusinessGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'smallBusinessDaily',
+                        align: 'center',
+                        title: '日均'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
+        var options1 = {
+            id: "bootstrap-table1",
+            url: prefix1 + "/list",
+            createUrl: prefix1 + "/add",
+            updateUrl: prefix1 + "/edit/{id}",
+            removeUrl: prefix1 + "/remove",
+            exportUrl: prefix1 + "/export",
+            modalName: "全行资产业务情况-附表",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false, // 不启用分页
+            sortable: false,
+            columns: [
+                [
+                    {
+                        rowspan: 2,
+                        field: 'district',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '地区'
+                    },
+                    {
+                        title: '合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '公司贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '直贴',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '转贴现',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '供应链',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '存放同业',
+                        align: 'center',
+                        colspan: 3
+                    }
+
+                ],
+                [
+                    {
+                        field: 'totalBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'totalGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'totalGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'supplyChainBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'supplyChainGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'supplyChainGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'directPasteBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'directPasteGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'directPasteGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'rediscountBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'rediscountGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'rediscountGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'interbankBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'interbankGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'interbankGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+        $.table.init(options1);
+        $.table.init(options);
+
+    });
+</script>
 </body>
 </html>

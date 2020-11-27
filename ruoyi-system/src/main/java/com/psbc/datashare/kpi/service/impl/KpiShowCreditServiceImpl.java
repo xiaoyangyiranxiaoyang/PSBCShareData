@@ -1,24 +1,26 @@
 package com.psbc.datashare.kpi.service.impl;
 
+import com.psbc.datashare.kpi.common.KpiShowConstant;
 import com.psbc.datashare.kpi.domain.*;
 import com.psbc.datashare.kpi.mapper.*;
 import com.psbc.datashare.kpi.service.IKpiShowCreditService;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.Arith;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.sun.corba.se.impl.oa.toa.TOA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 全行KPI指标（二）Service业务层处理
@@ -40,6 +42,8 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
     private KpiSourceOriginalDataMapper kpiSourceOriginalDataMapper;
     @Autowired
     private KpiSourceSavingDataMapper kpiSourceSavingDataMapper;
+    @Autowired
+    private KpiShowAssetBusinessMapper kpiShowAssetBusinessMapper;
 
     /**
      * 查询全行KPI指标（二）
@@ -132,7 +136,7 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
             Map<Integer, Map<Integer, Object>> excelDataMap_savingData = allSheetDataMap.get("代理储蓄数据");
 
             if (null == excelDataMap_creditScale || null == excelDataMap_unhealthy ||
-                    null == excelDataMap_overdue || null == excelDataMap_originalData || null == excelDataMap_savingData){
+                    null == excelDataMap_overdue || null == excelDataMap_originalData || null == excelDataMap_savingData) {
                 rrMsg = "导入数据失败，请查看是否按模板导入！";
                 new RuntimeException(rrMsg);
             }
@@ -425,6 +429,10 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
                 kpiSourceSavingDataMapper.insertBatch(datasToInsert_savingData);
             }
 
+            //  6. 计算全行资产业务情况表-主表 并入库
+            List<KpiShowAssetBusiness> assetBusinesses = calculateAssetBusinessMaster(dataDate, operName);
+            kpiShowAssetBusinessMapper.deleteByDataDate(dataDate);
+            kpiShowAssetBusinessMapper.insertBatch(assetBusinesses);
 
             rrMsg = "导入数据成功!";
         } catch (Exception e) {
@@ -438,5 +446,104 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
             }
         }
         return rrMsg;
+    }
+
+
+    /**
+     * 计算 全行资产业务情况表 主表
+     * @param dataDate
+     * @param operName
+     * @return
+     */
+    private List<KpiShowAssetBusiness> calculateAssetBusinessMaster(Date dataDate, String operName) {
+        List<KpiShowAssetBusiness> rrr = new LinkedList<>();
+        // 查询上月和年初(上年12月)的资产业务情况
+        Date lastMonth = DateUtils.addMonths(dataDate, -1);
+        Date beginYear = DateUtils.addYears(dataDate, -1);
+        beginYear = DateUtils.setMonths(beginYear, 11);
+        // 上月
+        List<KpiShowAssetBusiness> lastMonthDatas = kpiShowAssetBusinessMapper.selectByDataDate(lastMonth);
+        Map<String, KpiShowAssetBusiness> lastMonthDataMap = Optional.ofNullable(lastMonthDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), item -> item, (k1, k2) -> k1));
+        // 年初
+        List<KpiShowAssetBusiness> beginYearDatas = kpiShowAssetBusinessMapper.selectByDataDate(beginYear);
+        Map<String, KpiShowAssetBusiness> beginYearDataMap = Optional.ofNullable(beginYearDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), i -> i, (k1, k2) -> k1));
+
+        // 查询当月的信贷规模数据
+        List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceCreditScale> creditScaleMap = Optional.ofNullable(creditScales)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceCreditScale::getDistrict, i -> i, (k1, k2) -> k1));
+
+        Date dateNow = new Date();
+
+        for (String district : KpiShowConstant.DISTRICT_LIST_ASSET_BUSINESS) {
+
+            KpiShowAssetBusiness lst = lastMonthDataMap.get(district) == null ? new KpiShowAssetBusiness() : lastMonthDataMap.get(district);
+            KpiShowAssetBusiness by = beginYearDataMap.get(district) == null ? new KpiShowAssetBusiness() : beginYearDataMap.get(district);
+            KpiSourceCreditScale cs = creditScaleMap.get(district) == null ? new KpiSourceCreditScale() : creditScaleMap.get(district);
+
+            KpiShowAssetBusiness oneR = new KpiShowAssetBusiness();
+            oneR.setDistrict(district);
+            oneR.setDataDate(dataDate);
+            oneR.setDelFlag("0");
+            oneR.setCreateBy(operName);
+            oneR.setCreateTime(dateNow);
+
+            // 三农 余额 = 小额贷款 + 个商贷款 + 其他贷款
+            BigDecimal balance_sn = Arith.add(Arith.add(cs.getMicroloans(), cs.getIndividualBusiness()), cs.getPersonalOther());
+            oneR.setSmallAmountBalance(balance_sn);
+            oneR.setSmallAmountGrowthM(Arith.sub(balance_sn, lst.getSmallAmountBalance()));
+            oneR.setSmallAmountGrowthY(Arith.sub(balance_sn, by.getSmallAmountBalance()));
+
+            // 消费 余额 = 住房按揭贷款	+ 其他消费贷款
+            BigDecimal balance_xf = Arith.add(cs.getHomeMortgage(), cs.getOtherConsumer());
+            oneR.setConsumptionBalance(balance_xf);
+            oneR.setConsumptionGrowthM(Arith.sub(balance_xf, lst.getConsumptionBalance()));
+            oneR.setConsumptionGrowthY(Arith.sub(balance_xf, by.getConsumptionBalance()));
+
+            // 小企业
+            BigDecimal balance_xqy = cs.getSmallBusiness();
+            oneR.setSmallBusinessBalance(balance_xqy);
+            oneR.setSmallBusinessGrowthM(Arith.sub(balance_xqy, lst.getSmallBusinessBalance()));
+            oneR.setSmallBusinessGrowthY(Arith.sub(balance_xqy, by.getSmallBusinessBalance()));
+
+            // 公司贷款
+            BigDecimal balance_gs = cs.getOtherCompany();
+            oneR.setCompanyBalance(balance_gs);
+            oneR.setCompanyGrowthM(Arith.sub(balance_gs, lst.getCompanyBalance()));
+            oneR.setCompanyGrowthY(Arith.sub(balance_gs, by.getCompanyBalance()));
+
+            // 合计
+            BigDecimal balance_total = Arith.add(Arith.add(Arith.add(balance_sn, balance_xf), balance_xqy), balance_gs);
+            oneR.setTotalBalance(balance_total);
+            oneR.setTotalGrowthM(Arith.add(Arith.add(Arith.add(oneR.getSmallAmountGrowthM(), oneR.getConsumptionGrowthM()), oneR.getSmallBusinessGrowthM()), oneR.getCompanyGrowthM()));
+            oneR.setTotalGrowthY(Arith.add(Arith.add(Arith.add(oneR.getSmallAmountGrowthY(), oneR.getConsumptionGrowthY()), oneR.getSmallBusinessGrowthY()), oneR.getCompanyGrowthY()));
+
+            rrr.add(oneR);
+        }
+
+        // 公司贷款 在主表 全省的数据得从下面加
+        KpiShowAssetBusiness total = rrr.get(0);
+        BigDecimal company_balance_total = new BigDecimal(0);
+        BigDecimal company_growthM_total = new BigDecimal(0);
+        BigDecimal company_growthY_total = new BigDecimal(0);
+        for (int i = 1; i < rrr.size(); i++ ){
+            company_balance_total = Arith.add(company_balance_total, rrr.get(i).getCompanyBalance());
+            company_growthM_total = Arith.add(company_growthM_total, rrr.get(i).getCompanyGrowthM());
+            company_growthY_total = Arith.add(company_growthY_total, rrr.get(i).getCompanyGrowthY());
+        }
+        total.setCompanyBalance(company_balance_total);
+        total.setCompanyGrowthM(company_growthM_total);
+        total.setCompanyGrowthY(company_growthY_total);
+        // 同时引起 全省 总计的重新计算
+        total.setTotalBalance(Arith.add(Arith.add(Arith.add(total.getSmallAmountBalance(), total.getConsumptionBalance()), total.getSmallBusinessBalance()), company_balance_total));
+        total.setTotalGrowthM(Arith.add(Arith.add(Arith.add(total.getSmallAmountGrowthM(), total.getConsumptionGrowthM()), total.getSmallBusinessGrowthM()), company_growthM_total));
+        total.setTotalGrowthY(Arith.add(Arith.add(Arith.add(total.getSmallAmountGrowthY(), total.getConsumptionGrowthY()), total.getSmallBusinessGrowthY()), company_growthY_total));
+
+        rrr.remove(0);
+        rrr.add(0, total);
+
+        return rrr;
     }
 }

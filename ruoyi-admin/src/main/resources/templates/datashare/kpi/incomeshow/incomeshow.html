@@ -39,9 +39,9 @@
             <a class="btn btn-info" onclick="$.table.importExcel('import_kpiIncomde', 360, 315)" shiro:hasPermission="datashare/kpi:incomeshow:import">
                 <i class="fa fa-upload"></i> 导入
             </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:incomeshow:export">
+            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:incomeshow:export">
                 <i class="fa fa-download"></i> 导出
-            </a>
+            </a>-->
         </div>
         <div class="col-sm-12 select-table table-bordered">
             <table id="bootstrap-table"></table>
@@ -85,6 +85,7 @@
             showToggle: false,
             showColumns: false,
             pagination: false, // 不启用分页
+            sortable: false,
             columns: [
                 [
                     {

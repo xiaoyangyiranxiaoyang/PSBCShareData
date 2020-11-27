@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.kpi;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.ruoyi.common.utils.Arith;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +55,33 @@ public class KpiShowAssetBusinessController extends BaseController
     {
         startPage();
         List<KpiShowAssetBusiness> list = kpiShowAssetBusinessService.selectKpiShowAssetBusinessList(kpiShowAssetBusiness);
+        // 去小数位
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    item.setTotalBalance(Arith.round(item.getTotalBalance(), 0));
+                    item.setTotalGrowthM(Arith.round(item.getTotalGrowthM(), 0));
+                    item.setTotalGrowthY(Arith.round(item.getTotalGrowthY(), 0));
+                    item.setTotalDaily(Arith.round(item.getTotalDaily(), 0));
+
+                    item.setSmallAmountBalance(Arith.round(item.getSmallAmountBalance(), 0));
+                    item.setSmallAmountGrowthM(Arith.round(item.getSmallAmountGrowthM(), 0));
+                    item.setSmallAmountGrowthY(Arith.round(item.getSmallAmountGrowthY(), 0));
+                    item.setSmallAmountDaily(Arith.round(item.getSmallAmountDaily(), 0));
+
+                    item.setConsumptionBalance(Arith.round(item.getConsumptionBalance(), 0));
+                    item.setConsumptionGrowthM(Arith.round(item.getConsumptionGrowthM(), 0));
+                    item.setConsumptionGrowthY(Arith.round(item.getConsumptionGrowthY(), 0));
+                    item.setConsumptionDaily(Arith.round(item.getConsumptionDaily(), 0));
+
+                    item.setSmallBusinessBalance(Arith.round(item.getSmallBusinessBalance(), 0));
+                    item.setSmallBusinessGrowthM(Arith.round(item.getSmallBusinessGrowthM(), 0));
+                    item.setSmallBusinessGrowthY(Arith.round(item.getSmallBusinessGrowthY(), 0));
+                    item.setSmallBusinessDaily(Arith.round(item.getSmallBusinessDaily(), 0));
+
+                    item.setCompanyBalance(Arith.round(item.getCompanyBalance(), 0));
+                    item.setCompanyGrowthM(Arith.round(item.getCompanyGrowthM(), 0));
+                    item.setCompanyGrowthY(Arith.round(item.getCompanyGrowthY(), 0));
+                });
         return getDataTable(list);
     }
 

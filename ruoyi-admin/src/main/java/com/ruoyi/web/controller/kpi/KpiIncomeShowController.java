@@ -8,6 +8,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.Arith;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -23,8 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 全行KPI指标（一）Controller
@@ -58,6 +61,26 @@ public class KpiIncomeShowController extends BaseController
     {
         startPage();
         List<KpiIncomeShow> list = kpiIncomeShowService.selectKpiIncomeShowList(kpiIncomeShow);
+        // 去小数位
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    item.setIncomeTotalMonth(Arith.round(item.getIncomeTotalMonth(), 0));
+                    item.setIncomeTotalYear(Arith.round(item.getIncomeTotalYear(), 0));
+
+                    item.setIncomeSelfMonth(Arith.round(item.getIncomeSelfMonth(), 0));
+                    item.setIncomeSelfYear(Arith.round(item.getIncomeSelfYear(), 0));
+                    item.setIncomeSelfRise(Arith.round(item.getIncomeSelfRise(), 0));
+                    item.setIncomeSelfProgress(Arith.round(item.getIncomeSelfProgress(), 0));
+                    item.setIncomeSelfPercapita(Arith.round(item.getIncomeSelfPercapita(), 0));
+
+                    item.setNetProfitMonth(Arith.round(item.getNetProfitMonth(), 0));
+                    item.setNetProfitYear(Arith.round(item.getNetProfitYear(), 0));
+                    item.setNetProfitRise(Arith.round(item.getNetProfitRise(), 0));
+                    item.setNetProfitProgress(Arith.round(item.getNetProfitProgress(), 0));
+                    item.setNetProfitPercapita(Arith.round(item.getNetProfitPercapita(), 0));
+
+                    item.setIncomeProfitRate(Arith.round(item.getIncomeProfitRate(), 0));
+                });
         return getDataTable(list);
     }
 

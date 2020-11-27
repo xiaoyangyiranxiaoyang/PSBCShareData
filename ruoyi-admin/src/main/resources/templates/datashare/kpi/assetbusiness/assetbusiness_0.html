@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('全行KPI指标（二）列表')" />
+    <th:block th:include="include :: header('全行资产业务情况表列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -26,20 +26,17 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:credit:add">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:assetbusiness:add">
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:credit:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:assetbusiness:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:credit:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:assetbusiness:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>-->
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:credit:export">
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:assetbusiness:export">
                     <i class="fa fa-download"></i> 导出
-                </a>-->
-                <a class="btn btn-info" onclick="$.table.importExcel('import_source_data', 360, 315, '导入KPI源数据')" shiro:hasPermission="datashare/kpi:credit:import">
-                    <i class="fa fa-upload"></i> 导入源数据
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -49,9 +46,9 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('datashare/kpi:credit:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('datashare/kpi:credit:remove')}]];
-        var prefix = ctx + "datashare/kpi/credit";
+        var editFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:remove')}]];
+        var prefix = ctx + "datashare/kpi/assetbusiness";
 
         $(function() {
             var options = {
@@ -60,9 +57,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 exportUrl: prefix + "/export",
-                importUrl: prefix + "/importData",
-                importTemplateUrl: prefix + "/importTemplate",
-                modalName: "全行KPI指标（二）",
+                modalName: "全行资产业务情况表",
                 columns: [{
                     checkbox: true
                 },
@@ -76,60 +71,68 @@
                     title: '地区'
                 },
                 {
-                    field: 'depositBalance',
-                    title: '存款合计-余额'
+                    field: 'totalBalance',
+                    title: '合计-余额'
                 },
                 {
-                    field: 'depositGrowthM',
-                    title: '存款合计-月增'
+                    field: 'totalGrowthM',
+                    title: '合计-月增'
                 },
                 {
-                    field: 'depositGrowthY',
-                    title: '存款合计-年增'
+                    field: 'totalGrowthY',
+                    title: '合计-年增'
                 },
                 {
-                    field: 'selfBalance',
-                    title: '邮储自营-余额'
+                    field: 'totalDaily',
+                    title: '合计-日均'
                 },
                 {
-                    field: 'selfGrowthM',
-                    title: '邮储自营-月增'
+                    field: 'smallAmountBalance',
+                    title: '三农贷款(小额)-余额'
                 },
                 {
-                    field: 'selfGrowthY',
-                    title: '邮储自营-年增'
+                    field: 'smallAmountGrowthM',
+                    title: '三农贷款(小额)-月增'
                 },
                 {
-                    field: 'agentBalance',
-                    title: '邮储代理-余额'
+                    field: 'smallAmountGrowthY',
+                    title: '三农贷款(小额)-年增'
                 },
                 {
-                    field: 'agentGrowthM',
-                    title: '邮储代理-月增'
+                    field: 'smallAmountDaily',
+                    title: '三农贷款(小额)-日均'
                 },
                 {
-                    field: 'agentGrowthY',
-                    title: '邮储代理-年增'
+                    field: 'consumptionBalance',
+                    title: '消费贷款-余额'
                 },
                 {
-                    field: 'companyBalance',
-                    title: '公司存款-余额'
+                    field: 'consumptionGrowthM',
+                    title: '消费贷款-月增'
                 },
                 {
-                    field: 'companyGrowthM',
-                    title: '公司存款-月增'
+                    field: 'consumptionGrowthY',
+                    title: '消费贷款-年增'
                 },
                 {
-                    field: 'companyGrowthY',
-                    title: '公司存款-年增'
+                    field: 'consumptionDaily',
+                    title: '消费贷款-日均'
                 },
                 {
-                    field: 'unhealthyRate',
-                    title: '不良率'
+                    field: 'smallBusinessBalance',
+                    title: '小企业贷款-余额'
                 },
                 {
-                    field: 'overdueRate',
-                    title: '逾期率'
+                    field: 'smallBusinessGrowthM',
+                    title: '小企业贷款-月增'
+                },
+                {
+                    field: 'smallBusinessGrowthY',
+                    title: '小企业贷款-年增'
+                },
+                {
+                    field: 'smallBusinessDaily',
+                    title: '小企业贷款-日均'
                 },
                 {
                     title: '操作',
@@ -146,28 +149,4 @@
         });
     </script>
 </body>
-<!-- 导入区域 -->
-<script id="import_source_data" type="text/template">
-    <form enctype="multipart/form-data" class="mt20 mb10">
-        <div class="col-xs-offset-1">
-            <input type="file" id="file" name="file"/>
-            <div class="mt10 pt5 pb5">
-                <label>数据年月：</label>
-                <input type="text" style="width: 100px" class="select-month" placeholder="yyyy-MM" data-type="month"
-                       name="dataMonth"/>
-            </div>
-            <font color="red" class="pull-left mt10">
-                <p>提示：</p>
-                <p>1. 仅允许导入“xls”或“xlsx”格式文件！</p>
-                <p>2. 若系统已有当前选择月的数据将会被替换!</p>
-            </font>
-            <hr/>
-            <div>
-                <a onclick="$.table.importTemplate(true)" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i>
-                    下载模板</a>
-            </div>
-
-        </div>
-    </form>
-</script>
 </html>

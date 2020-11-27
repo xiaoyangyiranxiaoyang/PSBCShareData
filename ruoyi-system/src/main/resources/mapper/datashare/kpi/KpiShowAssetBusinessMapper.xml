@@ -23,6 +23,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="smallBusinessGrowthM"    column="small_business_growth_m"    />
         <result property="smallBusinessGrowthY"    column="small_business_growth_y"    />
         <result property="smallBusinessDaily"    column="small_business_daily"    />
+        <result property="companyBalance"    column="company_balance"    />
+        <result property="companyGrowthM"    column="company_growth_m"    />
+        <result property="companyGrowthY"    column="company_growth_y"    />
         <result property="dataDate"    column="data_date"    />
         <result property="delFlag"    column="del_flag"    />
         <result property="createBy"    column="create_by"    />
@@ -33,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectKpiShowAssetBusinessVo">
-        select id, district, total_balance, total_growth_m, total_growth_y, total_daily, small_amount_balance, small_amount_growth_m, small_amount_growth_y, small_amount_daily, consumption_balance, consumption_growth_m, consumption_growth_y, consumption_daily, small_business_balance, small_business_growth_m, small_business_growth_y, small_business_daily, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_asset_business
+        select id, district, total_balance, total_growth_m, total_growth_y, total_daily, small_amount_balance, small_amount_growth_m, small_amount_growth_y, small_amount_daily, consumption_balance, consumption_growth_m, consumption_growth_y, consumption_daily, small_business_balance, small_business_growth_m, small_business_growth_y, small_business_daily, company_balance, company_growth_m, company_growth_y, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_asset_business
     </sql>
 
     <select id="selectKpiShowAssetBusinessList" parameterType="KpiShowAssetBusiness" resultMap="KpiShowAssetBusinessResult">
@@ -68,6 +71,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="smallBusinessGrowthM != null">small_business_growth_m,</if>
             <if test="smallBusinessGrowthY != null">small_business_growth_y,</if>
             <if test="smallBusinessDaily != null">small_business_daily,</if>
+            <if test="companyBalance != null">company_balance,</if>
+            <if test="companyGrowthM != null">company_growth_m,</if>
+            <if test="companyGrowthY != null">company_growth_y,</if>
             <if test="dataDate != null">data_date,</if>
             <if test="delFlag != null">del_flag,</if>
             <if test="createBy != null">create_by,</if>
@@ -94,6 +100,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="smallBusinessGrowthM != null">#{smallBusinessGrowthM},</if>
             <if test="smallBusinessGrowthY != null">#{smallBusinessGrowthY},</if>
             <if test="smallBusinessDaily != null">#{smallBusinessDaily},</if>
+            <if test="companyBalance != null">#{companyBalance},</if>
+            <if test="companyGrowthM != null">#{companyGrowthM},</if>
+            <if test="companyGrowthY != null">#{companyGrowthY},</if>
             <if test="dataDate != null">#{dataDate},</if>
             <if test="delFlag != null">#{delFlag},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -124,6 +133,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="smallBusinessGrowthM != null">small_business_growth_m = #{smallBusinessGrowthM},</if>
             <if test="smallBusinessGrowthY != null">small_business_growth_y = #{smallBusinessGrowthY},</if>
             <if test="smallBusinessDaily != null">small_business_daily = #{smallBusinessDaily},</if>
+            <if test="companyBalance != null">company_balance = #{companyBalance},</if>
+            <if test="companyGrowthM != null">company_growth_m = #{companyGrowthM},</if>
+            <if test="companyGrowthY != null">company_growth_y = #{companyGrowthY},</if>
             <if test="dataDate != null">data_date = #{dataDate},</if>
             <if test="delFlag != null">del_flag = #{delFlag},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
@@ -145,5 +157,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiShowAssetBusinessResult">
+        <include refid="selectKpiShowAssetBusinessVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_show_asset_business where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="KpiShowAssetBusiness">
+        insert into kpi_show_asset_business(id, district, total_balance, total_growth_m, total_growth_y, total_daily, small_amount_balance, small_amount_growth_m, small_amount_growth_y, small_amount_daily, consumption_balance, consumption_growth_m, consumption_growth_y, consumption_daily, small_business_balance, small_business_growth_m, small_business_growth_y, small_business_daily, company_balance, company_growth_m, company_growth_y, data_date, del_flag, create_by, create_time, update_by, update_time, remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.district},#{kk.totalBalance},#{kk.totalGrowthM},#{kk.totalGrowthY},#{kk.totalDaily},#{kk.smallAmountBalance},#{kk.smallAmountGrowthM},#{kk.smallAmountGrowthY},#{kk.smallAmountDaily},#{kk.consumptionBalance},#{kk.consumptionGrowthM},#{kk.consumptionGrowthY},#{kk.consumptionDaily},#{kk.smallBusinessBalance},#{kk.smallBusinessGrowthM},#{kk.smallBusinessGrowthY}, #{kk.smallBusinessDaily}, #{kk.companyBalance}, #{kk.companyGrowthM}, #{kk.companyGrowthY}, #{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
 
 </mapper>
