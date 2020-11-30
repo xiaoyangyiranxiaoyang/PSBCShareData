@@ -44,6 +44,8 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
     private KpiSourceSavingDataMapper kpiSourceSavingDataMapper;
     @Autowired
     private KpiShowAssetBusinessMapper kpiShowAssetBusinessMapper;
+    @Autowired
+    private KpiShowAssetBusinessScheduleMapper kpiShowAssetBusinessScheduleMapper;
 
     /**
      * 查询全行KPI指标（二）
@@ -113,8 +115,16 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
         return kpiShowCreditMapper.deleteKpiShowCreditById(id);
     }
 
+    /**
+     * KPI 源数据导入, 并执行当月数据计算入库到结果表
+     *
+     * @param is        文件输入流对象
+     * @param dataMonth 数据时间(月)
+     * @param operName  操作用户
+     * @return
+     */
     @Override
-    public String importKpiIncomeShow(InputStream is, String dataMonth, String operName) {
+    public String importKpiSourceData(InputStream is, String dataMonth, String operName) {
         String rrMsg = "导入数据失败";
         try {
             String dataDateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01";
@@ -429,10 +439,15 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
                 kpiSourceSavingDataMapper.insertBatch(datasToInsert_savingData);
             }
 
-            //  6. 计算全行资产业务情况表-主表 并入库
+            // 6. 计算全行资产业务情况表-主表 并入库
             List<KpiShowAssetBusiness> assetBusinesses = calculateAssetBusinessMaster(dataDate, operName);
             kpiShowAssetBusinessMapper.deleteByDataDate(dataDate);
             kpiShowAssetBusinessMapper.insertBatch(assetBusinesses);
+
+            // 7. 计算全行资产业务情况表-附表 并入库
+            KpiShowAssetBusinessSchedule assetBusinessSchedule = calculateAssetBusnessSchedule(dataDate, operName);
+            kpiShowAssetBusinessScheduleMapper.deleteByDataDate(dataDate);
+            kpiShowAssetBusinessScheduleMapper.insertKpiShowAssetBusinessSchedule(assetBusinessSchedule);
 
             rrMsg = "导入数据成功!";
         } catch (Exception e) {
@@ -546,4 +561,72 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
 
         return rrr;
     }
+
+
+    /**
+     * 计算 全行资产业务情况表 主表（本部）
+     * @param dataDate
+     * @param operName
+     * @return
+     */
+    private KpiShowAssetBusinessSchedule calculateAssetBusnessSchedule(Date dataDate, String operName){
+        KpiShowAssetBusinessSchedule rrr = new KpiShowAssetBusinessSchedule();
+
+        // 查询上月和年初(上年12月)的资产业务情况
+        Date lastMonth = DateUtils.addMonths(dataDate, -1);
+        Date beginYear = DateUtils.addYears(dataDate, -1);
+        beginYear = DateUtils.setMonths(beginYear, 11);
+        // 上月
+        List<KpiShowAssetBusinessSchedule> lastMonthDatas = kpiShowAssetBusinessScheduleMapper.selectByDataDate(lastMonth);
+        Map<String, KpiShowAssetBusinessSchedule> lastMonthDataMap = Optional.ofNullable(lastMonthDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), item -> item, (k1, k2) -> k1));
+
+//        // 年初
+//        List<KpiShowAssetBusinessSchedule> beginYearDatas = kpiShowAssetBusinessScheduleMapper.selectByDataDate(beginYear);
+//        Map<String, KpiShowAssetBusinessSchedule> beginYearDataMap = Optional.ofNullable(beginYearDatas)
+//                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), i -> i, (k1, k2) -> k1));
+
+        // 查询当月的信贷规模数据
+        List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceCreditScale> creditScaleMap = Optional.ofNullable(creditScales)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceCreditScale::getDistrict, i -> i, (k1, k2) -> k1));
+
+
+        KpiShowAssetBusinessSchedule lastMonthData = lastMonthDataMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiShowAssetBusinessSchedule() : lastMonthDataMap.get(KpiShowConstant.DISTRICT_BEN_BU);
+//        KpiShowAssetBusinessSchedule beginYearData = beginYearDataMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiShowAssetBusinessSchedule() : beginYearDataMap.get(KpiShowConstant.DISTRICT_BEN_BU);
+        KpiSourceCreditScale creditScale = creditScaleMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiSourceCreditScale() : creditScaleMap.get(KpiShowConstant.DISTRICT_BEN_BU);
+
+        rrr.setDistrict(KpiShowConstant.DISTRICT_BEN_BU);
+        rrr.setDataDate(dataDate);
+        rrr.setDelFlag("0");
+        rrr.setCreateBy(operName);
+        rrr.setCreateTime(new Date());
+        // 公司贷款
+        rrr.setCompanyBalance(creditScale.getOtherCompany());
+        rrr.setCompanyGrowthM(Arith.sub(creditScale.getOtherCompany(), lastMonthData.getCompanyBalance()));
+        rrr.setCompanyGrowthY(Arith.add(rrr.getCompanyGrowthM(), lastMonthData.getCompanyGrowthY()));
+        // 直贴
+        rrr.setDirectPasteBalance(creditScale.getDirectPaste());
+        rrr.setDirectPasteGrowthM(Arith.sub(creditScale.getDirectPaste(), lastMonthData.getDirectPasteBalance()));
+        rrr.setDirectPasteGrowthY(Arith.add(rrr.getDirectPasteGrowthM(), lastMonthData.getDirectPasteGrowthY()));
+        // 转贴现
+        rrr.setRediscountBalance(creditScale.getRediscount());
+        rrr.setRediscountGrowthM(Arith.sub(creditScale.getRediscount(), lastMonthData.getRediscountBalance()));
+        rrr.setRediscountGrowthY(Arith.add(rrr.getRediscountGrowthM(), lastMonthData.getRediscountGrowthY()));
+        // 供应链
+        rrr.setSupplyChainBalance(creditScale.getSupplyChain());
+        rrr.setSupplyChainGrowthM(Arith.sub(creditScale.getSupplyChain(), lastMonthData.getSupplyChainBalance()));
+        rrr.setSupplyChainGrowthY(Arith.add(rrr.getSupplyChainGrowthM(), lastMonthData.getSupplyChainGrowthY()));
+        // 存放同业
+        rrr.setInterbankBalance(new BigDecimal(0));
+        rrr.setInterbankGrowthM(new BigDecimal(0));
+        rrr.setInterbankGrowthY(new BigDecimal(0));
+        // 合计
+        rrr.setTotalBalance(Arith.add(Arith.add(Arith.add(rrr.getCompanyBalance(), rrr.getDirectPasteBalance()), rrr.getRediscountBalance()), rrr.getSupplyChainBalance()));
+        rrr.setTotalGrowthM(Arith.add(Arith.add(Arith.add(rrr.getCompanyGrowthM(), rrr.getDirectPasteGrowthM()), rrr.getRediscountGrowthM()), rrr.getSupplyChainGrowthM()));
+        rrr.setTotalGrowthY(Arith.add(Arith.add(Arith.add(rrr.getCompanyGrowthY(), rrr.getDirectPasteGrowthY()), rrr.getRediscountGrowthY()), rrr.getSupplyChainGrowthY()));
+
+        return rrr;
+    }
+
 }

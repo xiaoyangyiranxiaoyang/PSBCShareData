@@ -92,7 +92,7 @@ public class KpiShowCreditController extends BaseController
     public AjaxResult importData(MultipartFile file, String dataMonth) throws Exception
     {
         String operName = ShiroUtils.getSysUser().getLoginName();
-        String message = kpiShowCreditService.importKpiIncomeShow(file.getInputStream(), dataMonth, operName);
+        String message = kpiShowCreditService.importKpiSourceData(file.getInputStream(), dataMonth, operName);
         return AjaxResult.success(message);
     }
 

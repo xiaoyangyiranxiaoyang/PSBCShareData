@@ -1,6 +1,9 @@
 package com.psbc.datashare.kpi.mapper;
 
+import java.util.Date;
 import java.util.List;
+
+import com.psbc.datashare.kpi.domain.KpiShowAssetBusiness;
 import com.psbc.datashare.kpi.domain.KpiShowAssetBusinessSchedule;
 
 /**
@@ -58,4 +61,21 @@ public interface KpiShowAssetBusinessScheduleMapper
      * @return 结果
      */
     public int deleteKpiShowAssetBusinessScheduleByIds(String[] ids);
+
+    /**
+     * 查询
+     *
+     * @param dataDate 数据日期
+     * @return 全行KPI指标（一）
+     */
+    List<KpiShowAssetBusinessSchedule> selectByDataDate(Date dataDate);
+
+
+    /**
+     * 删除
+     *
+     * @param dataDate 数据日期
+     * @return
+     */
+    int deleteByDataDate(Date dataDate);
 }
