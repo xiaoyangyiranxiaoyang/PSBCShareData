@@ -585,8 +585,7 @@
             ]
         };
         $.table.init(options1);
-        if (rowEditFlag || removeFlag == ""){
-            console.log('row edit flag ')
+        if (rowEditFlag !== "hidden"){
             $.table.init(options_rowEdit);
         } else {
             $.table.init(options);
@@ -610,10 +609,13 @@
                         $.modal.closeAll();
                         //$.modal.alertSuccess(result.msg);
                     } else if (result.code == web_status.WARNING) {
-                        $.modal.alertWarning(result.msg)
+                        $el.text(oldValue);//修改失败，还原当前元素的初始值
+                        $.modal.alertWarning(result.msg);
+                        $.table.refresh("bootstrap-table");
                     } else {
+                        $el.text(oldValue);//修改失败，还原当前元素的初始值
                         $.modal.alertError(result.msg);
-                        $el.text(initValue);//修改失败，还原当前元素的初始值
+                        $.table.refresh("bootstrap-table")
                     }
                 }else{
                     $.modal.msgError("修改失败！");
@@ -634,12 +636,19 @@
      * 验证数据 是数字：返回true；不是数字：返回false
      **/
     function isNumber(val){
-        if (parseFloat(val).toString() == "NaN") {
-
-            return false;
-        } else {
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if(regPos.test(val) || regNeg.test(val)){
             return true;
+        }else{
+            return false;
         }
+        // if (parseFloat(val).toString() == "NaN") {
+        //
+        //     return false;
+        // } else {
+        //     return true;
+        // }
     }
 </script>
 </body>
