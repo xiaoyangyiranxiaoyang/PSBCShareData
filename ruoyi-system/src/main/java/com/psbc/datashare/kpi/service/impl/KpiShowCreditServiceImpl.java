@@ -575,16 +575,10 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
         // 查询上月和年初(上年12月)的资产业务情况
         Date lastMonth = DateUtils.addMonths(dataDate, -1);
         Date beginYear = DateUtils.addYears(dataDate, -1);
-        beginYear = DateUtils.setMonths(beginYear, 11);
         // 上月
         List<KpiShowAssetBusinessSchedule> lastMonthDatas = kpiShowAssetBusinessScheduleMapper.selectByDataDate(lastMonth);
         Map<String, KpiShowAssetBusinessSchedule> lastMonthDataMap = Optional.ofNullable(lastMonthDatas)
                 .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), item -> item, (k1, k2) -> k1));
-
-//        // 年初
-//        List<KpiShowAssetBusinessSchedule> beginYearDatas = kpiShowAssetBusinessScheduleMapper.selectByDataDate(beginYear);
-//        Map<String, KpiShowAssetBusinessSchedule> beginYearDataMap = Optional.ofNullable(beginYearDatas)
-//                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), i -> i, (k1, k2) -> k1));
 
         // 查询当月的信贷规模数据
         List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
@@ -593,7 +587,6 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
 
 
         KpiShowAssetBusinessSchedule lastMonthData = lastMonthDataMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiShowAssetBusinessSchedule() : lastMonthDataMap.get(KpiShowConstant.DISTRICT_BEN_BU);
-//        KpiShowAssetBusinessSchedule beginYearData = beginYearDataMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiShowAssetBusinessSchedule() : beginYearDataMap.get(KpiShowConstant.DISTRICT_BEN_BU);
         KpiSourceCreditScale creditScale = creditScaleMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiSourceCreditScale() : creditScaleMap.get(KpiShowConstant.DISTRICT_BEN_BU);
 
         rrr.setDistrict(KpiShowConstant.DISTRICT_BEN_BU);

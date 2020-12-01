@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('全行资产业务情况表列表')"/>
+    <th:block th:include="include :: bootstrap-editable-css" />
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -49,9 +50,12 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js" />
+
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:edit')}]];
     var removeFlag = [[${@permission.hasPermi('datashare/kpi:assetbusiness:remove')}]];
+    var rowEditFlag = [[${@permission.hasPermi('datashare/kpi:credit:import')}]]; // 拥有数据导入权限的人才拥有行编辑权限
     var prefix = ctx + "datashare/kpi/assetbusiness";
     var prefix1 = ctx + "datashare/kpi/assetbusiness_schedule";
 
@@ -227,6 +231,210 @@
             ]
         };
 
+        var options_rowEdit =  {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "全行资产业务情况表",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false, // 不启用分页
+            sortable: false,
+            onEditableSave: onEditableSave,
+            columns: [
+                [
+                    {
+                        title: '全行资产业务情况表',
+                        align: 'center',
+                        colspan: 20
+                    }
+                ],
+                [
+                    {
+                        rowspan: 2,
+                        field: 'district',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '地区'
+                    },
+                    {
+                        title: '合计',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '三农贷款',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '消费贷款',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '小企业贷款',
+                        align: 'center',
+                        colspan: 4
+                    },
+                    {
+                        title: '公司贷款',
+                        align: 'center',
+                        colspan: 3
+                    }
+                ],
+                [
+                    {
+                        field: 'totalBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'totalGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'totalGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'totalDaily',
+                        align: 'center',
+                        title: '日均',
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '日均数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '日均数据是数字';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        field: 'smallAmountBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'smallAmountGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'smallAmountGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'smallAmountDaily',
+                        align: 'center',
+                        title: '日均',
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '日均数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '日均数据是数字';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        field: 'consumptionBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'consumptionGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'consumptionGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'consumptionDaily',
+                        align: 'center',
+                        title: '日均',
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '日均数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '日均数据是数字';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        field: 'smallBusinessBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'smallBusinessGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'smallBusinessGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'smallBusinessDaily',
+                        align: 'center',
+                        title: '日均',
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '日均数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '日均数据是数字';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
         var options1 = {
             id: "bootstrap-table1",
             url: prefix1 + "/list",
@@ -377,9 +585,62 @@
             ]
         };
         $.table.init(options1);
-        $.table.init(options);
+        if (rowEditFlag || removeFlag == ""){
+            console.log('row edit flag ')
+            $.table.init(options_rowEdit);
+        } else {
+            $.table.init(options);
+        }
 
     });
+
+    function onEditableSave (field, row, rowIndex, oldValue, $el) {
+        console.log("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        let postData = {"id":row['id']};
+        postData[field] = row[field];
+        $.ajax({
+            type: "post",
+            url: prefix + "/edit",
+            data: postData,
+            success: function (result, status) {
+                //成功返回数据，status状态为 success  200
+                if (status == 'success') {
+
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.closeAll();
+                        //$.modal.alertSuccess(result.msg);
+                    } else if (result.code == web_status.WARNING) {
+                        $.modal.alertWarning(result.msg)
+                    } else {
+                        $.modal.alertError(result.msg);
+                        $el.text(initValue);//修改失败，还原当前元素的初始值
+                    }
+                }else{
+                    $.modal.msgError("修改失败！");
+                    $el.text(initValue);//修改失败，还原当前元素的初始值   修改标签文本
+                }
+            },
+
+            error: function () {
+                return '编辑失败';//$.modal.msgError("修改失败！");
+            },
+            complete: function () {
+
+            }
+        });
+    }
+
+    /**
+     * 验证数据 是数字：返回true；不是数字：返回false
+     **/
+    function isNumber(val){
+        if (parseFloat(val).toString() == "NaN") {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
 </script>
 </body>
 </html>

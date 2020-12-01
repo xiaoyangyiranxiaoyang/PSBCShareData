@@ -25,14 +25,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 全行资产业务情况表Controller
- * 
+ *
  * @author mql
  * @date 2020-11-25
  */
 @Controller
 @RequestMapping("/datashare/kpi/assetbusiness")
-public class KpiShowAssetBusinessController extends BaseController
-{
+public class KpiShowAssetBusinessController extends BaseController {
     private String prefix = "datashare/kpi/assetbusiness";
 
     @Autowired
@@ -40,8 +39,7 @@ public class KpiShowAssetBusinessController extends BaseController
 
     @RequiresPermissions("datashare/kpi:assetbusiness:view")
     @GetMapping()
-    public String assetbusiness()
-    {
+    public String assetbusiness() {
         return prefix + "/assetbusiness";
     }
 
@@ -51,8 +49,7 @@ public class KpiShowAssetBusinessController extends BaseController
     @RequiresPermissions("datashare/kpi:assetbusiness:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(KpiShowAssetBusiness kpiShowAssetBusiness)
-    {
+    public TableDataInfo list(KpiShowAssetBusiness kpiShowAssetBusiness) {
         startPage();
         List<KpiShowAssetBusiness> list = kpiShowAssetBusinessService.selectKpiShowAssetBusinessList(kpiShowAssetBusiness);
         // 去小数位
@@ -92,8 +89,7 @@ public class KpiShowAssetBusinessController extends BaseController
     @Log(title = "全行资产业务情况表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(KpiShowAssetBusiness kpiShowAssetBusiness)
-    {
+    public AjaxResult export(KpiShowAssetBusiness kpiShowAssetBusiness) {
         List<KpiShowAssetBusiness> list = kpiShowAssetBusinessService.selectKpiShowAssetBusinessList(kpiShowAssetBusiness);
         ExcelUtil<KpiShowAssetBusiness> util = new ExcelUtil<KpiShowAssetBusiness>(KpiShowAssetBusiness.class);
         return util.exportExcel(list, "assetbusiness");
@@ -103,8 +99,7 @@ public class KpiShowAssetBusinessController extends BaseController
      * 新增全行资产业务情况表
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -115,8 +110,7 @@ public class KpiShowAssetBusinessController extends BaseController
     @Log(title = "全行资产业务情况表", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(KpiShowAssetBusiness kpiShowAssetBusiness)
-    {
+    public AjaxResult addSave(KpiShowAssetBusiness kpiShowAssetBusiness) {
         return toAjax(kpiShowAssetBusinessService.insertKpiShowAssetBusiness(kpiShowAssetBusiness));
     }
 
@@ -124,8 +118,7 @@ public class KpiShowAssetBusinessController extends BaseController
      * 修改全行资产业务情况表
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         KpiShowAssetBusiness kpiShowAssetBusiness = kpiShowAssetBusinessService.selectKpiShowAssetBusinessById(id);
         mmap.put("kpiShowAssetBusiness", kpiShowAssetBusiness);
         return prefix + "/edit";
@@ -138,8 +131,7 @@ public class KpiShowAssetBusinessController extends BaseController
     @Log(title = "全行资产业务情况表", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(KpiShowAssetBusiness kpiShowAssetBusiness)
-    {
+    public AjaxResult editSave(KpiShowAssetBusiness kpiShowAssetBusiness) {
         return toAjax(kpiShowAssetBusinessService.updateKpiShowAssetBusiness(kpiShowAssetBusiness));
     }
 
@@ -148,10 +140,9 @@ public class KpiShowAssetBusinessController extends BaseController
      */
     @RequiresPermissions("datashare/kpi:assetbusiness:remove")
     @Log(title = "全行资产业务情况表", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(kpiShowAssetBusinessService.deleteKpiShowAssetBusinessByIds(ids));
     }
 }
