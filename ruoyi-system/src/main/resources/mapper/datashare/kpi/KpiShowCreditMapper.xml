@@ -19,6 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="companyBalance"    column="company_balance"    />
         <result property="companyGrowthM"    column="company_growth_m"    />
         <result property="companyGrowthY"    column="company_growth_y"    />
+        <result property="loanBalance"    column="loan_balance"    />
+        <result property="loanGrowthM"    column="loan_growth_m"    />
+        <result property="loanGrowthY"    column="loan_growth_y"    />
         <result property="unhealthyRate"    column="unhealthy_rate"    />
         <result property="overdueRate"    column="overdue_rate"    />
         <result property="dataDate"    column="data_date"    />
@@ -31,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectKpiShowCreditVo">
-        select id, district, deposit_balance, deposit_growth_m, deposit_growth_y, self_balance, self_growth_m, self_growth_y, agent_balance, agent_growth_m, agent_growth_y, company_balance, company_growth_m, company_growth_y, unhealthy_rate, overdue_rate, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_credit
+        select id, district, deposit_balance, deposit_growth_m, deposit_growth_y, self_balance, self_growth_m, self_growth_y, agent_balance, agent_growth_m, agent_growth_y, company_balance, company_growth_m, company_growth_y, loan_balance, loan_growth_m, loan_growth_y, unhealthy_rate, overdue_rate, data_date, del_flag, create_by, create_time, update_by, update_time, remark from kpi_show_credit
     </sql>
 
     <select id="selectKpiShowCreditList" parameterType="KpiShowCredit" resultMap="KpiShowCreditResult">
@@ -62,6 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyBalance != null">company_balance,</if>
             <if test="companyGrowthM != null">company_growth_m,</if>
             <if test="companyGrowthY != null">company_growth_y,</if>
+            <if test="loanBalance != null">loan_balance,</if>
+            <if test="loanGrowthM != null">loan_growth_m,</if>
+            <if test="loanGrowthY != null">loan_growth_y,</if>
             <if test="unhealthyRate != null">unhealthy_rate,</if>
             <if test="overdueRate != null">overdue_rate,</if>
             <if test="dataDate != null">data_date,</if>
@@ -86,6 +92,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyBalance != null">#{companyBalance},</if>
             <if test="companyGrowthM != null">#{companyGrowthM},</if>
             <if test="companyGrowthY != null">#{companyGrowthY},</if>
+            <if test="loanBalance != null">#{loanBalance},</if>
+            <if test="loanGrowthM != null">#{loanGrowthM},</if>
+            <if test="loanGrowthY != null">#{loanGrowthY},</if>
             <if test="unhealthyRate != null">#{unhealthyRate},</if>
             <if test="overdueRate != null">#{overdueRate},</if>
             <if test="dataDate != null">#{dataDate},</if>
@@ -114,6 +123,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="companyBalance != null">company_balance = #{companyBalance},</if>
             <if test="companyGrowthM != null">company_growth_m = #{companyGrowthM},</if>
             <if test="companyGrowthY != null">company_growth_y = #{companyGrowthY},</if>
+            <if test="loanBalance != null">loan_balance = #{loanBalance},</if>
+            <if test="loanGrowthM != null">loan_growth_m = #{loanGrowthM},</if>
+            <if test="loanGrowthY != null">loan_growth_y = #{loanGrowthY},</if>
             <if test="unhealthyRate != null">unhealthy_rate = #{unhealthyRate},</if>
             <if test="overdueRate != null">overdue_rate = #{overdueRate},</if>
             <if test="dataDate != null">data_date = #{dataDate},</if>

@@ -73,9 +73,15 @@ public class KpiShowCredit extends BaseEntity
     private BigDecimal companyGrowthY;
 
     /** 不良率 */
+
+    @Excel(name = "贷款合计-余额")
+    private BigDecimal loanBalance;
+    @Excel(name = "贷款合计-月增")
+    private BigDecimal loanGrowthM;
+    @Excel(name = "贷款合计-年增")
+    private BigDecimal loanGrowthY;
     @Excel(name = "不良率")
     private BigDecimal unhealthyRate;
-
     /** 逾期率 */
     @Excel(name = "逾期率")
     private BigDecimal overdueRate;
@@ -212,11 +218,35 @@ public class KpiShowCredit extends BaseEntity
     {
         return companyGrowthY;
     }
+
+    public void setLoanBalance(BigDecimal loanBalance) 
+    {
+        this.loanBalance = loanBalance;
+    }
+    public BigDecimal getLoanBalance() 
+    {
+        return loanBalance;
+    }
+    public void setLoanGrowthM(BigDecimal loanGrowthM) 
+    {
+        this.loanGrowthM = loanGrowthM;
+    }
+    public BigDecimal getLoanGrowthM() 
+    {
+        return loanGrowthM;
+    }
+    public void setLoanGrowthY(BigDecimal loanGrowthY) 
+    {
+        this.loanGrowthY = loanGrowthY;
+    }
+    public BigDecimal getLoanGrowthY() 
+    {
+        return loanGrowthY;
+    }
     public void setUnhealthyRate(BigDecimal unhealthyRate) 
     {
         this.unhealthyRate = unhealthyRate;
     }
-
     public BigDecimal getUnhealthyRate() 
     {
         return unhealthyRate;
@@ -266,6 +296,9 @@ public class KpiShowCredit extends BaseEntity
             .append("companyBalance", getCompanyBalance())
             .append("companyGrowthM", getCompanyGrowthM())
             .append("companyGrowthY", getCompanyGrowthY())
+            .append("loanBalance", getLoanBalance())
+            .append("loanGrowthM", getLoanGrowthM())
+            .append("loanGrowthY", getLoanGrowthY())
             .append("unhealthyRate", getUnhealthyRate())
             .append("overdueRate", getOverdueRate())
             .append("dataDate", getDataDate())
