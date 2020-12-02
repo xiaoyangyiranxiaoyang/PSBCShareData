@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('xi列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="type-form">
+					<div class="select-list">
+						<ul>
+							<li>
+								借据号：<input type="text" name="loadRctId"/>
+							</li>
+							<li>
+								客户姓名：<input type="text" name="custName"/>
+							</li>
+							<li>
+								客户证件号：<input type="text" name="custCertId"/>
+							</li>
+							<li>
+								产品名称：<input type="text" name="productName"/>
+							</li>
+							<li>
+								贷款利率：<input type="text" name="intRate"/>
+							</li>
+							<li class="select-time">
+								<label>贷款时间： </label>
+								<input type="text" class="time-input" id="loanBgnDate" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="loanDltneDate" placeholder="结束时间" name="params[endTime]"/>
+							</li>
+							<li>
+								柜员号：<input type="text" name="tellerNo"/>
+							</li>
+							<!--<li>
+								字典状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>-->
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	       <div class="btn-group-sm" id="toolbar" role="group">
+	            <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="credit:loanMain:add">
+	                <i class="fa fa-plus"></i> 新增
+	            </a>
+	            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="credit:loanMain:edit">
+		            <i class="fa fa-edit"></i> 修改
+		        </a>
+				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="credit:loanMain:remove">
+		            <i class="fa fa-remove"></i> 删除
+		        </a>
+		        <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="credit:loanMain:export">
+		            <i class="fa fa-download"></i> 导出
+		        </a>
+		        <a class="btn btn-danger" onclick="clearCache()" shiro:hasPermission="credit:loanMain:remove">
+		            <i class="fa fa-refresh"></i> 清理缓存
+		        </a>
+	        </div>
+	        
+	        <div class="col-sm-12 select-table table-striped">
+			    <table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+	<th:block th:include="include :: footer" />
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('credit:loanMain:edit')}]];
+		var listFlag = [[${@permission.hasPermi('credit:loanMain:list')}]];
+		var removeFlag = [[${@permission.hasPermi('credit:loanMain:remove')}]];
+		var datas = [[${@dict.getType('sys_normal_disable')}]];
+		var prefix = ctx + "credit/loanMain";
+
+		$(function() {
+		    var options = {
+		        url: prefix + "/list",
+		        createUrl: prefix + "/add",
+		        updateUrl: prefix + "/edit/{id}",
+		        removeUrl: prefix + "/remove",
+		        exportUrl: prefix + "/export",
+		        sortName: "loadRctId",
+		        sortOrder: "asc",
+		        modalName: "类型",
+		        columns: [{
+		            checkbox: true
+		        },
+		        {
+		            field: 'loadRctId',
+		            title: '借据号'
+		        },
+		        {
+		            field: 'custName',
+		            title: '客户姓名',
+		            sortable: true
+		        },
+				{
+					field: 'custCertId',
+					title: '客户证件号'
+				},
+				{
+					field: 'loanProductId',
+					title: '产品编码',
+					sortable: true
+				},
+				{
+					field: 'productName',
+					title: '产品名称'
+				},
+				{
+					field: 'productClass',
+					title: '产品分类',
+					sortable: true
+				},
+				{
+					field: 'intRate',
+					title: '贷款利率'
+				},
+				{
+					field: 'bmkRate',
+					title: '基准利率',
+					sortable: true
+				},
+				{
+					field: 'usageDesc',
+					title: '用途'
+				},
+				{
+					field: 'loanTerm',
+					title: '贷款期限',
+					sortable: true
+				},
+				{
+					field: 'loanBgnDate',
+					title: '贷款开始时间'
+				},
+				{
+					field: 'loanDltneDate',
+					title: '贷款结束时间',
+					sortable: true
+				},
+				{
+					field: 'loanAmt',
+					title: '贷款金额',
+					sortable: true
+				},
+				{
+					field: 'loanBal',
+					title: '贷款余额'
+				},
+				{
+					field: 'handovFlag',
+					title: '保全移交标记',
+					sortable: true
+				},
+				{
+					field: 'repayAccName',
+					title: '还款账户名称',
+					sortable: true
+				},
+				{
+					field: 'repayAccAccNo',
+					title: '还款账户账号'
+				},
+				{
+					field: 'riskClass',
+					title: '风险分类',
+					sortable: true
+				},
+				{
+					field: 'tellerNo',
+					title: '柜员号',
+					sortable: true
+				},
+				{
+					field: 'instNo',
+					title: '创建机构号'
+				},
+				{
+					field: 'empolyeeName',
+					title: '员工姓名',
+					sortable: true
+				},
+				{
+					field: 'empolyeeCard',
+					title: '员工证件号',
+					sortable: true
+				},
+				{
+					field: 'instName',
+					title: '机构名称'
+				},
+				{
+					field: 'limitContractNo',
+					title: '额度合同编号',
+					sortable: true
+				},
+				{
+					field: 'loanContractNo',
+					title: '贷款合同编号',
+					sortable: true
+				},
+				{
+					field: 'rewardAmount',
+					title: '奖励金额',
+					sortable: true
+				},
+				{
+					field: 'issued',
+					title: '已发放期数',
+					sortable: true
+				},
+				{
+					field: 'nextGrantDate',
+					title: '下次奖励发放时间',
+					sortable: true
+				},
+		        /*{
+		            field: 'dictType',
+		            title: '字典类型',
+		            sortable: true,
+		            formatter: function(value, row, index) {
+		                return '<a href="javascript:void(0)" onclick="detail(\'' + row.dictId + '\')">' + value + '</a>';
+		            }
+		        },
+		        {
+		            field: 'status',
+		            title: '状态',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	return $.table.selectDictLabel(datas, value);
+		            }
+		        },
+		        {
+		            field: 'remark',
+		            title: '备注',
+		            formatter: function(value, row, index) {
+                        return $.table.tooltip(value);
+			        }
+		        },*/
+		        {
+		            field: 'createTime',
+		            title: '创建时间',
+		            sortable: true
+		        },
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		                var actions = [];
+		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.loadRctId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		                actions.push('<a class="btn btn-info btn-xs ' + listFlag + '" href="javascript:void(0)" onclick="detail(\'' + row.loadRctId + '\')"><i class="fa fa-list-ul"></i>列表</a> ');
+		                actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.loadRctId + '\')"><i class="fa fa-remove"></i>删除</a>');
+		                return actions.join('');
+		            }
+		        }]
+		    };
+		    $.table.init(options);
+		});
+
+		/*字典列表-详细*/
+		function detail(loadRctId) {
+		    var url = prefix + '/detail/' + loadRctId;
+		    $.modal.openTab("信贷记录详细数据", url);
+		}
+		
+		/** 清理字典缓存 */
+        function clearCache() {
+            $.operate.get(prefix + "/clearCache");
+        }
+	</script>
+</body>
+</html>

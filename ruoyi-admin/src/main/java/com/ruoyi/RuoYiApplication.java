@@ -10,13 +10,13 @@ import org.springframework.context.annotation.ComponentScan;
  * 
  * @author robb
  */
-@ComponentScan(basePackages={"com.ruoyi","com.psbc.datashare"})
+@ComponentScan(basePackages={"com.ruoyi","com.psbc"})
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
 public class RuoYiApplication
 {
     public static void main(String[] args)
     {
         SpringApplication.run(RuoYiApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ PSBC-SHARE_DATA Start Success! ლ(´ڡ`ლ)ﾞ");
+        System.out.println("<<<---- PSBC Start Success! ----->>>ﾞ");
     }
 }

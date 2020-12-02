@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.credit.mapper.LoanMainMapper">
+
+    <resultMap type="com.psbc.credit.dto.LoanMainResponseDto" id="LoanMainMap">
+        <result property="id" column="id" jdbcType="OTHER"/>
+        <result property="applyId" column="apply_id" jdbcType="VARCHAR"/>
+        <result property="loadRctId" column="load_rct_id" jdbcType="VARCHAR"/>
+        <result property="custId" column="cust_id" jdbcType="VARCHAR"/>
+        <result property="custName" column="cust_name" jdbcType="VARCHAR"/>
+        <result property="custCertId" column="cust_cert_id" jdbcType="VARCHAR"/>
+        <result property="loanProductId" column="loan_product_id" jdbcType="VARCHAR"/>
+        <result property="productName" column="product_name" jdbcType="VARCHAR"/>
+        <result property="productClass" column="product_class" jdbcType="VARCHAR"/>
+        <result property="intRate" column="int_rate" jdbcType="NUMERIC"/>
+        <result property="bmkRate" column="bmk_rate" jdbcType="NUMERIC"/>
+        <result property="usageDesc" column="usage_desc" jdbcType="VARCHAR"/>
+        <result property="loanTerm" column="loan_term" jdbcType="INTEGER"/>
+        <result property="loanBgnDate" column="loan_bgn_date" jdbcType="VARCHAR"/>
+        <result property="loanDltneDate" column="loan_dltne_date" jdbcType="VARCHAR"/>
+        <result property="loanAmt" column="loan_amt" jdbcType="NUMERIC"/>
+        <result property="loanBal" column="loan_bal" jdbcType="NUMERIC"/>
+        <result property="handovFlag" column="handov_flag" jdbcType="VARCHAR"/>
+        <result property="repayAccName" column="repay_acc_name" jdbcType="VARCHAR"/>
+        <result property="repayAccAccNo" column="repay_acc_acc_no" jdbcType="VARCHAR"/>
+        <result property="riskClass" column="risk_class" jdbcType="VARCHAR"/>
+        <result property="tellerNo" column="teller_no" jdbcType="VARCHAR"/>
+        <result property="instNo" column="inst_no" jdbcType="VARCHAR"/>
+        <result property="empolyeeName" column="empolyee_name" jdbcType="VARCHAR"/>
+        <result property="empolyeeCard" column="empolyee_card" jdbcType="VARCHAR"/>
+        <result property="instName" column="inst_name" jdbcType="VARCHAR"/>
+        <result property="limitContractNo" column="limit_contract_no" jdbcType="VARCHAR"/>
+        <result property="loanContractNo" column="loan_contract_no" jdbcType="VARCHAR"/>
+        <result property="etlDate" column="etl_date" jdbcType="VARCHAR"/>
+
+        <result property="rewardAmount" column="reward_amount" />
+        <result property="grantTimes" column="grant_times" />
+        <result property="issued" column="issued" />
+        <result property="nextGrantDate" column="next_grant_date" />
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LoanMainMap">
+        select
+          lm.id,
+          lm.apply_id,
+          lm.load_rct_id,
+          lm.cust_id,
+          lm.cust_name,
+          lm.cust_cert_id,
+          lm.loan_product_id,
+          lm.product_name,
+          lm.product_class,
+          lm.int_rate,
+          lm.bmk_rate,
+          lm.usage_desc,
+          lm.loan_term,
+          lm.loan_bgn_date,
+          lm.loan_dltne_date,
+          lm.loan_amt,
+          lm.loan_bal,
+          lm.handov_flag,
+          lm.repay_acc_name,
+          lm.repay_acc_acc_no,
+          lm.risk_class,
+          lm.teller_no,
+          lm.inst_no,
+          lm.empolyee_name,
+          lm.empolyee_card,
+          lm.inst_name,
+          lm.limit_contract_no,
+          lm.loan_contract_no,
+          lm.etl_date,
+          lme.reward_amount,
+          lme.grant_times,
+          lme.Issued,
+          lme.next_grant_date
+        from loan_main lm left join loan_main_ext lme on lm.load_rct_id = lme.load_rct_id
+        where lm.load_rct_id = #{loadRctId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LoanMainMap">
+        select
+          id, apply_id, load_rct_id, cust_id, cust_name, cust_cert_id, loan_product_id, product_name, product_class, int_rate, bmk_rate, usage_desc, loan_term, loan_bgn_date, loan_dltne_date, loan_amt, loan_bal, handov_flag, repay_acc_name, repay_acc_acc_no, risk_class, teller_no, inst_no, empolyee_name, empolyee_card, inst_name, limit_contract_no, loan_contract_no, etl_date
+        from loan_main
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="LoanMainMap" parameterType="com.psbc.credit.dto.LoanMainDto">
+        select
+        id, apply_id, load_rct_id, cust_id, cust_name, cust_cert_id, loan_product_id, product_name, product_class,
+        int_rate, bmk_rate, usage_desc, loan_term, loan_bgn_date, loan_dltne_date, loan_amt, loan_bal, handov_flag,
+        repay_acc_name, repay_acc_acc_no, risk_class, teller_no, inst_no, empolyee_name, empolyee_card, inst_name,
+        limit_contract_no, loan_contract_no, etl_date
+        from loan_main
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="applyId != null and applyId != ''">
+                and apply_id = #{applyId}
+            </if>
+            <if test="loadRctId != null and loadRctId != ''">
+                and load_rct_id = #{loadRctId}
+            </if>
+            <if test="custId != null and custId != ''">
+                and cust_id = #{custId}
+            </if>
+            <if test="custName != null and custName != ''">
+                and cust_name = #{custName}
+            </if>
+            <if test="custCertId != null and custCertId != ''">
+                and cust_cert_id = #{custCertId}
+            </if>
+            <if test="loanProductId != null and loanProductId != ''">
+                and loan_product_id = #{loanProductId}
+            </if>
+            <if test="productName != null and productName != ''">
+                and product_name = #{productName}
+            </if>
+            <if test="productClass != null and productClass != ''">
+                and product_class = #{productClass}
+            </if>
+            <if test="intRate != null">
+                and int_rate = #{intRate}
+            </if>
+            <if test="bmkRate != null">
+                and bmk_rate = #{bmkRate}
+            </if>
+            <if test="usageDesc != null and usageDesc != ''">
+                and usage_desc = #{usageDesc}
+            </if>
+            <if test="loanTerm != null">
+                and loan_term = #{loanTerm}
+            </if>
+            <if test="loanBgnDate != null and loanBgnDate != ''">
+                and loan_bgn_date = #{loanBgnDate}
+            </if>
+            <if test="loanDltneDate != null and loanDltneDate != ''">
+                and loan_dltne_date = #{loanDltneDate}
+            </if>
+            <if test="loanAmt != null">
+                and loan_amt = #{loanAmt}
+            </if>
+            <if test="loanBal != null">
+                and loan_bal = #{loanBal}
+            </if>
+            <if test="handovFlag != null and handovFlag != ''">
+                and handov_flag = #{handovFlag}
+            </if>
+            <if test="repayAccName != null and repayAccName != ''">
+                and repay_acc_name = #{repayAccName}
+            </if>
+            <if test="repayAccAccNo != null and repayAccAccNo != ''">
+                and repay_acc_acc_no = #{repayAccAccNo}
+            </if>
+            <if test="riskClass != null and riskClass != ''">
+                and risk_class = #{riskClass}
+            </if>
+            <if test="tellerNo != null and tellerNo != ''">
+                and teller_no = #{tellerNo}
+            </if>
+            <if test="instNo != null and instNo != ''">
+                and inst_no = #{instNo}
+            </if>
+            <if test="empolyeeName != null and empolyeeName != ''">
+                and empolyee_name = #{empolyeeName}
+            </if>
+            <if test="empolyeeCard != null and empolyeeCard != ''">
+                and empolyee_card = #{empolyeeCard}
+            </if>
+            <if test="instName != null and instName != ''">
+                and inst_name = #{instName}
+            </if>
+            <if test="limitContractNo != null and limitContractNo != ''">
+                and limit_contract_no = #{limitContractNo}
+            </if>
+            <if test="loanContractNo != null and loanContractNo != ''">
+                and loan_contract_no = #{loanContractNo}
+            </if>
+            <if test="etlDate != null and etlDate != ''">
+                and etl_date = #{etlDate}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into loan_main(apply_id, load_rct_id, cust_id, cust_name, cust_cert_id, loan_product_id, product_name, product_class, int_rate, bmk_rate, usage_desc, loan_term, loan_bgn_date, loan_dltne_date, loan_amt, loan_bal, handov_flag, repay_acc_name, repay_acc_acc_no, risk_class, teller_no, inst_no, empolyee_name, empolyee_card, inst_name, limit_contract_no, loan_contract_no, etl_date)
+        values (#{applyId}, #{loadRctId}, #{custId}, #{custName}, #{custCertId}, #{loanProductId}, #{productName}, #{productClass}, #{intRate}, #{bmkRate}, #{usageDesc}, #{loanTerm}, #{loanBgnDate}, #{loanDltneDate}, #{loanAmt}, #{loanBal}, #{handovFlag}, #{repayAccName}, #{repayAccAccNo}, #{riskClass}, #{tellerNo}, #{instNo}, #{empolyeeName}, #{empolyeeCard}, #{instName}, #{limitContractNo}, #{loanContractNo}, #{etlDate})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update loan_main
+        <set>
+            <if test="applyId != null and applyId != ''">
+                apply_id = #{applyId},
+            </if>
+            <if test="loadRctId != null and loadRctId != ''">
+                load_rct_id = #{loadRctId},
+            </if>
+            <if test="custId != null and custId != ''">
+                cust_id = #{custId},
+            </if>
+            <if test="custName != null and custName != ''">
+                cust_name = #{custName},
+            </if>
+            <if test="custCertId != null and custCertId != ''">
+                cust_cert_id = #{custCertId},
+            </if>
+            <if test="loanProductId != null and loanProductId != ''">
+                loan_product_id = #{loanProductId},
+            </if>
+            <if test="productName != null and productName != ''">
+                product_name = #{productName},
+            </if>
+            <if test="productClass != null and productClass != ''">
+                product_class = #{productClass},
+            </if>
+            <if test="intRate != null">
+                int_rate = #{intRate},
+            </if>
+            <if test="bmkRate != null">
+                bmk_rate = #{bmkRate},
+            </if>
+            <if test="usageDesc != null and usageDesc != ''">
+                usage_desc = #{usageDesc},
+            </if>
+            <if test="loanTerm != null">
+                loan_term = #{loanTerm},
+            </if>
+            <if test="loanBgnDate != null and loanBgnDate != ''">
+                loan_bgn_date = #{loanBgnDate},
+            </if>
+            <if test="loanDltneDate != null and loanDltneDate != ''">
+                loan_dltne_date = #{loanDltneDate},
+            </if>
+            <if test="loanAmt != null">
+                loan_amt = #{loanAmt},
+            </if>
+            <if test="loanBal != null">
+                loan_bal = #{loanBal},
+            </if>
+            <if test="handovFlag != null and handovFlag != ''">
+                handov_flag = #{handovFlag},
+            </if>
+            <if test="repayAccName != null and repayAccName != ''">
+                repay_acc_name = #{repayAccName},
+            </if>
+            <if test="repayAccAccNo != null and repayAccAccNo != ''">
+                repay_acc_acc_no = #{repayAccAccNo},
+            </if>
+            <if test="riskClass != null and riskClass != ''">
+                risk_class = #{riskClass},
+            </if>
+            <if test="tellerNo != null and tellerNo != ''">
+                teller_no = #{tellerNo},
+            </if>
+            <if test="instNo != null and instNo != ''">
+                inst_no = #{instNo},
+            </if>
+            <if test="empolyeeName != null and empolyeeName != ''">
+                empolyee_name = #{empolyeeName},
+            </if>
+            <if test="empolyeeCard != null and empolyeeCard != ''">
+                empolyee_card = #{empolyeeCard},
+            </if>
+            <if test="instName != null and instName != ''">
+                inst_name = #{instName},
+            </if>
+            <if test="limitContractNo != null and limitContractNo != ''">
+                limit_contract_no = #{limitContractNo},
+            </if>
+            <if test="loanContractNo != null and loanContractNo != ''">
+                loan_contract_no = #{loanContractNo},
+            </if>
+            <if test="etlDate != null and etlDate != ''">
+                etl_date = #{etlDate},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from loan_main where id = #{id}
+    </delete>
+
+</mapper>

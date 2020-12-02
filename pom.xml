@@ -6,10 +6,6 @@
     <groupId>com.ruoyi</groupId>
     <artifactId>ruoyi</artifactId>
     <version>4.5.0</version>
-
-    <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
-    <description>若依管理系统</description>
     
     <properties>
         <ruoyi.version>4.5.0</ruoyi.version>
@@ -52,7 +48,11 @@
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-            
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.5.1</version>
+            </dependency>
             <!--验证码 -->
             <dependency>
                 <groupId>com.github.penggle</groupId>
