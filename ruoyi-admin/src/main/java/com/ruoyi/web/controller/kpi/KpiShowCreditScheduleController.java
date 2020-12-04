@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.kpi;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.ruoyi.common.utils.Arith;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +55,32 @@ public class KpiShowCreditScheduleController extends BaseController
     {
         startPage();
         List<KpiShowCreditSchedule> list = kpiShowCreditScheduleService.selectKpiShowCreditScheduleList(kpiShowCreditSchedule);
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    item.setTotalBalance(Arith.round(item.getTotalBalance(), 0));
+                    item.setTotalGrowthM(Arith.round(item.getTotalGrowthM(), 0));
+                    item.setTotalGrowthY(Arith.round(item.getTotalGrowthY(), 0));
+
+                    item.setRetailBalance(Arith.round(item.getRetailBalance(), 0));
+                    item.setRetailGrowthM(Arith.round(item.getRetailGrowthM(), 0));
+                    item.setRetailGrowthY(Arith.round(item.getRetailGrowthY(), 0));
+
+                    item.setSmallBusinessBalance(Arith.round(item.getSmallBusinessBalance(), 0));
+                    item.setSmallBusinessGrowthM(Arith.round(item.getSmallBusinessGrowthM(), 0));
+                    item.setSmallBusinessGrowthY(Arith.round(item.getSmallBusinessGrowthY(), 0));
+
+                    item.setCompanyBalance(Arith.round(item.getCompanyBalance(), 0));
+                    item.setCompanyGrowthM(Arith.round(item.getCompanyGrowthM(), 0));
+                    item.setCompanyGrowthY(Arith.round(item.getCompanyGrowthY(), 0));
+
+                    item.setSupplyChainBalance(Arith.round(item.getSupplyChainBalance(), 0));
+                    item.setSupplyChainGrowthM(Arith.round(item.getSupplyChainGrowthM(), 0));
+                    item.setSupplyChainGrowthY(Arith.round(item.getSupplyChainGrowthY(), 0));
+
+                    item.setBillFinancingBalance(Arith.round(item.getBillFinancingBalance(), 0));
+                    item.setBillFinancingGrowthM(Arith.round(item.getBillFinancingGrowthM(), 0));
+                    item.setBillFinancingGrowthY(Arith.round(item.getBillFinancingGrowthY(), 0));
+                });
         return getDataTable(list);
     }
 

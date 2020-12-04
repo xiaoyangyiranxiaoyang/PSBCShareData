@@ -45,6 +45,8 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
     @Autowired
     private KpiShowCreditMapper kpiShowCreditMapper;
     @Autowired
+    private KpiShowCreditScheduleMapper kpiShowCreditScheduleMapper;
+    @Autowired
     private KpiShowAssetBusinessMapper kpiShowAssetBusinessMapper;
     @Autowired
     private KpiShowAssetBusinessScheduleMapper kpiShowAssetBusinessScheduleMapper;
@@ -463,7 +465,14 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
                 kpiShowCreditMapper.insertBatch(kpiShowCredits);
             }
 
-            rrMsg = "导入数据成功!";
+            // 9. 计算全行KPI指标表（二）-附表 并入库
+            KpiShowCreditSchedule creditSchedule = calculateCreditSchedule(dataDate, operName);
+            if (creditSchedule != null) {
+                kpiShowCreditScheduleMapper.deleteByDataDate(dataDate);
+                kpiShowCreditScheduleMapper.insertKpiShowCreditSchedule(creditSchedule);
+            }
+
+            rrMsg = "数据导入成功, 并成计算出结果!";
         } catch (Exception e) {
             throw new BusinessException(rrMsg, e);
         } finally {
@@ -742,6 +751,72 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
             rrr.add(oneR);
         }
         return rrr;
+    }
+
+    /**
+     * 计算 全行KPI指标表（二） 附表 (全省)
+     *
+     * @param dataDate
+     * @param operName
+     * @return
+     */
+    private KpiShowCreditSchedule calculateCreditSchedule(Date dataDate, String operName) {
+        KpiShowCreditSchedule r = new KpiShowCreditSchedule();
+
+        r.setDistrict(KpiShowConstant.DISTRICT_QUAN_SHENG);
+        r.setDataDate(dataDate);
+        r.setDelFlag("0");
+        r.setCreateBy(operName);
+        r.setCreateTime(new Date());
+
+        // 查询上月和年初(上年12月)的资产业务情况
+        Date lastMonth = DateUtils.addMonths(dataDate, -1);
+        Date beginYear = DateUtils.addYears(dataDate, -1);
+        beginYear = DateUtils.setMonths(beginYear, 11);
+        // 上月
+        List<KpiShowCreditSchedule> lastMonthDatas = kpiShowCreditScheduleMapper.selectByDataDate(lastMonth);
+        // 年初
+        List<KpiShowCreditSchedule> beginYearDatas = kpiShowCreditScheduleMapper.selectByDataDate(beginYear);
+        // 查询当月的信贷规模数据
+        List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceCreditScale> creditScaleMap = Optional.ofNullable(creditScales)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceCreditScale::getDistrict, i -> i, (k1, k2) -> k1));
+
+        KpiShowCreditSchedule lst = (lastMonthDatas != null && !lastMonthDatas.isEmpty()) ? lastMonthDatas.get(0) : new KpiShowCreditSchedule();
+        KpiShowCreditSchedule by = (beginYearDatas != null && !beginYearDatas.isEmpty()) ? beginYearDatas.get(0) : new KpiShowCreditSchedule();
+        KpiSourceCreditScale cs = creditScaleMap.get(KpiShowConstant.DISTRICT_QUAN_SHENG) == null ? new KpiSourceCreditScale() : creditScaleMap.get(KpiShowConstant.DISTRICT_QUAN_SHENG);
+
+        // 个人零售贷款 = 小额贷款	+ 个商贷款	+ 住房按揭贷款	+ 其他消费贷款	+ 其他贷款
+        r.setRetailBalance(Arith.add(Arith.add(Arith.add(Arith.add(cs.getMicroloans(), cs.getIndividualBusiness()),cs.getHomeMortgage()),cs.getOtherConsumer()),cs.getPersonalOther()));
+        r.setRetailGrowthM(Arith.sub(r.getRetailBalance(), lst.getRetailBalance()));
+        r.setRetailGrowthY(Arith.sub(r.getRetailBalance(), by.getRetailBalance()));
+
+        // 小企业贷款 = 小企业
+        r.setSmallBusinessBalance(cs.getSmallBusiness());
+        r.setSmallBusinessGrowthM(Arith.sub(r.getSmallBusinessBalance(), lst.getSmallBusinessBalance()));
+        r.setSmallBusinessGrowthY(Arith.sub(r.getSmallBusinessBalance(), by.getSmallBusinessBalance()));
+
+        // 公司贷款 = 其他公司贷
+        r.setCompanyBalance(cs.getOtherCompany());
+        r.setCompanyGrowthM(Arith.sub(r.getCompanyBalance(), lst.getCompanyBalance()));
+        r.setCompanyGrowthY(Arith.sub(r.getCompanyBalance(), by.getCompanyBalance()));
+
+        // 供应链 = 供应链
+        r.setSupplyChainBalance(cs.getSupplyChain());
+        r.setSupplyChainGrowthM(Arith.sub(r.getSupplyChainBalance(), lst.getSupplyChainBalance()));
+        r.setSupplyChainGrowthY(Arith.sub(r.getSupplyChainBalance(), by.getSupplyChainBalance()));
+
+        // 票据融资 = 转贴 + 直贴
+        r.setBillFinancingBalance(Arith.add(cs.getRediscount(), cs.getDirectPaste()));
+        r.setBillFinancingGrowthM(Arith.sub(r.getBillFinancingBalance(), lst.getBillFinancingBalance()));
+        r.setBillFinancingGrowthY(Arith.sub(r.getBillFinancingBalance(), by.getBillFinancingBalance()));
+
+        // 合计
+        r.setTotalBalance(Arith.add(Arith.add(Arith.add(Arith.add(r.getRetailBalance(), r.getSmallBusinessBalance()),r.getCompanyBalance()),r.getSupplyChainBalance()),r.getBillFinancingBalance()));
+        r.setTotalGrowthM(Arith.add(Arith.add(Arith.add(Arith.add(r.getRetailGrowthM(), r.getSmallBusinessGrowthM()),r.getCompanyGrowthM()),r.getSupplyChainGrowthM()),r.getBillFinancingGrowthM()));
+        r.setTotalGrowthY(Arith.add(Arith.add(Arith.add(Arith.add(r.getRetailGrowthY(), r.getSmallBusinessGrowthY()),r.getCompanyGrowthY()),r.getSupplyChainGrowthY()),r.getBillFinancingGrowthY()));
+
+        return r;
     }
 
     //《地区，《指标号，数额》》

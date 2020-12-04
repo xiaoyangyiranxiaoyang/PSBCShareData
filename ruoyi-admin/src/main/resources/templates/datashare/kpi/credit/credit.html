@@ -3,7 +3,7 @@
 <head>
     <th:block th:include="include :: header('全行KPI指标（二）列表')"/>
     <style type="text/css">
-        table{
+        table {
             table-layout: fixed !important;
         }
     </style>
@@ -21,7 +21,8 @@
                                    data-type="month" name="dataDate"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('formId','bootstrap-table');/*$.table.search('formId','bootstrap-table1')*/"><i
+                            <a class="btn btn-primary btn-rounded btn-sm"
+                               onclick="$.table.search('formId','bootstrap-table');$.table.search('formId','bootstrap-table1')"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                         </li>
                     </ul>
@@ -49,6 +50,8 @@
         </div>
         <div class="col-sm-12 select-table table-bordered">
             <table id="bootstrap-table"></table>
+            <span>附表</span>
+            <table id="bootstrap-table1"></table>
         </div>
     </div>
 </div>
@@ -57,15 +60,16 @@
     var editFlag = [[${@permission.hasPermi('datashare/kpi:credit:edit')}]];
     var removeFlag = [[${@permission.hasPermi('datashare/kpi:credit:remove')}]];
     var prefix = ctx + "datashare/kpi/credit";
+    var prefix1 = ctx + "datashare/kpi/credit_schedule";
 
     $(function () {
         var nowDate = new Date();
         var year = nowDate.getFullYear();
         var month = nowDate.getMonth() + 1;
-        var monthStr = year+"-"+(month < 10 ? "0"+month : month);
+        var monthStr = year + "-" + (month < 10 ? "0" + month : month);
         $("#search_month").val(monthStr);
         // 搜索时间选择器初始化
-        layui.use('laydate', function(){
+        layui.use('laydate', function () {
             var laydate = layui.laydate;
             //年月选择器
             laydate.render({
@@ -222,7 +226,161 @@
                 ]
             ]
         };
+
+        var options1 = {
+            id: "bootstrap-table1",
+            url: prefix1 + "/list",
+            createUrl: prefix1 + "/add",
+            updateUrl: prefix1 + "/edit/{id}",
+            removeUrl: prefix1 + "/remove",
+            exportUrl: prefix1 + "/export",
+            modalName: "全行KPI指标（二）-附表",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [
+                [
+                    {
+                        field: 'district',
+                        title: '地区',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2
+                    },
+                    {
+                        title: '合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '个人零售贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '小企业贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '公司贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '供应链',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '票据融资',
+                        align: 'center',
+                        colspan: 3
+                    }
+                ],
+                [
+                    {
+                        field: 'totalBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'totalGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'totalGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'retailBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'retailGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'retailGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'smallBusinessBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'smallBusinessGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'smallBusinessGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'supplyChainBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'supplyChainGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'supplyChainGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'billFinancingBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'billFinancingGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'billFinancingGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
+
+        $.table.init(options1);
         $.table.init(options);
+
+
     });
 </script>
 </body>
