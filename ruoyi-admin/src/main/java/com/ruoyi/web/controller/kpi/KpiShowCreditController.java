@@ -1,9 +1,13 @@
 package com.ruoyi.web.controller.kpi;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.Arith;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -59,8 +63,33 @@ public class KpiShowCreditController extends BaseController
     @ResponseBody
     public TableDataInfo list(KpiShowCredit kpiShowCredit)
     {
-        startPage();
+        //startPage();
         List<KpiShowCredit> list = kpiShowCreditService.selectKpiShowCreditList(kpiShowCredit);
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    item.setDepositBalance(Arith.round(item.getDepositBalance(), 0));
+                    item.setDepositGrowthM(Arith.round(item.getDepositGrowthM(), 0));
+                    item.setDepositGrowthY(Arith.round(item.getDepositGrowthY(), 0));
+
+                    item.setSelfBalance(Arith.round(item.getSelfBalance(), 0));
+                    item.setSelfGrowthM(Arith.round(item.getSelfGrowthM(), 0));
+                    item.setSelfGrowthY(Arith.round(item.getSelfGrowthY(), 0));
+
+                    item.setAgentBalance(Arith.round(item.getAgentBalance(), 0));
+                    item.setAgentGrowthM(Arith.round(item.getAgentGrowthM(), 0));
+                    item.setAgentGrowthY(Arith.round(item.getAgentGrowthY(), 0));
+
+                    item.setCompanyBalance(Arith.round(item.getCompanyBalance(), 0));
+                    item.setCompanyGrowthM(Arith.round(item.getCompanyGrowthM(), 0));
+                    item.setCompanyGrowthY(Arith.round(item.getCompanyGrowthY(), 0));
+
+                    item.setLoanBalance(Arith.round(item.getLoanBalance(), 0));
+                    item.setLoanGrowthM(Arith.round(item.getLoanGrowthM(), 0));
+                    item.setLoanGrowthY(Arith.round(item.getLoanGrowthY(), 0));
+
+                    item.setUnhealthyRate(Arith.round(Arith.mul(item.getUnhealthyRate(),new BigDecimal(100)), 2));
+                    item.setOverdueRate(Arith.round(Arith.mul(item.getOverdueRate(),new BigDecimal(100)), 2));
+                });
         return getDataTable(list);
     }
 

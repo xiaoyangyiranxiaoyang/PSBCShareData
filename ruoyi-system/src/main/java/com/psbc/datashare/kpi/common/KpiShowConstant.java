@@ -29,7 +29,7 @@ public class KpiShowConstant {
     public static final String DISTRICT_YING_YI_BU = "营业部";
 
     /**
-     * 全行资产业务情况表主表显示的地区列表(按顺序)
+     * 全行资产业务情况表主表 显示的地区列表(按顺序)
      */
     public static final LinkedList<String> DISTRICT_LIST_ASSET_BUSINESS = new LinkedList<String>(){{
         add(DISTRICT_QUAN_SHENG);
@@ -45,5 +45,25 @@ public class KpiShowConstant {
         add(DISTRICT_GUO_LUO);
         add(DISTRICT_YU_SHU);
         add(DISTRICT_YING_YI_BU);
+    }};
+
+    /**
+     * 全行KPI指标（二）主表 地区列表(按顺序)
+     */
+    public static final LinkedList<String> DISTRICT_LIST_KPI_CREDIT = new LinkedList<String>(){{
+        add(DISTRICT_QUAN_SHENG);
+        add(DISTRICT_CHENG_XI);
+        add(DISTRICT_CHENG_ZHONG);
+        add(DISTRICT_DA_TONG);
+        add(DISTRICT_HAI_DONG);
+        add(DISTRICT_HAI_XI);
+        add(DISTRICT_GE_ER_MU);
+        add(DISTRICT_HAI_NAN);
+        add(DISTRICT_HAI_BEI);
+        add(DISTRICT_HUANG_NAN);
+        add(DISTRICT_GUO_LUO);
+        add(DISTRICT_YU_SHU);
+        add(DISTRICT_YING_YI_BU);
+        add(DISTRICT_BEN_BU);
     }};
 }

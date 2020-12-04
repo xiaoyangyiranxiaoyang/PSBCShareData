@@ -16,18 +16,13 @@
                 <div class="select-list">
                     <ul>
                         <li class="select-time">
-                            <label>数据日期：</label>
-                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                   name="params[beginDataDate]"/>
-                            <span>-</span>
-                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                   name="params[endDataDate]"/>
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
                         </li>
                         <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search('formId','bootstrap-table');/*$.table.search('formId','bootstrap-table1')*/"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
                         </li>
                     </ul>
                 </div>
@@ -64,115 +59,31 @@
     var prefix = ctx + "datashare/kpi/credit";
 
     $(function () {
-        /*var options = {
-            id: "bootstrap-table",
-            url: prefix + "/list",
-            //createUrl: prefix + "/add",
-            //updateUrl: prefix + "/edit/{id}",
-            //removeUrl: prefix + "/remove",
-            //exportUrl: prefix + "/export",
-            importUrl: prefix + "/importData",
-            importTemplateUrl: prefix + "/importTemplate",
-            modalName: "全行KPI指标（二）",
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            pagination: false,
-            sortable: false,
-            columns: [
-                [
-                    {
-                        title: "全行KPI指标（二）",
-                        align: 'center',
-                        colspan: 20
-                    }
-                ],
-                [
-                    {
-                        rowspan: 2,
-                        field: 'district',
-                        align: 'center',
-                        valign: 'middle',
-                        title: '地区'
-                    },
-                    {
-                        title: '合计',
-                        align: 'center',
-                        //colspan: 4
-                    },
-                ],
-                [
-                    // {
-                    //     field: 'district',
-                    //     title: '地区'
-                    // },
-                    {
-                        field: 'depositBalance',
-                        title: '存款合计-余额'
-                    },
-                    {
-                        field: 'depositGrowthM',
-                        title: '存款合计-月增'
-                    },
-                    {
-                        field: 'depositGrowthY',
-                        title: '存款合计-年增'
-                    },
-                    {
-                        field: 'selfBalance',
-                        title: '邮储自营-余额'
-                    },
-                    {
-                        field: 'selfGrowthM',
-                        title: '邮储自营-月增'
-                    },
-                    {
-                        field: 'selfGrowthY',
-                        title: '邮储自营-年增'
-                    },
-                    {
-                        field: 'agentBalance',
-                        title: '邮储代理-余额'
-                    },
-                    {
-                        field: 'agentGrowthM',
-                        title: '邮储代理-月增'
-                    },
-                    {
-                        field: 'agentGrowthY',
-                        title: '邮储代理-年增'
-                    },
-                    {
-                        field: 'companyBalance',
-                        title: '公司存款-余额'
-                    },
-                    {
-                        field: 'companyGrowthM',
-                        title: '公司存款-月增'
-                    },
-                    {
-                        field: 'companyGrowthY',
-                        title: '公司存款-年增'
-                    },
-                    {
-                        field: 'unhealthyRate',
-                        title: '不良率'
-                    },
-                    {
-                        field: 'overdueRate',
-                        title: '逾期率'
-                    }
-                ]
-            ]
-        };*/
+        var nowDate = new Date();
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1;
+        var monthStr = year+"-"+(month < 10 ? "0"+month : month);
+        $("#search_month").val(monthStr);
+        // 搜索时间选择器初始化
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            //年月选择器
+            laydate.render({
+                elem: '#search_month',
+                type: 'month',
+                value: new Date()
+            });
+        });
+
         var options = {
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
-            modalName: "全行资产业务情况表",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "全行KPI指标（二）",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
@@ -222,14 +133,14 @@
                     },
                     {
                         field: 'unhealthyRate',
-                        title: '不良率',
+                        title: '不良率(%)',
                         align: 'center',
                         valign: 'middle',
                         rowspan: 2
                     },
                     {
                         field: 'overdueRate',
-                        title: '逾期率',
+                        title: '逾期率(%)',
                         align: 'center',
                         valign: 'middle',
                         rowspan: 2

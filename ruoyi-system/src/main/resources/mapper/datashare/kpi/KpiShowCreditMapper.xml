@@ -150,4 +150,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiShowCreditResult">
+        <include refid="selectKpiShowCreditVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_show_credit where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="KpiShowCredit">
+        insert into kpi_show_credit(id,district,deposit_balance,deposit_growth_m,deposit_growth_y,self_balance,self_growth_m,self_growth_y,agent_balance,agent_growth_m,agent_growth_y,company_balance,company_growth_m,company_growth_y,loan_balance,loan_growth_m,loan_growth_y,unhealthy_rate,overdue_rate,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.district},#{kk.depositBalance},#{kk.depositGrowthM},#{kk.depositGrowthY},#{kk.selfBalance},#{kk.selfGrowthM},#{kk.selfGrowthY},#{kk.agentBalance},#{kk.agentGrowthM},#{kk.agentGrowthY},#{kk.companyBalance},#{kk.companyGrowthM},#{kk.companyGrowthY},#{kk.loanBalance},#{kk.loanGrowthM},#{kk.loanGrowthY},#{kk.unhealthyRate},#{kk.overdueRate},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
 </mapper>
