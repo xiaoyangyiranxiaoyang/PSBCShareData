@@ -2,11 +2,12 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('全行KPI指标（二）列表')"/>
-    <style type="text/css">
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <!--<style type="text/css">
         table {
             table-layout: fixed !important;
         }
-    </style>
+    </style>-->
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -56,9 +57,11 @@
     </div>
 </div>
 <th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js" />
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('datashare/kpi:credit:edit')}]];
     var removeFlag = [[${@permission.hasPermi('datashare/kpi:credit:remove')}]];
+    var rowEditFlag = [[${@permission.hasPermi('datashare/kpi:credit:import')}]]; // 拥有数据导入权限的人才拥有行编辑权限
     var prefix = ctx + "datashare/kpi/credit";
     var prefix1 = ctx + "datashare/kpi/credit_schedule";
 
@@ -148,6 +151,179 @@
                         align: 'center',
                         valign: 'middle',
                         rowspan: 2
+                    }
+                ],
+                [
+                    {
+                        field: 'depositBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'depositGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'depositGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'selfBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'selfGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'selfGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'agentBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'agentGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'agentGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'loanBalance',
+                        title: '余额'
+                    },
+                    {
+                        field: 'loanGrowthM',
+                        title: '月增'
+                    },
+                    {
+                        field: 'loanGrowthY',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
+        var options_rowEdit = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "全行KPI指标（二）",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            onEditableSave: onEditableSave,
+            columns: [
+                [
+                    {
+                        title: '全行KPI指标（二）',
+                        align: 'center',
+                        colspan: 18
+                    }
+                ],
+                [
+                    {
+                        rowspan: 2,
+                        field: 'district',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '地区'
+                    },
+                    {
+                        title: '存款合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '其中：1.邮储自营',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '2.邮储代理',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '3.公司存款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '贷款合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        field: 'unhealthyRate',
+                        title: '不良率(%)',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2,
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '不良率数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '不良率数据是数字';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        field: 'overdueRate',
+                        title: '逾期率(%)',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2,
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '逾期率数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '逾期率数据是数字';
+                                }
+                            }
+                        }
                     }
                 ],
                 [
@@ -378,10 +554,71 @@
 
 
         $.table.init(options1);
-        $.table.init(options);
-
+        if (rowEditFlag !== "hidden"){
+            $.table.init(options_rowEdit);
+        } else {
+            $.table.init(options);
+        }
 
     });
+
+    function onEditableSave (field, row, rowIndex, oldValue, $el) {
+        console.log("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        let postData = {"id":row['id']};
+        postData[field] = row[field] ? row[field]/100 : row[field];
+        $.ajax({
+            type: "post",
+            url: prefix + "/edit",
+            data: postData,
+            success: function (result, status) {
+                //成功返回数据，status状态为 success  200
+                if (status == 'success') {
+
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.closeAll();
+                        //$.modal.alertSuccess(result.msg);
+                    } else if (result.code == web_status.WARNING) {
+                        $el.text(oldValue);//修改失败，还原当前元素的初始值
+                        $.modal.alertWarning(result.msg);
+                        $.table.refresh("bootstrap-table");
+                    } else {
+                        $el.text(oldValue);//修改失败，还原当前元素的初始值
+                        $.modal.alertError(result.msg);
+                        $.table.refresh("bootstrap-table")
+                    }
+                }else{
+                    $.modal.msgError("修改失败！");
+                    $el.text(initValue);//修改失败，还原当前元素的初始值   修改标签文本
+                }
+            },
+
+            error: function () {
+                return '编辑失败';//$.modal.msgError("修改失败！");
+            },
+            complete: function () {
+
+            }
+        });
+    }
+
+    /**
+     * 验证数据 是数字：返回true；不是数字：返回false
+     **/
+    function isNumber(val){
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if(regPos.test(val) || regNeg.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+        // if (parseFloat(val).toString() == "NaN") {
+        //
+        //     return false;
+        // } else {
+        //     return true;
+        // }
+    }
 </script>
 </body>
 <!-- 导入区域 -->
