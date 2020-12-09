@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('主要监管指标汇总列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search();"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-info" onclick="$.table.importExcel('import_cbrc_data', 360, 315, '导入银监局共享数据')"
+               shiro:hasPermission="datashare/cbrc:major_regulatory_indicators:import">
+                <i class="fa fa-upload"></i> 导入银监局共享数据
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var prefix = ctx + "datashare/cbrc/major_regulatory_indicators";
+
+    var nowDate = new Date();
+    let year = nowDate.getFullYear();
+    let month = nowDate.getMonth() + 1;
+    let monthStr = year + "-" + (month < 10 ? "0" + month : month);
+    $("#search_month").val(monthStr);
+    // 搜索时间选择器初始化
+    layui.use('laydate', function () {
+        let laydate = layui.laydate;
+        //年月选择器
+        laydate.render({
+            elem: '#search_month',
+            type: 'month',
+            value: new Date()
+        });
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "青海主要监管指标汇总",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'item',
+                    title: '项目'
+                },
+                {
+                    field: 'regulatoryStandards',
+                    title: '监管标准'
+                },
+                {
+                    field: 'currentIssue',
+                    title: '本期'
+                },
+                {
+                    field: 'compareBeginYear',
+                    title: '比年初'
+                },
+                {
+                    field: 'compateLastYear',
+                    title: '比去年同期'
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+<!-- 导入区域 -->
+<script id="import_cbrc_data" type="text/template">
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+            <div class="mt10 pt5 pb5">
+                <label>数据年月：</label>
+                <input type="text" style="width: 100px" class="select-month" placeholder="yyyy-MM" data-type="month"
+                       name="dataMonth"/>
+            </div>
+            <font color="red" class="pull-left mt10">
+                <p>提示：</p>
+                <p>1. 仅允许导入“xls”或“xlsx”格式文件！</p>
+                <p>2. 若系统已有当前选择月的数据将会被替换!</p>
+            </font>
+            <hr/>
+            <div>
+                <a onclick="$.table.importTemplate(true)" class="btn btn-default btn-xs"><i
+                        class="fa fa-file-excel-o"></i>
+                    下载模板</a>
+            </div>
+
+        </div>
+    </form>
+</script>
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.cbrc.mapper.CbrcMajorRegulatoryIndicatorsMapper">
+    
+    <resultMap type="CbrcMajorRegulatoryIndicators" id="CbrcMajorRegulatoryIndicatorsResult">
+        <result property="id"    column="id"    />
+        <result property="item"    column="item"    />
+        <result property="regulatoryStandards"    column="regulatory_standards"    />
+        <result property="currentIssue"    column="current_issue"    />
+        <result property="compareBeginYear"    column="compare_begin_year"    />
+        <result property="compateLastYear"    column="compate_last_year"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCbrcMajorRegulatoryIndicatorsVo">
+        select id, item, regulatory_standards, current_issue, compare_begin_year, compate_last_year, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_major_regulatory_indicators
+    </sql>
+
+    <select id="selectCbrcMajorRegulatoryIndicatorsList" parameterType="CbrcMajorRegulatoryIndicators" resultMap="CbrcMajorRegulatoryIndicatorsResult">
+        <include refid="selectCbrcMajorRegulatoryIndicatorsVo"/>
+        <where>  
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectCbrcMajorRegulatoryIndicatorsById" parameterType="Long" resultMap="CbrcMajorRegulatoryIndicatorsResult">
+        <include refid="selectCbrcMajorRegulatoryIndicatorsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCbrcMajorRegulatoryIndicators" parameterType="CbrcMajorRegulatoryIndicators">
+        insert into cbrc_major_regulatory_indicators
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="item != null">item,</if>
+            <if test="regulatoryStandards != null">regulatory_standards,</if>
+            <if test="currentIssue != null">current_issue,</if>
+            <if test="compareBeginYear != null">compare_begin_year,</if>
+            <if test="compateLastYear != null">compate_last_year,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="item != null">#{item},</if>
+            <if test="regulatoryStandards != null">#{regulatoryStandards},</if>
+            <if test="currentIssue != null">#{currentIssue},</if>
+            <if test="compareBeginYear != null">#{compareBeginYear},</if>
+            <if test="compateLastYear != null">#{compateLastYear},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCbrcMajorRegulatoryIndicators" parameterType="CbrcMajorRegulatoryIndicators">
+        update cbrc_major_regulatory_indicators
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="item != null">item = #{item},</if>
+            <if test="regulatoryStandards != null">regulatory_standards = #{regulatoryStandards},</if>
+            <if test="currentIssue != null">current_issue = #{currentIssue},</if>
+            <if test="compareBeginYear != null">compare_begin_year = #{compareBeginYear},</if>
+            <if test="compateLastYear != null">compate_last_year = #{compateLastYear},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCbrcMajorRegulatoryIndicatorsById" parameterType="Long">
+        delete from cbrc_major_regulatory_indicators where id = #{id}
+    </delete>
+
+    <delete id="deleteCbrcMajorRegulatoryIndicatorsByIds" parameterType="String">
+        delete from cbrc_major_regulatory_indicators where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="CbrcMajorRegulatoryIndicatorsResult">
+        <include refid="selectCbrcMajorRegulatoryIndicatorsVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from cbrc_major_regulatory_indicators where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="CbrcMajorRegulatoryIndicators">
+        insert into cbrc_major_regulatory_indicators(id,item,regulatory_standards,current_issue,compare_begin_year,compate_last_year,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.item},#{kk.regulatoryStandards},#{kk.currentIssue},#{kk.compareBeginYear},#{kk.compateLastYear},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+
+</mapper>

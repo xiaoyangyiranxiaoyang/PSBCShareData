@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增金融机构资产负债主要指标')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-assets_liabilities_indicators-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构：</label>
+                <div class="col-sm-8">
+                    <input name="institution" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">资产总额：</label>
+                <div class="col-sm-8">
+                    <input name="assetsTotal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">比年初：</label>
+                <div class="col-sm-8">
+                    <input name="assetsCompateBeginYear" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">负债总额：</label>
+                <div class="col-sm-8">
+                    <input name="liabilitiesTotal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">比年初：</label>
+                <div class="col-sm-8">
+                    <input name="liabilitiesCompateBeginYear" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">所有者权益：</label>
+                <div class="col-sm-8">
+                    <input name="owner equity" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">比年初：</label>
+                <div class="col-sm-8">
+                    <input name="equityCompateBeginYear" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">本年利润：</label>
+                <div class="col-sm-8">
+                    <input name="profit ThisYear" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">比去年同期：</label>
+                <div class="col-sm-8">
+                    <input name="profit CompateLastYear" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">数据日期：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="dataDate" class="form-control" placeholder="yyyy-MM-dd" type="text" required>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">删除标志：</label>
+                <div class="col-sm-8">
+                    <input name="delFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "datashare/cbrc/assets_liabilities_indicators"
+        $("#form-assets_liabilities_indicators-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-assets_liabilities_indicators-add').serialize());
+            }
+        }
+
+        $("input[name='dataDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>

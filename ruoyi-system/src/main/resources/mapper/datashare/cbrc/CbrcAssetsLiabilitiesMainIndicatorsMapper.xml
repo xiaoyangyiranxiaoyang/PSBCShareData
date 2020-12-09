@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.cbrc.mapper.CbrcAssetsLiabilitiesMainIndicatorsMapper">
+    
+    <resultMap type="CbrcAssetsLiabilitiesMainIndicators" id="CbrcAssetsLiabilitiesMainIndicatorsResult">
+        <result property="id"    column="id"    />
+        <result property="institution"    column="institution"    />
+        <result property="assetsTotal"    column="assets_total"    />
+        <result property="assetsCompateBeginYear"    column="assets_compate_begin_year"    />
+        <result property="liabilitiesTotal"    column="liabilities_total"    />
+        <result property="liabilitiesCompateBeginYear"    column="liabilities_compate_begin_year"    />
+        <result property="owner equity"    column="owner_ equity"    />
+        <result property="equityCompateBeginYear"    column="equity_compate_begin_year"    />
+        <result property="profitThisYear"    column="profit_this_year"    />
+        <result property="profitCompateLastYear"    column="profit_compate_last_year"    />
+        <result property="dataDate"    column="data_date"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCbrcAssetsLiabilitiesMainIndicatorsVo">
+        select id, institution, assets_total, assets_compate_begin_year, liabilities_total, liabilities_compate_begin_year, owner_ equity, equity_compate_begin_year, profit_this_year, profit_compate_last_year, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_assets_liabilities_main_indicators
+    </sql>
+
+    <select id="selectCbrcAssetsLiabilitiesMainIndicatorsList" parameterType="CbrcAssetsLiabilitiesMainIndicators" resultMap="CbrcAssetsLiabilitiesMainIndicatorsResult">
+        <include refid="selectCbrcAssetsLiabilitiesMainIndicatorsVo"/>
+        <where>  
+            <if test="dataDate != null "> and data_date = #{dataDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectCbrcAssetsLiabilitiesMainIndicatorsById" parameterType="Long" resultMap="CbrcAssetsLiabilitiesMainIndicatorsResult">
+        <include refid="selectCbrcAssetsLiabilitiesMainIndicatorsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCbrcAssetsLiabilitiesMainIndicators" parameterType="CbrcAssetsLiabilitiesMainIndicators">
+        insert into cbrc_assets_liabilities_main_indicators
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="institution != null">institution,</if>
+            <if test="assetsTotal != null">assets_total,</if>
+            <if test="assetsCompateBeginYear != null">assets_compate_begin_year,</if>
+            <if test="liabilitiesTotal != null">liabilities_total,</if>
+            <if test="liabilitiesCompateBeginYear != null">liabilities_compate_begin_year,</if>
+            <if test="owner equity != null">owner_ equity,</if>
+            <if test="equityCompateBeginYear != null">equity_compate_begin_year,</if>
+            <if test="profitThisYear != null">profit_this_year,</if>
+            <if test="profitCompateLastYear != null">profit_compate_last_year,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="institution != null">#{institution},</if>
+            <if test="assetsTotal != null">#{assetsTotal},</if>
+            <if test="assetsCompateBeginYear != null">#{assetsCompateBeginYear},</if>
+            <if test="liabilitiesTotal != null">#{liabilitiesTotal},</if>
+            <if test="liabilitiesCompateBeginYear != null">#{liabilitiesCompateBeginYear},</if>
+            <if test="owner equity != null">#{owner equity},</if>
+            <if test="equityCompateBeginYear != null">#{equityCompateBeginYear},</if>
+            <if test="profitThisYear != null">#{profitThisYear},</if>
+            <if test="profitCompateLastYear != null">#{profitCompateLastYear},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCbrcAssetsLiabilitiesMainIndicators" parameterType="CbrcAssetsLiabilitiesMainIndicators">
+        update cbrc_assets_liabilities_main_indicators
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="institution != null">institution = #{institution},</if>
+            <if test="assetsTotal != null">assets_total = #{assetsTotal},</if>
+            <if test="assetsCompateBeginYear != null">assets_compate_begin_year = #{assetsCompateBeginYear},</if>
+            <if test="liabilitiesTotal != null">liabilities_total = #{liabilitiesTotal},</if>
+            <if test="liabilitiesCompateBeginYear != null">liabilities_compate_begin_year = #{liabilitiesCompateBeginYear},</if>
+            <if test="owner equity != null">owner_ equity = #{owner equity},</if>
+            <if test="equityCompateBeginYear != null">equity_compate_begin_year = #{equityCompateBeginYear},</if>
+            <if test="profitThisYear != null">profit_this_year = #{profitThisYear},</if>
+            <if test="profitCompateLastYear != null">profit_compate_last_year = #{profitCompateLastYear},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCbrcAssetsLiabilitiesMainIndicatorsById" parameterType="Long">
+        delete from cbrc_assets_liabilities_main_indicators where id = #{id}
+    </delete>
+
+    <delete id="deleteCbrcAssetsLiabilitiesMainIndicatorsByIds" parameterType="String">
+        delete from cbrc_assets_liabilities_main_indicators where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="CbrcAssetsLiabilitiesMainIndicatorsResult">
+        <include refid="selectCbrcAssetsLiabilitiesMainIndicatorsVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from cbrc_assets_liabilities_main_indicators where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="CbrcAssetsLiabilitiesMainIndicators">
+        insert into cbrc_assets_liabilities_main_indicators(id,item,regulatory_standards,current_issue,compare_begin_year,compate_last_year,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.item},#{kk.regulatoryStandards},#{kk.currentIssue},#{kk.compareBeginYear},#{kk.compateLastYear},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+
+</mapper>
