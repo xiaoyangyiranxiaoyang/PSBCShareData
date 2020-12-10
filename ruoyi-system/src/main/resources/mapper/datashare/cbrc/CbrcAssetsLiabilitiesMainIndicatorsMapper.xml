@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="assetsCompateBeginYear"    column="assets_compate_begin_year"    />
         <result property="liabilitiesTotal"    column="liabilities_total"    />
         <result property="liabilitiesCompateBeginYear"    column="liabilities_compate_begin_year"    />
-        <result property="owner equity"    column="owner_ equity"    />
+        <result property="ownerEquity"    column="owner_equity"    />
         <result property="equityCompateBeginYear"    column="equity_compate_begin_year"    />
         <result property="profitThisYear"    column="profit_this_year"    />
         <result property="profitCompateLastYear"    column="profit_compate_last_year"    />
@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCbrcAssetsLiabilitiesMainIndicatorsVo">
-        select id, institution, assets_total, assets_compate_begin_year, liabilities_total, liabilities_compate_begin_year, owner_ equity, equity_compate_begin_year, profit_this_year, profit_compate_last_year, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_assets_liabilities_main_indicators
+        select id, institution, assets_total, assets_compate_begin_year, liabilities_total, liabilities_compate_begin_year, owner_equity, equity_compate_begin_year, profit_this_year, profit_compate_last_year, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_assets_liabilities_main_indicators
     </sql>
 
     <select id="selectCbrcAssetsLiabilitiesMainIndicatorsList" parameterType="CbrcAssetsLiabilitiesMainIndicators" resultMap="CbrcAssetsLiabilitiesMainIndicatorsResult">
@@ -49,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="assetsCompateBeginYear != null">assets_compate_begin_year,</if>
             <if test="liabilitiesTotal != null">liabilities_total,</if>
             <if test="liabilitiesCompateBeginYear != null">liabilities_compate_begin_year,</if>
-            <if test="owner equity != null">owner_ equity,</if>
+            <if test="ownerEquity != null">owner_equity,</if>
             <if test="equityCompateBeginYear != null">equity_compate_begin_year,</if>
             <if test="profitThisYear != null">profit_this_year,</if>
             <if test="profitCompateLastYear != null">profit_compate_last_year,</if>
@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="assetsCompateBeginYear != null">#{assetsCompateBeginYear},</if>
             <if test="liabilitiesTotal != null">#{liabilitiesTotal},</if>
             <if test="liabilitiesCompateBeginYear != null">#{liabilitiesCompateBeginYear},</if>
-            <if test="owner equity != null">#{owner equity},</if>
+            <if test="ownerEquity != null">#{ownerEquity},</if>
             <if test="equityCompateBeginYear != null">#{equityCompateBeginYear},</if>
             <if test="profitThisYear != null">#{profitThisYear},</if>
             <if test="profitCompateLastYear != null">#{profitCompateLastYear},</if>
@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="assetsCompateBeginYear != null">assets_compate_begin_year = #{assetsCompateBeginYear},</if>
             <if test="liabilitiesTotal != null">liabilities_total = #{liabilitiesTotal},</if>
             <if test="liabilitiesCompateBeginYear != null">liabilities_compate_begin_year = #{liabilitiesCompateBeginYear},</if>
-            <if test="owner equity != null">owner_ equity = #{owner equity},</if>
+            <if test="ownerEquity != null">owner_equity = #{ownerEquity},</if>
             <if test="equityCompateBeginYear != null">equity_compate_begin_year = #{equityCompateBeginYear},</if>
             <if test="profitThisYear != null">profit_this_year = #{profitThisYear},</if>
             <if test="profitCompateLastYear != null">profit_compate_last_year = #{profitCompateLastYear},</if>
@@ -126,10 +126,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="insertBatch" parameterType="CbrcAssetsLiabilitiesMainIndicators">
-        insert into cbrc_assets_liabilities_main_indicators(id,item,regulatory_standards,current_issue,compare_begin_year,compate_last_year,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        insert into cbrc_assets_liabilities_main_indicators(id,institution,assets_total,assets_compate_begin_year,liabilities_total,liabilities_compate_begin_year,owner_equity,equity_compate_begin_year,profit_this_year,profit_compate_last_year,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
         values
         <foreach collection="list" item="kk" separator=",">
-            (#{kk.id},#{kk.item},#{kk.regulatoryStandards},#{kk.currentIssue},#{kk.compareBeginYear},#{kk.compateLastYear},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+            (#{kk.id},#{kk.institution},#{kk.assetsTotal},#{kk.assetsCompateBeginYear},#{kk.liabilitiesTotal},#{kk.liabilitiesCompateBeginYear},#{kk.ownerEquity},#{kk.equityCompateBeginYear},#{kk.profitThisYear},#{kk.profitCompateLastYear},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
         </foreach>
     </insert>
 
