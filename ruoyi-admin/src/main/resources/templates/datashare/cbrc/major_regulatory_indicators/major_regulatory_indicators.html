@@ -29,7 +29,7 @@
                 <i class="fa fa-upload"></i> 导入银监局共享数据
             </a>
         </div>
-        <div class="col-sm-12 select-table table-striped">
+        <div class="col-sm-12 select-table table-bordered">
             <table id="bootstrap-table"></table>
         </div>
     </div>
@@ -66,30 +66,49 @@
             showColumns: false,
             pagination: false,
             sortable: false,
-            columns: [{
-                checkbox: true
-            },
-                {
-                    field: 'item',
-                    title: '项目'
-                },
-                {
-                    field: 'regulatoryStandards',
-                    title: '监管标准'
-                },
-                {
-                    field: 'currentIssue',
-                    title: '本期'
-                },
-                {
-                    field: 'compareBeginYear',
-                    title: '比年初'
-                },
-                {
-                    field: 'compateLastYear',
-                    title: '比去年同期'
-                }
+            columns: [
+                [
+                    {
+                        title: '青海主要监管指标汇总',
+                        align: 'center',
+                        colspan: 6
+                    }
+                ],
+                [
+                    {
+                        field: 'categories'
+                    },
+                    {
+                        field: 'item',
+                        title: '项目'
+                    },
+                    {
+                        field: 'regulatoryStandards',
+                        title: '监管标准'
+                    },
+                    {
+                        field: 'currentIssue',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'compareBeginYear',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'compateLastYear',
+                        align: 'right',
+                        title: '比去年同期'
+                    }
+                ]
             ]
+        };
+        $.table.onLoadSuccess = function(){
+            $("#bootstrap-table").bootstrapTable('mergeCells', {index: 0, field: 'categories', colspan: 1, rowspan: 7});
+            $("#bootstrap-table").bootstrapTable('mergeCells', {index: 7, field: 'categories', colspan: 1, rowspan: 6});
+            $("#bootstrap-table").bootstrapTable('mergeCells', {index: 13, field: 'categories', colspan: 1, rowspan: 7});
+            //$("#bootstrap-table").bootstrapTable('mergeCells', {index: 19, field: 'categories', colspan: 1, rowspan: 2});
         };
         $.table.init(options);
     });

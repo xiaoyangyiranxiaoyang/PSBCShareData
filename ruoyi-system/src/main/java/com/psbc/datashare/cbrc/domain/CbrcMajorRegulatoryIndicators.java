@@ -20,6 +20,10 @@ public class CbrcMajorRegulatoryIndicators extends BaseEntity
     /** ID */
     private Long id;
 
+    /** 类别 */
+    @Excel(name = "类别")
+    private String categories;
+
     /** 项目 */
     @Excel(name = "项目")
     private String item;
@@ -55,7 +59,16 @@ public class CbrcMajorRegulatoryIndicators extends BaseEntity
     {
         return id;
     }
-    public void setItem(String item) 
+
+    public String getCategories() {
+        return categories;
+    }
+
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+
+    public void setItem(String item)
     {
         this.item = item;
     }
@@ -123,6 +136,7 @@ public class CbrcMajorRegulatoryIndicators extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
+            .append("categories", getCategories())
             .append("item", getItem())
             .append("regulatoryStandards", getRegulatoryStandards())
             .append("currentIssue", getCurrentIssue())

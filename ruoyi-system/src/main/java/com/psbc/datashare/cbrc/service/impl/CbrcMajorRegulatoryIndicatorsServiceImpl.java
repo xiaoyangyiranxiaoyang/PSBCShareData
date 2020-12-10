@@ -148,12 +148,13 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
 
             // 1. 青海主要监管指标汇总
             List<CbrcMajorRegulatoryIndicators> datasToInsert_regulatoryIndicators = new LinkedList<>();
-            // 获取3~23行，2~6列数据并组装入库
+            // 获取3~23行，1~6列数据并组装入库
             for (int rowNum = 3; rowNum <= 23; rowNum++) {
                 Map<Integer, Object> columnDataMap = excelDataMap_majorRegulatoryIndicators.get(rowNum);
                 if (columnDataMap != null && !columnDataMap.isEmpty()) {
                     CbrcMajorRegulatoryIndicators one = new CbrcMajorRegulatoryIndicators();
 
+                    one.setCategories(Convert.toStr(columnDataMap.get(1)));
                     one.setItem(Convert.toStr(columnDataMap.get(2)));
                     one.setRegulatoryStandards(Convert.toStr(columnDataMap.get(3), ""));
                     one.setCurrentIssue(Convert.toBigDecimal(columnDataMap.get(4)));

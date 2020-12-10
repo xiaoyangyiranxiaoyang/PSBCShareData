@@ -1,6 +1,14 @@
 package com.ruoyi.web.controller.cbrc;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+
+import com.psbc.datashare.cbrc.common.CbrcConstant;
+import com.ruoyi.common.json.JSONObject;
+import com.ruoyi.common.utils.Arith;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +29,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 银行业机构资产负债主要项目统计Controller
- * 
+ *
  * @author mql
  * @date 2020-12-09
  */
 @Controller
 @RequestMapping("/datashare/cbrc/assets_liabilities_projects")
-public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
-{
+public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController {
     private String prefix = "datashare/cbrc/assets_liabilities_projects";
 
     @Autowired
@@ -36,8 +43,7 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
 
     @RequiresPermissions("datashare/cbrc:assets_liabilities_projects:view")
     @GetMapping()
-    public String assets_liabilities_projects()
-    {
+    public String assets_liabilities_projects() {
         return prefix + "/assets_liabilities_projects";
     }
 
@@ -47,11 +53,42 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
     @RequiresPermissions("datashare/cbrc:assets_liabilities_projects:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects)
-    {
+    public TableDataInfo list(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects) {
         startPage();
         List<CbrcAssetsLiabilitiesMajorProjects> list = cbrcAssetsLiabilitiesMajorProjectsService.selectCbrcAssetsLiabilitiesMajorProjectsList(cbrcAssetsLiabilitiesMajorProjects);
         return getDataTable(list);
+    }
+
+    /**
+     * 查询银行业机构资产负债主要项目统计列表
+     */
+    @RequiresPermissions("datashare/cbrc:assets_liabilities_projects:list")
+    @PostMapping("/listShow")
+    @ResponseBody
+    public TableDataInfo listShow(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects) {
+        List<CbrcAssetsLiabilitiesMajorProjects> list = cbrcAssetsLiabilitiesMajorProjectsService.selectCbrcAssetsLiabilitiesMajorProjectsList(cbrcAssetsLiabilitiesMajorProjects);
+        List<JSONObject> rrr = new LinkedList<>();
+
+        JSONObject oner = new JSONObject();
+        for (CbrcAssetsLiabilitiesMajorProjects item : list) {
+            if (CbrcConstant.TYPE_ASSETS_PROJECTS.equals(item.getType())) {
+                oner = new JSONObject();
+                oner.put("assets_item", item.getItem());
+                oner.put("assets_currentIssue", Arith.round(item.getCurrentIssue(), 2));
+                oner.put("assets_compareBeginYear", Arith.round(item.getCompareBeginYear(), 2));
+                oner.put("assets_compareLastMonth", Arith.round(item.getCompareLastMonth(), 2));
+                oner.put("assets_compateLastYearPct", Arith.round(Arith.mul(item.getCompateLastYearPct(), new BigDecimal(100)), 2));
+            } else {
+                oner.put("liabilities_item", item.getItem());
+                oner.put("liabilities_currentIssue", Arith.round(item.getCurrentIssue(), 2));
+                oner.put("liabilities_compareBeginYear", Arith.round(item.getCompareBeginYear(), 2));
+                oner.put("liabilities_compareLastMonth", Arith.round(item.getCompareLastMonth(), 2));
+                oner.put("liabilities_compateLastYearPct", Arith.round(Arith.mul(item.getCompateLastYearPct(), new BigDecimal(100)), 2));
+                rrr.add(oner);
+            }
+        }
+
+        return getDataTable(rrr);
     }
 
     /**
@@ -61,8 +98,7 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
     @Log(title = "银行业机构资产负债主要项目统计", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects)
-    {
+    public AjaxResult export(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects) {
         List<CbrcAssetsLiabilitiesMajorProjects> list = cbrcAssetsLiabilitiesMajorProjectsService.selectCbrcAssetsLiabilitiesMajorProjectsList(cbrcAssetsLiabilitiesMajorProjects);
         ExcelUtil<CbrcAssetsLiabilitiesMajorProjects> util = new ExcelUtil<CbrcAssetsLiabilitiesMajorProjects>(CbrcAssetsLiabilitiesMajorProjects.class);
         return util.exportExcel(list, "assets_liabilities_projects");
@@ -72,8 +108,7 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
      * 新增银行业机构资产负债主要项目统计
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -84,8 +119,7 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
     @Log(title = "银行业机构资产负债主要项目统计", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects)
-    {
+    public AjaxResult addSave(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects) {
         return toAjax(cbrcAssetsLiabilitiesMajorProjectsService.insertCbrcAssetsLiabilitiesMajorProjects(cbrcAssetsLiabilitiesMajorProjects));
     }
 
@@ -93,8 +127,7 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
      * 修改银行业机构资产负债主要项目统计
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects = cbrcAssetsLiabilitiesMajorProjectsService.selectCbrcAssetsLiabilitiesMajorProjectsById(id);
         mmap.put("cbrcAssetsLiabilitiesMajorProjects", cbrcAssetsLiabilitiesMajorProjects);
         return prefix + "/edit";
@@ -107,8 +140,7 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
     @Log(title = "银行业机构资产负债主要项目统计", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects)
-    {
+    public AjaxResult editSave(CbrcAssetsLiabilitiesMajorProjects cbrcAssetsLiabilitiesMajorProjects) {
         return toAjax(cbrcAssetsLiabilitiesMajorProjectsService.updateCbrcAssetsLiabilitiesMajorProjects(cbrcAssetsLiabilitiesMajorProjects));
     }
 
@@ -117,10 +149,9 @@ public class CbrcAssetsLiabilitiesMajorProjectsController extends BaseController
      */
     @RequiresPermissions("datashare/cbrc:assets_liabilities_projects:remove")
     @Log(title = "银行业机构资产负债主要项目统计", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(cbrcAssetsLiabilitiesMajorProjectsService.deleteCbrcAssetsLiabilitiesMajorProjectsByIds(ids));
     }
 }

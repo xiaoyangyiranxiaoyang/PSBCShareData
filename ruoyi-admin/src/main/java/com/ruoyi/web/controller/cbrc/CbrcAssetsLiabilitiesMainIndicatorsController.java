@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.cbrc;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.ruoyi.common.utils.Arith;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +25,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 金融机构资产负债主要指标Controller
- * 
+ *
  * @author mql
  * @date 2020-12-09
  */
 @Controller
 @RequestMapping("/datashare/cbrc/assets_liabilities_indicators")
-public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseController
-{
+public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseController {
     private String prefix = "datashare/cbrc/assets_liabilities_indicators";
 
     @Autowired
@@ -36,8 +39,7 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
 
     @RequiresPermissions("datashare/cbrc:assets_liabilities_indicators:view")
     @GetMapping()
-    public String assets_liabilities_indicators()
-    {
+    public String assets_liabilities_indicators() {
         return prefix + "/assets_liabilities_indicators";
     }
 
@@ -47,10 +49,20 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
     @RequiresPermissions("datashare/cbrc:assets_liabilities_indicators:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators)
-    {
-        startPage();
+    public TableDataInfo list(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators) {
+        //startPage();
         List<CbrcAssetsLiabilitiesMainIndicators> list = cbrcAssetsLiabilitiesMainIndicatorsService.selectCbrcAssetsLiabilitiesMainIndicatorsList(cbrcAssetsLiabilitiesMainIndicators);
+        Optional.ofNullable(list).orElse(new ArrayList<>())
+                .forEach(item -> {
+                    item.setAssetsTotal(Arith.round(item.getAssetsTotal(), 2));
+                    item.setAssetsCompateBeginYear(Arith.round(item.getAssetsCompateBeginYear(), 2));
+                    item.setLiabilitiesTotal(Arith.round(item.getLiabilitiesTotal(), 2));
+                    item.setLiabilitiesCompateBeginYear(Arith.round(item.getLiabilitiesCompateBeginYear(), 2));
+                    item.setOwnerEquity(Arith.round(item.getOwnerEquity(), 2));
+                    item.setEquityCompateBeginYear(Arith.round(item.getEquityCompateBeginYear(), 2));
+                    item.setProfitThisYear(Arith.round(item.getProfitThisYear(), 2));
+                    item.setProfitCompateLastYear(Arith.round(item.getProfitCompateLastYear(), 2));
+                });
         return getDataTable(list);
     }
 
@@ -61,8 +73,7 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
     @Log(title = "金融机构资产负债主要指标", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators)
-    {
+    public AjaxResult export(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators) {
         List<CbrcAssetsLiabilitiesMainIndicators> list = cbrcAssetsLiabilitiesMainIndicatorsService.selectCbrcAssetsLiabilitiesMainIndicatorsList(cbrcAssetsLiabilitiesMainIndicators);
         ExcelUtil<CbrcAssetsLiabilitiesMainIndicators> util = new ExcelUtil<CbrcAssetsLiabilitiesMainIndicators>(CbrcAssetsLiabilitiesMainIndicators.class);
         return util.exportExcel(list, "assets_liabilities_indicators");
@@ -72,8 +83,7 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
      * 新增金融机构资产负债主要指标
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -84,8 +94,7 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
     @Log(title = "金融机构资产负债主要指标", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators)
-    {
+    public AjaxResult addSave(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators) {
         return toAjax(cbrcAssetsLiabilitiesMainIndicatorsService.insertCbrcAssetsLiabilitiesMainIndicators(cbrcAssetsLiabilitiesMainIndicators));
     }
 
@@ -93,8 +102,7 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
      * 修改金融机构资产负债主要指标
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators = cbrcAssetsLiabilitiesMainIndicatorsService.selectCbrcAssetsLiabilitiesMainIndicatorsById(id);
         mmap.put("cbrcAssetsLiabilitiesMainIndicators", cbrcAssetsLiabilitiesMainIndicators);
         return prefix + "/edit";
@@ -107,8 +115,7 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
     @Log(title = "金融机构资产负债主要指标", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators)
-    {
+    public AjaxResult editSave(CbrcAssetsLiabilitiesMainIndicators cbrcAssetsLiabilitiesMainIndicators) {
         return toAjax(cbrcAssetsLiabilitiesMainIndicatorsService.updateCbrcAssetsLiabilitiesMainIndicators(cbrcAssetsLiabilitiesMainIndicators));
     }
 
@@ -117,10 +124,9 @@ public class CbrcAssetsLiabilitiesMainIndicatorsController extends BaseControlle
      */
     @RequiresPermissions("datashare/cbrc:assets_liabilities_indicators:remove")
     @Log(title = "金融机构资产负债主要指标", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(cbrcAssetsLiabilitiesMainIndicatorsService.deleteCbrcAssetsLiabilitiesMainIndicatorsByIds(ids));
     }
 }

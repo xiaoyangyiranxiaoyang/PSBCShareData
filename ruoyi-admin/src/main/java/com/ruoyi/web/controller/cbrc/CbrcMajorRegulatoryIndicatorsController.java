@@ -1,9 +1,13 @@
 package com.ruoyi.web.controller.cbrc;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.Arith;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -56,8 +60,19 @@ public class CbrcMajorRegulatoryIndicatorsController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(CbrcMajorRegulatoryIndicators cbrcMajorRegulatoryIndicators) {
-        startPage();
+        //startPage();
         List<CbrcMajorRegulatoryIndicators> list = cbrcMajorRegulatoryIndicatorsService.selectCbrcMajorRegulatoryIndicatorsList(cbrcMajorRegulatoryIndicators);
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    if(item.getItem().indexOf("率") > 0){
+                        item.setCurrentIssue(Arith.round(Arith.mul(item.getCurrentIssue(), new BigDecimal(100)), 2));
+                    } else {
+                        item.setCurrentIssue(Arith.round(item.getCurrentIssue(), 2));
+                    }
+                    item.setCompareBeginYear(Arith.round(item.getCompareBeginYear(), 2));
+                    item.setCompateLastYear(Arith.round(item.getCompateLastYear(), 2));
+                });
+
         return getDataTable(list);
     }
 

@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="CbrcMajorRegulatoryIndicators" id="CbrcMajorRegulatoryIndicatorsResult">
         <result property="id"    column="id"    />
+        <result property="categories"    column="categories"    />
         <result property="item"    column="item"    />
         <result property="regulatoryStandards"    column="regulatory_standards"    />
         <result property="currentIssue"    column="current_issue"    />
@@ -21,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCbrcMajorRegulatoryIndicatorsVo">
-        select id, item, regulatory_standards, current_issue, compare_begin_year, compate_last_year, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_major_regulatory_indicators
+        select id, categories, item, regulatory_standards, current_issue, compare_begin_year, compate_last_year, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_major_regulatory_indicators
     </sql>
 
     <select id="selectCbrcMajorRegulatoryIndicatorsList" parameterType="CbrcMajorRegulatoryIndicators" resultMap="CbrcMajorRegulatoryIndicatorsResult">
@@ -40,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into cbrc_major_regulatory_indicators
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
+            <if test="categories != null">categories,</if>
             <if test="item != null">item,</if>
             <if test="regulatoryStandards != null">regulatory_standards,</if>
             <if test="currentIssue != null">current_issue,</if>
@@ -55,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
+            <if test="categories != null">#{categories},</if>
             <if test="item != null">#{item},</if>
             <if test="regulatoryStandards != null">#{regulatoryStandards},</if>
             <if test="currentIssue != null">#{currentIssue},</if>
@@ -73,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateCbrcMajorRegulatoryIndicators" parameterType="CbrcMajorRegulatoryIndicators">
         update cbrc_major_regulatory_indicators
         <trim prefix="SET" suffixOverrides=",">
+            <if test="categories != null">categories = #{categories},</if>
             <if test="item != null">item = #{item},</if>
             <if test="regulatoryStandards != null">regulatory_standards = #{regulatoryStandards},</if>
             <if test="currentIssue != null">current_issue = #{currentIssue},</if>
@@ -110,10 +114,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="insertBatch" parameterType="CbrcMajorRegulatoryIndicators">
-        insert into cbrc_major_regulatory_indicators(id,item,regulatory_standards,current_issue,compare_begin_year,compate_last_year,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        insert into cbrc_major_regulatory_indicators(id,categories,item,regulatory_standards,current_issue,compare_begin_year,compate_last_year,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
         values
         <foreach collection="list" item="kk" separator=",">
-            (#{kk.id},#{kk.item},#{kk.regulatoryStandards},#{kk.currentIssue},#{kk.compareBeginYear},#{kk.compateLastYear},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+            (#{kk.id},#{kk.categories},#{kk.item},#{kk.regulatoryStandards},#{kk.currentIssue},#{kk.compareBeginYear},#{kk.compateLastYear},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
         </foreach>
     </insert>
 
