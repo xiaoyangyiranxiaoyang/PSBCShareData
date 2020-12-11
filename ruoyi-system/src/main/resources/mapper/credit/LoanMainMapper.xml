@@ -76,14 +76,16 @@
           lme.Issued,
           lme.next_grant_date
         from loan_main lm left join loan_main_ext lme on lm.load_rct_id = lme.load_rct_id
-        where lm.load_rct_id = #{loadRctId}
+        where lm.del_flag = 0
+            and lme.del_flag = 0
+            and lm.load_rct_id = #{loadRctId}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="LoanMainMap">
         select
           id, apply_id, load_rct_id, cust_id, cust_name, cust_cert_id, loan_product_id, product_name, product_class, int_rate, bmk_rate, usage_desc, loan_term, loan_bgn_date, loan_dltne_date, loan_amt, loan_bal, handov_flag, repay_acc_name, repay_acc_acc_no, risk_class, teller_no, inst_no, empolyee_name, empolyee_card, inst_name, limit_contract_no, loan_contract_no, etl_date
-        from loan_main
+        from loan_main where del_flag = 0
         limit #{offset}, #{limit}
     </select>
 
@@ -96,6 +98,7 @@
         limit_contract_no, loan_contract_no, etl_date
         from loan_main
         <where>
+            del_flag = 0
             <if test="id != null">
                 and id = #{id}
             </if>
@@ -281,12 +284,7 @@
                 etl_date = #{etlDate},
             </if>
         </set>
-        where id = #{id}
+        where del_flag = 0 and id = #{id}
     </update>
-
-    <!--通过主键删除-->
-    <delete id="deleteById">
-        delete from loan_main where id = #{id}
-    </delete>
 
 </mapper>

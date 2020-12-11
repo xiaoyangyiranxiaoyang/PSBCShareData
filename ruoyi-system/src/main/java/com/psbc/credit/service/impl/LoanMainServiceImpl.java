@@ -5,7 +5,8 @@ import com.psbc.credit.dto.LoanMainDto;
 import com.psbc.credit.dto.LoanMainResponseDto;
 import com.psbc.credit.mapper.LoanMainMapper;
 import com.psbc.credit.service.LoanMainService;
-import com.ruoyi.common.core.domain.entity.SysDictType;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.DictUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -81,5 +82,23 @@ public class LoanMainServiceImpl implements LoanMainService {
     @Override
     public boolean deleteById(Object id) {
         return this.loanMainMapper.deleteById(id) > 0;
+    }
+
+    @Override
+    public AjaxResult accountabilitySave(LoanMainDto loanMainDto) {
+        return AjaxResult.success();
+    }
+
+    @Override
+    public AjaxResult exemptionSave(LoanMainDto loanMainDto) {
+        return AjaxResult.success();
+    }
+    /**
+     * 清空缓存数据
+     */
+    @Override
+    public void clearCache()
+    {
+        DictUtils.clearDictCache();
     }
 }

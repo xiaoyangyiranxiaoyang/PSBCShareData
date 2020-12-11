@@ -165,7 +165,6 @@ public class SysDeptController extends BaseController
         mmap.put("excludeId", excludeId);
         return prefix + "/tree";
     }
-
     /**
      * 加载部门列表树
      */

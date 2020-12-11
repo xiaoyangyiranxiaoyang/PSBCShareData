@@ -3,6 +3,7 @@ package com.psbc.credit.service;
 import com.psbc.credit.domain.LoanMain;
 import com.psbc.credit.dto.LoanMainDto;
 import com.psbc.credit.dto.LoanMainResponseDto;
+import com.ruoyi.common.core.domain.AjaxResult;
 
 import java.util.List;
 
@@ -61,5 +62,20 @@ public interface LoanMainService {
      * @return 是否成功
      */
     boolean deleteById(Object id);
-
+    /**
+     * 问责处理
+     * @param loanMainDto 传入参数
+     * @return 返回信息
+     */
+    AjaxResult accountabilitySave(LoanMainDto loanMainDto);
+    /**
+     * 免责处理
+     * @param loanMainDto 传入参数
+     * @return 返回信息
+     */
+    AjaxResult exemptionSave(LoanMainDto loanMainDto);
+    /**
+     * 清空缓存数据
+     */
+    public void clearCache();
 }

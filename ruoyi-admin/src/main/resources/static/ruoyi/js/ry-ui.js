@@ -1078,6 +1078,36 @@ var table = {
             	    $.modal.open("修改" + table.options.modalName, $.operate.editUrl(id));
             	}
             },
+            // 问责信息
+            accountability: function(id) {
+                table.set();
+                if($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                    if ($.common.isEmpty(row)) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    var url = table.options.accountabilityUrl.replace("{id}", row[table.options.uniqueId]);
+                    $.modal.open("信贷问责" + table.options.modalName, url);
+                } else {
+                    $.modal.open("信贷问责" + table.options.modalName,  table.options.accountabilityUrl.replace("{id}", id));
+                }
+            },
+            // 免责信息
+            exemption: function(id) {
+                table.set();
+                if($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                    var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                    if ($.common.isEmpty(row)) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    }
+                    var url = table.options.exemptionUrl.replace("{id}", row[table.options.uniqueId]);
+                    $.modal.open("信贷免责" + table.options.modalName, url);
+                } else {
+                    $.modal.open("信贷免责" + table.options.modalName,  table.options.exemptionUrl.replace("{id}", id));
+                }
+            },
             // 修改信息，以tab页展现
             editTab: function(id) {
             	table.set();

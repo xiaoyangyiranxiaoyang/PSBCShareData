@@ -22,5 +22,17 @@ public class LoanMainResponseDto extends LoanMain {
     private Integer Issued;
     /**奖励下次发放时间*/
     private Date nextGrantDate;
+    /**备注*/
+    private String remark;
+
+    //免责信息
+    /**免责原因*/
+    private Integer exemptionType;
+
+    //问责信息
+    /**问责原因*/
+    private Integer accountabilityType;
+    /**问责状态*/
+    private Integer accountabilityState;
 
 }
