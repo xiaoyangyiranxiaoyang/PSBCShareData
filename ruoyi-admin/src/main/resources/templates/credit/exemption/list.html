@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('信贷奖励配置列表')" />
+	<th:block th:include="include :: header('信贷免责记录列表')" />
 </head>
 <body class="gray-bg">
 	<div class="container-div">
@@ -11,10 +11,10 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								部门名称：<input type="text" name="deptName"/>
+								借据号：<input type="text" name="loadRctId"/>
 							</li>
 							<li>
-								贷款种类：<select name="loanType" th:with="type=${@dict.getType('loan_credit_type')}">
+								免责原因：<select name="exemptionType" th:with="type=${@dict.getType('loan_exemption_type')}">
 								<option value="">所有</option>
 								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 							</select>
@@ -27,25 +27,6 @@
 					</div>
 				</form>
 			</div>
-			
-	       <div class="btn-group-sm" id="toolbar" role="group">
-	            <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="credit:reward:config:add">
-	                <i class="fa fa-plus"></i> 新增
-	            </a>
-	            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="credit:reward:config:edit">
-		            <i class="fa fa-edit"></i> 修改
-		        </a>
-				<a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="credit:reward:config:remove">
-		            <i class="fa fa-remove"></i> 删除
-		        </a>
-		  <!--      <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="credit:loanMain:export">
-		            <i class="fa fa-download"></i> 导出
-		        </a>-->
-		        <a class="btn btn-danger" onclick="clearCache()" shiro:hasPermission="credit:reward:config:clear">
-		            <i class="fa fa-refresh"></i> 清理缓存
-		        </a>
-	        </div>
-	        
 	        <div class="col-sm-12 select-table table-striped">
 			    <table id="bootstrap-table"></table>
 			</div>
@@ -53,10 +34,10 @@
 	</div>
 	<th:block th:include="include :: footer" />
 	<script th:inline="javascript">
-		var addFlag = [[${@permission.hasPermi('credit:reward:Config:add')}]];
-		var editFlag = [[${@permission.hasPermi('credit:reward:Config:edit')}]];
-		var removeFlag = [[${@permission.hasPermi('credit:reward:Config:remove')}]];
-		var prefix = ctx + "credit/reward/config"
+		var addFlag = [[${@permission.hasPermi('credit:exemption:add')}]];
+		var editFlag = [[${@permission.hasPermi('credit:exemption:edit')}]];
+		var removeFlag = [[${@permission.hasPermi('credit:exemption:remove')}]];
+		var prefix = ctx + "credit/exemption"
 
 		$(function() {
 			var options = {
@@ -64,32 +45,27 @@
 				createUrl: prefix + "/add/{id}",
 				updateUrl: prefix + "/edit/{id}",
 				removeUrl: prefix + "/remove/{id}",
-				modalName: "贷款奖励配置",
+				modalName: "信贷问责记录",
 				columns: [{
 					field: 'selectItem',
 					radio: true
 				},
 					{
-						field: 'deptName',
-						title: '部门名称',
+						field: 'loadRctId',
+						title: '拮据号',
 						align: "left"
 					},
 					{
-						field: 'loanType',
-						title: '贷款种类',
+						field: 'exemptionType',
+						title: '问责原因',
 						align: "center",
 						formatter: function(value, item, index) {
 							return $.table.selectDictLabel(datas, item.status);
 						}
 					},
 					{
-						field: 'rewardAmount',
-						title: '奖励金额',
-						align: "center"
-					},
-					{
-						field: 'userName',
-						title: '奖励用户',
+						field: 'remark',
+						title: '备注',
 						align: "center"
 					},
 					{
@@ -97,7 +73,7 @@
 						title: '创建时间',
 						align: "left"
 					},
-		        {
+		        /*{
 		            title: '操作',
 		            align: 'center',
 					sortable: true,
@@ -108,7 +84,7 @@
 						actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-trash"></i>删除</a>');
 						return actions.join('');
 		            }
-		        }]
+		        }*/]
 		    };
 		    $.table.init(options);
 		});

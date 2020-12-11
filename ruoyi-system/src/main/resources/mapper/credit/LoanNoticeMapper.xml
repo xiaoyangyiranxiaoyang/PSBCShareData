@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.credit.mapper.LoanNoticeMapper">
+
+    <resultMap type="com.psbc.credit.domain.LoanNotice" id="LoanNoticeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="noticeType" column="notice_type" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="noticeReason" column="notice_reason" jdbcType="VARCHAR"/>
+        <result property="isHandle" column="is_handle" jdbcType="INTEGER"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="serverIp" column="server_ip" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+        <result property="loadRctId" column="load_rct_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LoanNoticeMap">
+        select
+          id, notice_type,remark, notice_reason, is_handle, create_by, create_time, server_ip, update_by, update_time, del_flag, load_rct_id
+        from loan_notice
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LoanNoticeMap">
+        select
+          id, notice_type,remark, notice_reason, is_handle, create_by, create_time, server_ip, update_by, update_time, del_flag, load_rct_id
+        from loan_notice
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="LoanNoticeMap">
+        select
+        id, notice_type, remark,notice_reason, is_handle, create_by, create_time, server_ip, update_by, update_time, del_flag,
+        load_rct_id
+        from loan_notice
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="noticeType != null">
+                and notice_type = #{noticeType}
+            </if>
+            <if test="noticeReason != null and noticeReason != ''">
+                and notice_reason = #{noticeReason}
+            </if>
+            <if test="isHandle != null">
+                and is_handle = #{isHandle}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delFlag != null">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="loadRctId != null and loadRctId != ''">
+                and load_rct_id = #{loadRctId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into loan_notice(notice_type, remark,notice_reason, is_handle, create_by, create_time, server_ip, update_by, update_time, del_flag, load_rct_id)
+        values (#{noticeType},#{remark}, #{noticeReason}, #{isHandle}, #{createBy}, #{createTime}, #{serverIp}, #{updateBy}, #{updateTime}, #{delFlag}, #{loadRctId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update loan_notice
+        <set>
+            <if test="noticeType != null">
+                notice_type = #{noticeType},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="noticeReason != null and noticeReason != ''">
+                notice_reason = #{noticeReason},
+            </if>
+            <if test="isHandle != null">
+                is_handle = #{isHandle},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                server_ip = #{serverIp},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+            <if test="loadRctId != null and loadRctId != ''">
+                load_rct_id = #{loadRctId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from loan_notice where id = #{id}
+    </delete>
+
+</mapper>
