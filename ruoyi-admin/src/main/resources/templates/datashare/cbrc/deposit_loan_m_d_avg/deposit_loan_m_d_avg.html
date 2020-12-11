@@ -1,136 +1,166 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('分机构存贷款月日均情况列表')" />
+    <th:block th:include="include :: header('分机构存贷款月日均情况列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li class="select-time">
-                                <label>数据日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDataDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDataDate]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search();"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/cbrc:deposit_loan_m_d_avg:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/cbrc:deposit_loan_m_d_avg:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/cbrc:deposit_loan_m_d_avg:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/cbrc:deposit_loan_m_d_avg:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="col-sm-12 select-table">
+            <table id="bootstrap-table"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('datashare/cbrc:deposit_loan_m_d_avg:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('datashare/cbrc:deposit_loan_m_d_avg:remove')}]];
-        var prefix = ctx + "datashare/cbrc/deposit_loan_m_d_avg";
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('datashare/cbrc:deposit_loan_m_d_avg:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('datashare/cbrc:deposit_loan_m_d_avg:remove')}]];
+    var prefix = ctx + "datashare/cbrc/deposit_loan_m_d_avg";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                modalName: "分机构存贷款月日均情况",
-                columns: [{
-                    checkbox: true
-                },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible: false
-                },
-                {
-                    field: 'institution',
-                    title: '机构名称'
-                },
-                {
-                    field: 'loanBalance',
-                    title: '贷款-本期'
-                },
-                {
-                    field: 'loanGrowthM',
-                    title: '贷款-比上期'
-                },
-                {
-                    field: 'loanGrowthY',
-                    title: '贷款-比年初'
-                },
-                {
-                    field: 'loanAvgBalance',
-                    title: '月日均贷款余额-本期'
-                },
-                {
-                    field: 'loanAvgGrowthM',
-                    title: '月日均贷款余额-比上期'
-                },
-                {
-                    field: 'loanAvgGrowthY',
-                    title: '月日均贷款余额-比年初'
-                },
-                {
-                    field: 'depositBalance',
-                    title: '存款-本期'
-                },
-                {
-                    field: 'depositGrowthM',
-                    title: '存款-比上月'
-                },
-                {
-                    field: 'depositGrowthY',
-                    title: '存款-比年初'
-                },
-                {
-                    field: 'depositAvgBalance',
-                    title: '月日均存款余额-本期'
-                },
-                {
-                    field: 'depositAvgGrowthM',
-                    title: '月日均存款余额-比上月'
-                },
-                {
-                    field: 'depositAvgGrowthY',
-                    title: '月日均存款余额-比年初'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "青海省分机构存贷款月日均情况表",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [
+                [
+                    {
+                        title: '青海省分机构存贷款月日均情况表',
+                        align: 'center',
+                        colspan: 13
+                    },
+                ],
+                [
+                    {
+                        field: 'institution',
+                        title: '机构名称',
+                        rowspan: 3
+                    },
+                    {
+                        title: '贷款情况',
+                        align: 'center',
+                        colspan: 6
+                    },
+                    {
+                        title: '存款情况',
+                        align: 'center',
+                        colspan: 6
+                    },
+                ],
+                [
+                    {
+                        title: '各项贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '月日均贷款余额',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '各项存款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '月日均存款余额',
+                        align: 'center',
+                        colspan: 3
                     }
-                }]
-            };
-            $.table.init(options);
-        });
-    </script>
+                ],
+                [
+                    {
+                        field: 'loanBalance',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'loanGrowthM',
+                        align: 'right',
+                        title: '比上期'
+                    },
+                    {
+                        field: 'loanGrowthY',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'loanAvgBalance',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'loanAvgGrowthM',
+                        align: 'right',
+                        title: '比上期'
+                    },
+                    {
+                        field: 'loanAvgGrowthY',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'depositBalance',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'depositGrowthM',
+                        align: 'right',
+                        title: '比上月'
+                    },
+                    {
+                        field: 'depositGrowthY',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'depositAvgBalance',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'depositAvgGrowthM',
+                        align: 'right',
+                        title: '比上月'
+                    },
+                    {
+                        field: 'depositAvgGrowthY',
+                        align: 'right',
+                        title: '比年初'
+                    }
+                ]
+            ]
+        };
+        $.table.init(options);
+    });
+</script>
 </body>
 </html>

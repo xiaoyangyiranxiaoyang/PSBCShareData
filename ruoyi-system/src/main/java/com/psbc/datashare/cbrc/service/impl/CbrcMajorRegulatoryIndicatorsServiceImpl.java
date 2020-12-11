@@ -8,10 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import com.psbc.datashare.cbrc.common.CbrcConstant;
-import com.psbc.datashare.cbrc.domain.CbrcAssetsLiabilitiesMainIndicators;
-import com.psbc.datashare.cbrc.domain.CbrcAssetsLiabilitiesMajorProjects;
-import com.psbc.datashare.cbrc.mapper.CbrcAssetsLiabilitiesMainIndicatorsMapper;
-import com.psbc.datashare.cbrc.mapper.CbrcAssetsLiabilitiesMajorProjectsMapper;
+import com.psbc.datashare.cbrc.domain.*;
+import com.psbc.datashare.cbrc.mapper.*;
 import com.psbc.datashare.kpi.domain.KpiIncomeShow;
 import com.psbc.datashare.kpi.domain.KpiSourceCreditScale;
 import com.ruoyi.common.exception.BusinessException;
@@ -20,8 +18,6 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.psbc.datashare.cbrc.mapper.CbrcMajorRegulatoryIndicatorsMapper;
-import com.psbc.datashare.cbrc.domain.CbrcMajorRegulatoryIndicators;
 import com.psbc.datashare.cbrc.service.ICbrcMajorRegulatoryIndicatorsService;
 import com.ruoyi.common.core.text.Convert;
 
@@ -39,6 +35,10 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
     private CbrcAssetsLiabilitiesMajorProjectsMapper cbrcAssetsLiabilitiesMajorProjectsMapper;
     @Autowired
     private CbrcAssetsLiabilitiesMainIndicatorsMapper cbrcAssetsLiabilitiesMainIndicatorsMapper;
+    @Autowired
+    private CbrcDepositLoanInstitutionMapper cbrcDepositLoanInstitutionMapper;
+    @Autowired
+    private CbrcDepositLoanMonthlyDailyAvgMapper cbrcDepositLoanMonthlyDailyAvgMapper;
 
     /**
      * 查询主要监管指标汇总
@@ -137,6 +137,16 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
             Map<Integer, Map<Integer, Object>> excelDataMap_assetsLiabilitiesMajorIndicator = allSheetDataMap.get("青海省银行业金融机构资产负债主要指标");
             if (null == excelDataMap_assetsLiabilitiesMajorIndicator) {
                 rrMsg = "导入数据失败，无法获取“青海省银行业金融机构资产负债主要指标”数据！";
+                new RuntimeException(rrMsg);
+            }
+            Map<Integer, Map<Integer, Object>> excelDataMap_depositLoanInstitution = allSheetDataMap.get("青海省银行业金融机构存贷款分机构情况表");
+            if (null == excelDataMap_assetsLiabilitiesMajorIndicator) {
+                rrMsg = "导入数据失败，无法获取“青海省银行业金融机构存贷款分机构情况表”数据！";
+                new RuntimeException(rrMsg);
+            }
+            Map<Integer, Map<Integer, Object>> excelDataMap_depositLoanMDavg = allSheetDataMap.get("青海省分机构存贷款月日均情况表");
+            if (null == excelDataMap_assetsLiabilitiesMajorIndicator) {
+                rrMsg = "导入数据失败，无法获取“青海省分机构存贷款月日均情况表”数据！";
                 new RuntimeException(rrMsg);
             }
 
@@ -264,6 +274,86 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
                 // 导入当月的数据
                 cbrcAssetsLiabilitiesMainIndicatorsMapper.insertBatch(datasToInsert_assetsLiabilitiesIndicator);
             }
+
+            // 4. 青海省银行业金融机构存贷款分机构情况表
+            List<CbrcDepositLoanInstitution> datasToInsert_depositLoanInstitution = new LinkedList<>();
+            // 获取3~29行，1、3~8列数据并组装入库
+            for (int rowNum = 3; rowNum <= 29; rowNum++) {
+                Map<Integer, Object> columnDataMap = excelDataMap_depositLoanInstitution.get(rowNum);
+                if (columnDataMap != null && !columnDataMap.isEmpty()) {
+                    CbrcDepositLoanInstitution one = new CbrcDepositLoanInstitution();
+
+                    one.setInstitution(Convert.toStr(columnDataMap.get(1)));
+                    one.setDepositBalance(Convert.toBigDecimal(columnDataMap.get(3)));
+                    one.setDepositGrowthM(Convert.toBigDecimal(columnDataMap.get(4)));
+                    one.setDepositGrowthY(Convert.toBigDecimal(columnDataMap.get(5)));
+                    one.setLoanBalance(Convert.toBigDecimal(columnDataMap.get(6)));
+                    one.setLoanGrowthM(Convert.toBigDecimal(columnDataMap.get(7)));
+                    one.setLoanGrowthY(Convert.toBigDecimal(columnDataMap.get(8)));
+
+                    one.setDataDate(dataDate);
+                    one.setDelFlag("0");
+                    one.setCreateBy(operName);
+                    one.setCreateTime(dateNow);
+
+                    datasToInsert_depositLoanInstitution.add(one);
+                }
+            }
+            if (!datasToInsert_depositLoanInstitution.isEmpty()) {
+                // 先删除当月数据
+                List<CbrcDepositLoanInstitution> oldDatas = cbrcDepositLoanInstitutionMapper.selectByDataDate(dataDate);
+                if (oldDatas != null && !oldDatas.isEmpty()) {
+                    cbrcDepositLoanInstitutionMapper.deleteByDataDate(dataDate);
+                }
+                // 导入当月的数据
+                cbrcDepositLoanInstitutionMapper.insertBatch(datasToInsert_depositLoanInstitution);
+            }
+
+
+            // 5. 青海省分机构存贷款月日均情况表
+            List<CbrcDepositLoanMonthlyDailyAvg> datasToInsert_depositLoanMDavg = new LinkedList<>();
+            // 获取5~26行，1~13列数据并组装入库
+            for (int rowNum = 5; rowNum <= 26; rowNum++) {
+                Map<Integer, Object> columnDataMap = excelDataMap_depositLoanMDavg.get(rowNum);
+                if (columnDataMap != null && !columnDataMap.isEmpty()) {
+                    CbrcDepositLoanMonthlyDailyAvg one = new CbrcDepositLoanMonthlyDailyAvg();
+
+                    one.setInstitution(Convert.toStr(columnDataMap.get(1)));
+
+                    one.setLoanBalance(Convert.toBigDecimal(columnDataMap.get(2)));
+                    one.setLoanGrowthM(Convert.toBigDecimal(columnDataMap.get(3)));
+                    one.setLoanGrowthY(Convert.toBigDecimal(columnDataMap.get(4)));
+
+                    one.setLoanAvgBalance(Convert.toBigDecimal(columnDataMap.get(5)));
+                    one.setLoanAvgGrowthM(Convert.toBigDecimal(columnDataMap.get(6)));
+                    one.setLoanAvgGrowthY(Convert.toBigDecimal(columnDataMap.get(7)));
+
+                    one.setDepositBalance(Convert.toBigDecimal(columnDataMap.get(8)));
+                    one.setDepositGrowthM(Convert.toBigDecimal(columnDataMap.get(9)));
+                    one.setDepositGrowthY(Convert.toBigDecimal(columnDataMap.get(10)));
+
+                    one.setDepositAvgBalance(Convert.toBigDecimal(columnDataMap.get(11)));
+                    one.setDepositAvgGrowthM(Convert.toBigDecimal(columnDataMap.get(12)));
+                    one.setDepositAvgGrowthY(Convert.toBigDecimal(columnDataMap.get(13)));
+
+                    one.setDataDate(dataDate);
+                    one.setDelFlag("0");
+                    one.setCreateBy(operName);
+                    one.setCreateTime(dateNow);
+
+                    datasToInsert_depositLoanMDavg.add(one);
+                }
+            }
+            if (!datasToInsert_depositLoanMDavg.isEmpty()) {
+                // 先删除当月数据
+                List<CbrcDepositLoanMonthlyDailyAvg> oldDatas = cbrcDepositLoanMonthlyDailyAvgMapper.selectByDataDate(dataDate);
+                if (oldDatas != null && !oldDatas.isEmpty()) {
+                    cbrcDepositLoanMonthlyDailyAvgMapper.deleteByDataDate(dataDate);
+                }
+                // 导入当月的数据
+                cbrcDepositLoanMonthlyDailyAvgMapper.insertBatch(datasToInsert_depositLoanMDavg);
+            }
+
         rrMsg = "数据导入成功!";
     } catch (Exception e) {
         throw new BusinessException(rrMsg, e);

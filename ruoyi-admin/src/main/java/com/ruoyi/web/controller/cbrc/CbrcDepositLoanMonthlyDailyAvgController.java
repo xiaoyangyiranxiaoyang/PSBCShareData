@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.cbrc;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.ruoyi.common.utils.Arith;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +25,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 分机构存贷款月日均情况Controller
- * 
+ *
  * @author mql
  * @date 2020-12-10
  */
 @Controller
 @RequestMapping("/datashare/cbrc/deposit_loan_m_d_avg")
-public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
-{
+public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController {
     private String prefix = "datashare/cbrc/deposit_loan_m_d_avg";
 
     @Autowired
@@ -36,8 +39,7 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
 
     @RequiresPermissions("datashare/cbrc:deposit_loan_m_d_avg:view")
     @GetMapping()
-    public String deposit_loan_m_d_avg()
-    {
+    public String deposit_loan_m_d_avg() {
         return prefix + "/deposit_loan_m_d_avg";
     }
 
@@ -47,10 +49,27 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
     @RequiresPermissions("datashare/cbrc:deposit_loan_m_d_avg:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg)
-    {
-        startPage();
+    public TableDataInfo list(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg) {
+        //startPage();
         List<CbrcDepositLoanMonthlyDailyAvg> list = cbrcDepositLoanMonthlyDailyAvgService.selectCbrcDepositLoanMonthlyDailyAvgList(cbrcDepositLoanMonthlyDailyAvg);
+        Optional.ofNullable(list).orElse(new ArrayList<>())
+                .forEach(item -> {
+                    item.setLoanBalance(Arith.round(item.getLoanBalance(), 2));
+                    item.setLoanGrowthM(Arith.round(item.getLoanGrowthM(), 2));
+                    item.setLoanGrowthY(Arith.round(item.getLoanGrowthY(), 2));
+
+                    item.setLoanAvgBalance(Arith.round(item.getLoanAvgBalance(), 2));
+                    item.setLoanAvgGrowthM(Arith.round(item.getLoanAvgGrowthM(), 2));
+                    item.setLoanAvgGrowthY(Arith.round(item.getLoanAvgGrowthY(), 2));
+
+                    item.setDepositBalance(Arith.round(item.getDepositBalance(), 2));
+                    item.setDepositGrowthM(Arith.round(item.getDepositGrowthM(), 2));
+                    item.setDepositGrowthY(Arith.round(item.getDepositGrowthY(), 2));
+
+                    item.setDepositAvgBalance(Arith.round(item.getDepositAvgBalance(), 2));
+                    item.setDepositAvgGrowthM(Arith.round(item.getDepositAvgGrowthM(), 2));
+                    item.setDepositAvgGrowthY(Arith.round(item.getDepositAvgGrowthY(), 2));
+                });
         return getDataTable(list);
     }
 
@@ -61,8 +80,7 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
     @Log(title = "分机构存贷款月日均情况", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg)
-    {
+    public AjaxResult export(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg) {
         List<CbrcDepositLoanMonthlyDailyAvg> list = cbrcDepositLoanMonthlyDailyAvgService.selectCbrcDepositLoanMonthlyDailyAvgList(cbrcDepositLoanMonthlyDailyAvg);
         ExcelUtil<CbrcDepositLoanMonthlyDailyAvg> util = new ExcelUtil<CbrcDepositLoanMonthlyDailyAvg>(CbrcDepositLoanMonthlyDailyAvg.class);
         return util.exportExcel(list, "deposit_loan_m_d_avg");
@@ -72,8 +90,7 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
      * 新增分机构存贷款月日均情况
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -84,8 +101,7 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
     @Log(title = "分机构存贷款月日均情况", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg)
-    {
+    public AjaxResult addSave(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg) {
         return toAjax(cbrcDepositLoanMonthlyDailyAvgService.insertCbrcDepositLoanMonthlyDailyAvg(cbrcDepositLoanMonthlyDailyAvg));
     }
 
@@ -93,8 +109,7 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
      * 修改分机构存贷款月日均情况
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg = cbrcDepositLoanMonthlyDailyAvgService.selectCbrcDepositLoanMonthlyDailyAvgById(id);
         mmap.put("cbrcDepositLoanMonthlyDailyAvg", cbrcDepositLoanMonthlyDailyAvg);
         return prefix + "/edit";
@@ -107,8 +122,7 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
     @Log(title = "分机构存贷款月日均情况", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg)
-    {
+    public AjaxResult editSave(CbrcDepositLoanMonthlyDailyAvg cbrcDepositLoanMonthlyDailyAvg) {
         return toAjax(cbrcDepositLoanMonthlyDailyAvgService.updateCbrcDepositLoanMonthlyDailyAvg(cbrcDepositLoanMonthlyDailyAvg));
     }
 
@@ -117,10 +131,9 @@ public class CbrcDepositLoanMonthlyDailyAvgController extends BaseController
      */
     @RequiresPermissions("datashare/cbrc:deposit_loan_m_d_avg:remove")
     @Log(title = "分机构存贷款月日均情况", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(cbrcDepositLoanMonthlyDailyAvgService.deleteCbrcDepositLoanMonthlyDailyAvgByIds(ids));
     }
 }

@@ -147,7 +147,7 @@
         cbrc_deposit_loan_monthly_daily_avg(id,institution,loan_balance,loan_growth_m,loan_growth_y,loan_avg_balance,loan_avg_growth_m,loan_avg_growth_y,deposit_balance,deposit_growth_m,deposit_growth_y,deposit_avg_balance,deposit_avg_growth_m,deposit_avg_growth_y,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
         values
         <foreach collection="list" item="kk" separator=",">
-            (#{kk.institution},#{kk.loanBalance},#{kk.loanGrowthM},#{kk.loanGrowthY},#{kk.loanAvgBalance},#{kk.loanAvgGrowthM},#{kk.loanAvgGrowthY},#{kk.depositBalance},#{kk.depositGrowthM},#{kk.depositGrowthY},#{kk.depositAvgBalance},#{kk.depositAvgGrowthM},#{kk.depositAvgGrowthY},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+            (#{kk.id},#{kk.institution},#{kk.loanBalance},#{kk.loanGrowthM},#{kk.loanGrowthY},#{kk.loanAvgBalance},#{kk.loanAvgGrowthM},#{kk.loanAvgGrowthY},#{kk.depositBalance},#{kk.depositGrowthM},#{kk.depositGrowthY},#{kk.depositAvgBalance},#{kk.depositAvgGrowthM},#{kk.depositAvgGrowthY},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
         </foreach>
     </insert>
 </mapper>
