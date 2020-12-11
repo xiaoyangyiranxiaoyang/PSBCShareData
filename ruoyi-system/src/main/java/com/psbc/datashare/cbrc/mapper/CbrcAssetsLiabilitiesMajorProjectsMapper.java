@@ -3,7 +3,6 @@ package com.psbc.datashare.cbrc.mapper;
 import java.util.Date;
 import java.util.List;
 import com.psbc.datashare.cbrc.domain.CbrcAssetsLiabilitiesMajorProjects;
-import com.psbc.datashare.cbrc.domain.CbrcMajorRegulatoryIndicators;
 
 /**
  * 银行业机构资产负债主要项目统计Mapper接口

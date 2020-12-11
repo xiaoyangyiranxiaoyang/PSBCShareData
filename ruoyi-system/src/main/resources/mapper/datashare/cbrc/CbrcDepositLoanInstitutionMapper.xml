@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.cbrc.mapper.CbrcDepositLoanInstitutionMapper">
+
+    <resultMap type="CbrcDepositLoanInstitution" id="CbrcDepositLoanInstitutionResult">
+        <result property="id" column="id"/>
+        <result property="institution" column="institution"/>
+        <result property="depositBalance" column="deposit_balance"/>
+        <result property="depositGrowthM" column="deposit_growth_m"/>
+        <result property="depositGrowthY" column="deposit_growth_y"/>
+        <result property="loanBalance" column="loan_balance"/>
+        <result property="loanGrowthM" column="loan_growth_m"/>
+        <result property="loanGrowthY" column="loan_growth_y"/>
+        <result property="dataDate" column="data_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectCbrcDepositLoanInstitutionVo">
+        select id, institution, deposit_balance, deposit_growth_m, deposit_growth_y, loan_balance, loan_growth_m, loan_growth_y, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_deposit_loan_institution
+    </sql>
+
+    <select id="selectCbrcDepositLoanInstitutionList" parameterType="CbrcDepositLoanInstitution"
+            resultMap="CbrcDepositLoanInstitutionResult">
+        <include refid="selectCbrcDepositLoanInstitutionVo"/>
+        <where>
+            <if test="dataDate != null ">and data_date = #{dataDate}</if>
+        </where>
+    </select>
+
+    <select id="selectCbrcDepositLoanInstitutionById" parameterType="Long" resultMap="CbrcDepositLoanInstitutionResult">
+        <include refid="selectCbrcDepositLoanInstitutionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCbrcDepositLoanInstitution" parameterType="CbrcDepositLoanInstitution" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into cbrc_deposit_loan_institution
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="institution != null">institution,</if>
+            <if test="depositBalance != null">deposit_balance,</if>
+            <if test="depositGrowthM != null">deposit_growth_m,</if>
+            <if test="depositGrowthY != null">deposit_growth_y,</if>
+            <if test="loanBalance != null">loan_balance,</if>
+            <if test="loanGrowthM != null">loan_growth_m,</if>
+            <if test="loanGrowthY != null">loan_growth_y,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="institution != null">#{institution},</if>
+            <if test="depositBalance != null">#{depositBalance},</if>
+            <if test="depositGrowthM != null">#{depositGrowthM},</if>
+            <if test="depositGrowthY != null">#{depositGrowthY},</if>
+            <if test="loanBalance != null">#{loanBalance},</if>
+            <if test="loanGrowthM != null">#{loanGrowthM},</if>
+            <if test="loanGrowthY != null">#{loanGrowthY},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCbrcDepositLoanInstitution" parameterType="CbrcDepositLoanInstitution">
+        update cbrc_deposit_loan_institution
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="institution != null">institution = #{institution},</if>
+            <if test="depositBalance != null">deposit_balance = #{depositBalance},</if>
+            <if test="depositGrowthM != null">deposit_growth_m = #{depositGrowthM},</if>
+            <if test="depositGrowthY != null">deposit_growth_y = #{depositGrowthY},</if>
+            <if test="loanBalance != null">loan_balance = #{loanBalance},</if>
+            <if test="loanGrowthM != null">loan_growth_m = #{loanGrowthM},</if>
+            <if test="loanGrowthY != null">loan_growth_y = #{loanGrowthY},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCbrcDepositLoanInstitutionById" parameterType="Long">
+        delete from cbrc_deposit_loan_institution where id = #{id}
+    </delete>
+
+    <delete id="deleteCbrcDepositLoanInstitutionByIds" parameterType="String">
+        delete from cbrc_deposit_loan_institution where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="CbrcDepositLoanInstitutionResult">
+        <include refid="selectCbrcDepositLoanInstitutionVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from cbrc_deposit_loan_institution where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="CbrcDepositLoanInstitution">
+        insert into
+        cbrc_deposit_loan_institution(id,institution,deposit_balance,deposit_growth_m,deposit_growth_y,loan_balance,loan_growth_m,loan_growth_y,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.institution},#{kk.depositBalance},#{kk.depositGrowthM},#{kk.depositGrowthY},#{kk.loanBalance},#{kk.loanGrowthM},#{kk.loanGrowthY},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+</mapper>

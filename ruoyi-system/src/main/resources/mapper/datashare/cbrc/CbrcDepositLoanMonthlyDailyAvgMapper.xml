@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.cbrc.mapper.CbrcDepositLoanMonthlyDailyAvgMapper">
+
+    <resultMap type="CbrcDepositLoanMonthlyDailyAvg" id="CbrcDepositLoanMonthlyDailyAvgResult">
+        <result property="id" column="id"/>
+        <result property="institution" column="institution"/>
+        <result property="loanBalance" column="loan_balance"/>
+        <result property="loanGrowthM" column="loan_growth_m"/>
+        <result property="loanGrowthY" column="loan_growth_y"/>
+        <result property="loanAvgBalance" column="loan_avg_balance"/>
+        <result property="loanAvgGrowthM" column="loan_avg_growth_m"/>
+        <result property="loanAvgGrowthY" column="loan_avg_growth_y"/>
+        <result property="depositBalance" column="deposit_balance"/>
+        <result property="depositGrowthM" column="deposit_growth_m"/>
+        <result property="depositGrowthY" column="deposit_growth_y"/>
+        <result property="depositAvgBalance" column="deposit_avg_balance"/>
+        <result property="depositAvgGrowthM" column="deposit_avg_growth_m"/>
+        <result property="depositAvgGrowthY" column="deposit_avg_growth_y"/>
+        <result property="dataDate" column="data_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectCbrcDepositLoanMonthlyDailyAvgVo">
+        select id, institution, loan_balance, loan_growth_m, loan_growth_y, loan_avg_balance, loan_avg_growth_m, loan_avg_growth_y, deposit_balance, deposit_growth_m, deposit_growth_y, deposit_avg_balance, deposit_avg_growth_m, deposit_avg_growth_y, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_deposit_loan_monthly_daily_avg
+    </sql>
+
+    <select id="selectCbrcDepositLoanMonthlyDailyAvgList" parameterType="CbrcDepositLoanMonthlyDailyAvg"
+            resultMap="CbrcDepositLoanMonthlyDailyAvgResult">
+        <include refid="selectCbrcDepositLoanMonthlyDailyAvgVo"/>
+        <where>
+            <if test="dataDate != null ">and data_date = #{dataDate}</if>
+        </where>
+    </select>
+
+    <select id="selectCbrcDepositLoanMonthlyDailyAvgById" parameterType="Long"
+            resultMap="CbrcDepositLoanMonthlyDailyAvgResult">
+        <include refid="selectCbrcDepositLoanMonthlyDailyAvgVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCbrcDepositLoanMonthlyDailyAvg" parameterType="CbrcDepositLoanMonthlyDailyAvg"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into cbrc_deposit_loan_monthly_daily_avg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="institution != null">institution,</if>
+            <if test="loanBalance != null">loan_balance,</if>
+            <if test="loanGrowthM != null">loan_growth_m,</if>
+            <if test="loanGrowthY != null">loan_growth_y,</if>
+            <if test="loanAvgBalance != null">loan_avg_balance,</if>
+            <if test="loanAvgGrowthM != null">loan_avg_growth_m,</if>
+            <if test="loanAvgGrowthY != null">loan_avg_growth_y,</if>
+            <if test="depositBalance != null">deposit_balance,</if>
+            <if test="depositGrowthM != null">deposit_growth_m,</if>
+            <if test="depositGrowthY != null">deposit_growth_y,</if>
+            <if test="depositAvgBalance != null">deposit_avg_balance,</if>
+            <if test="depositAvgGrowthM != null">deposit_avg_growth_m,</if>
+            <if test="depositAvgGrowthY != null">deposit_avg_growth_y,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="institution != null">#{institution},</if>
+            <if test="loanBalance != null">#{loanBalance},</if>
+            <if test="loanGrowthM != null">#{loanGrowthM},</if>
+            <if test="loanGrowthY != null">#{loanGrowthY},</if>
+            <if test="loanAvgBalance != null">#{loanAvgBalance},</if>
+            <if test="loanAvgGrowthM != null">#{loanAvgGrowthM},</if>
+            <if test="loanAvgGrowthY != null">#{loanAvgGrowthY},</if>
+            <if test="depositBalance != null">#{depositBalance},</if>
+            <if test="depositGrowthM != null">#{depositGrowthM},</if>
+            <if test="depositGrowthY != null">#{depositGrowthY},</if>
+            <if test="depositAvgBalance != null">#{depositAvgBalance},</if>
+            <if test="depositAvgGrowthM != null">#{depositAvgGrowthM},</if>
+            <if test="depositAvgGrowthY != null">#{depositAvgGrowthY},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCbrcDepositLoanMonthlyDailyAvg" parameterType="CbrcDepositLoanMonthlyDailyAvg">
+        update cbrc_deposit_loan_monthly_daily_avg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="institution != null">institution = #{institution},</if>
+            <if test="loanBalance != null">loan_balance = #{loanBalance},</if>
+            <if test="loanGrowthM != null">loan_growth_m = #{loanGrowthM},</if>
+            <if test="loanGrowthY != null">loan_growth_y = #{loanGrowthY},</if>
+            <if test="loanAvgBalance != null">loan_avg_balance = #{loanAvgBalance},</if>
+            <if test="loanAvgGrowthM != null">loan_avg_growth_m = #{loanAvgGrowthM},</if>
+            <if test="loanAvgGrowthY != null">loan_avg_growth_y = #{loanAvgGrowthY},</if>
+            <if test="depositBalance != null">deposit_balance = #{depositBalance},</if>
+            <if test="depositGrowthM != null">deposit_growth_m = #{depositGrowthM},</if>
+            <if test="depositGrowthY != null">deposit_growth_y = #{depositGrowthY},</if>
+            <if test="depositAvgBalance != null">deposit_avg_balance = #{depositAvgBalance},</if>
+            <if test="depositAvgGrowthM != null">deposit_avg_growth_m = #{depositAvgGrowthM},</if>
+            <if test="depositAvgGrowthY != null">deposit_avg_growth_y = #{depositAvgGrowthY},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCbrcDepositLoanMonthlyDailyAvgById" parameterType="Long">
+        delete from cbrc_deposit_loan_monthly_daily_avg where id = #{id}
+    </delete>
+
+    <delete id="deleteCbrcDepositLoanMonthlyDailyAvgByIds" parameterType="String">
+        delete from cbrc_deposit_loan_monthly_daily_avg where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="CbrcDepositLoanMonthlyDailyAvgResult">
+        <include refid="selectCbrcDepositLoanMonthlyDailyAvgVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from cbrc_deposit_loan_monthly_daily_avg where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="CbrcDepositLoanMonthlyDailyAvg">
+        insert into
+        cbrc_deposit_loan_monthly_daily_avg(id,institution,loan_balance,loan_growth_m,loan_growth_y,loan_avg_balance,loan_avg_growth_m,loan_avg_growth_y,deposit_balance,deposit_growth_m,deposit_growth_y,deposit_avg_balance,deposit_avg_growth_m,deposit_avg_growth_y,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.institution},#{kk.loanBalance},#{kk.loanGrowthM},#{kk.loanGrowthY},#{kk.loanAvgBalance},#{kk.loanAvgGrowthM},#{kk.loanAvgGrowthY},#{kk.depositBalance},#{kk.depositGrowthM},#{kk.depositGrowthY},#{kk.depositAvgBalance},#{kk.depositAvgGrowthM},#{kk.depositAvgGrowthY},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+</mapper>
