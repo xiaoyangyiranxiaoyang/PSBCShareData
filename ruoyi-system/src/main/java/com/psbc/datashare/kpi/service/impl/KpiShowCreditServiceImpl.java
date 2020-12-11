@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
-    @Autowired
-    private KpiShowCreditMapper kpiShowCreditMapper;
+
     @Autowired
     private KpiSourceCreditScaleMapper kpiSourceCreditScaleMapper;
     @Autowired
@@ -42,8 +41,15 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
     private KpiSourceOriginalDataMapper kpiSourceOriginalDataMapper;
     @Autowired
     private KpiSourceSavingDataMapper kpiSourceSavingDataMapper;
+
+    @Autowired
+    private KpiShowCreditMapper kpiShowCreditMapper;
+    @Autowired
+    private KpiShowCreditScheduleMapper kpiShowCreditScheduleMapper;
     @Autowired
     private KpiShowAssetBusinessMapper kpiShowAssetBusinessMapper;
+    @Autowired
+    private KpiShowAssetBusinessScheduleMapper kpiShowAssetBusinessScheduleMapper;
 
     /**
      * 查询全行KPI指标（二）
@@ -113,8 +119,16 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
         return kpiShowCreditMapper.deleteKpiShowCreditById(id);
     }
 
+    /**
+     * KPI 源数据导入, 并执行当月数据计算入库到结果表
+     *
+     * @param is        文件输入流对象
+     * @param dataMonth 数据时间(月)
+     * @param operName  操作用户
+     * @return
+     */
     @Override
-    public String importKpiIncomeShow(InputStream is, String dataMonth, String operName) {
+    public String importKpiSourceData(InputStream is, String dataMonth, String operName) {
         String rrMsg = "导入数据失败";
         try {
             String dataDateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")) + "-01";
@@ -397,19 +411,19 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
                     // 本日余额
                     one.setDailyBalance(Convert.toBigDecimal(columnDataMap.get(2)));
                     one.setDailyBalanceSelf(Convert.toBigDecimal(columnDataMap.get(3)));
-                    one.setDailyBalanceAgent(Convert.toBigDecimal(columnDataMap.get(4)));
+                    one.setDailyBalanceAgent(Convert.toBigDecimal(columnDataMap.get(5)));
                     // 本日新增
-                    one.setDailyIncrease(Convert.toBigDecimal(columnDataMap.get(5)));
-                    one.setDailyIncreaseSelf(Convert.toBigDecimal(columnDataMap.get(6)));
-                    one.setDailyIncreaseAgent(Convert.toBigDecimal(columnDataMap.get(7)));
+                    one.setDailyIncrease(Convert.toBigDecimal(columnDataMap.get(6)));
+                    one.setDailyIncreaseSelf(Convert.toBigDecimal(columnDataMap.get(7)));
+                    one.setDailyIncreaseAgent(Convert.toBigDecimal(columnDataMap.get(8)));
                     // 本月新增
-                    one.setMonthlyIncrease(Convert.toBigDecimal(columnDataMap.get(8)));
-                    one.setMonthlyIncreaseSelf(Convert.toBigDecimal(columnDataMap.get(9)));
-                    one.setMonthlyIncreaseAgent(Convert.toBigDecimal(columnDataMap.get(10)));
+                    one.setMonthlyIncrease(Convert.toBigDecimal(columnDataMap.get(9)));
+                    one.setMonthlyIncreaseSelf(Convert.toBigDecimal(columnDataMap.get(10)));
+                    one.setMonthlyIncreaseAgent(Convert.toBigDecimal(columnDataMap.get(12)));
                     // 本年新增
-                    one.setYearlyIncrease(Convert.toBigDecimal(columnDataMap.get(11)));
-                    one.setYearlyIncreaseSelf(Convert.toBigDecimal(columnDataMap.get(12)));
-                    one.setYearlyIncreaseAgent(Convert.toBigDecimal(columnDataMap.get(13)));
+                    one.setYearlyIncrease(Convert.toBigDecimal(columnDataMap.get(13)));
+                    one.setYearlyIncreaseSelf(Convert.toBigDecimal(columnDataMap.get(14)));
+                    one.setYearlyIncreaseAgent(Convert.toBigDecimal(columnDataMap.get(17)));
 
                     one.setDataDate(dataDate);
                     one.setDelFlag("0");
@@ -429,12 +443,36 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
                 kpiSourceSavingDataMapper.insertBatch(datasToInsert_savingData);
             }
 
-            //  6. 计算全行资产业务情况表-主表 并入库
+            // 6. 计算全行资产业务情况表-主表 并入库
             List<KpiShowAssetBusiness> assetBusinesses = calculateAssetBusinessMaster(dataDate, operName);
-            kpiShowAssetBusinessMapper.deleteByDataDate(dataDate);
-            kpiShowAssetBusinessMapper.insertBatch(assetBusinesses);
+            if (!assetBusinesses.isEmpty()) {
+                kpiShowAssetBusinessMapper.deleteByDataDate(dataDate);
+                kpiShowAssetBusinessMapper.insertBatch(assetBusinesses);
+            }
 
-            rrMsg = "导入数据成功!";
+
+            // 7. 计算全行资产业务情况表-附表 并入库
+            KpiShowAssetBusinessSchedule assetBusinessSchedule = calculateAssetBusnessSchedule(dataDate, operName);
+            if (assetBusinessSchedule != null) {
+                kpiShowAssetBusinessScheduleMapper.deleteByDataDate(dataDate);
+                kpiShowAssetBusinessScheduleMapper.insertKpiShowAssetBusinessSchedule(assetBusinessSchedule);
+            }
+
+            // 8. 计算全行KPI指标表（二）-主表 并入库
+            List<KpiShowCredit> kpiShowCredits = calculateCreditMaster(dataDate, operName);
+            if (!kpiShowCredits.isEmpty()) {
+                kpiShowCreditMapper.deleteByDataDate(dataDate);
+                kpiShowCreditMapper.insertBatch(kpiShowCredits);
+            }
+
+            // 9. 计算全行KPI指标表（二）-附表 并入库
+            KpiShowCreditSchedule creditSchedule = calculateCreditSchedule(dataDate, operName);
+            if (creditSchedule != null) {
+                kpiShowCreditScheduleMapper.deleteByDataDate(dataDate);
+                kpiShowCreditScheduleMapper.insertKpiShowCreditSchedule(creditSchedule);
+            }
+
+            rrMsg = "数据导入成功, 并成计算出结果!";
         } catch (Exception e) {
             throw new BusinessException(rrMsg, e);
         } finally {
@@ -451,6 +489,7 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
 
     /**
      * 计算 全行资产业务情况表 主表
+     *
      * @param dataDate
      * @param operName
      * @return
@@ -528,7 +567,7 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
         BigDecimal company_balance_total = new BigDecimal(0);
         BigDecimal company_growthM_total = new BigDecimal(0);
         BigDecimal company_growthY_total = new BigDecimal(0);
-        for (int i = 1; i < rrr.size(); i++ ){
+        for (int i = 1; i < rrr.size(); i++) {
             company_balance_total = Arith.add(company_balance_total, rrr.get(i).getCompanyBalance());
             company_growthM_total = Arith.add(company_growthM_total, rrr.get(i).getCompanyGrowthM());
             company_growthY_total = Arith.add(company_growthY_total, rrr.get(i).getCompanyGrowthY());
@@ -545,5 +584,362 @@ public class KpiShowCreditServiceImpl implements IKpiShowCreditService {
         rrr.add(0, total);
 
         return rrr;
+    }
+
+
+    /**
+     * 计算 全行资产业务情况表 附表（本部）
+     *
+     * @param dataDate
+     * @param operName
+     * @return
+     */
+    private KpiShowAssetBusinessSchedule calculateAssetBusnessSchedule(Date dataDate, String operName) {
+        KpiShowAssetBusinessSchedule rrr = new KpiShowAssetBusinessSchedule();
+
+        // 查询上月和年初(上年12月)的资产业务情况
+        Date lastMonth = DateUtils.addMonths(dataDate, -1);
+        Date beginYear = DateUtils.addYears(dataDate, -1);
+        // 上月
+        List<KpiShowAssetBusinessSchedule> lastMonthDatas = kpiShowAssetBusinessScheduleMapper.selectByDataDate(lastMonth);
+        Map<String, KpiShowAssetBusinessSchedule> lastMonthDataMap = Optional.ofNullable(lastMonthDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), item -> item, (k1, k2) -> k1));
+
+        // 查询当月的信贷规模数据
+        List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceCreditScale> creditScaleMap = Optional.ofNullable(creditScales)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceCreditScale::getDistrict, i -> i, (k1, k2) -> k1));
+
+
+        KpiShowAssetBusinessSchedule lastMonthData = lastMonthDataMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiShowAssetBusinessSchedule() : lastMonthDataMap.get(KpiShowConstant.DISTRICT_BEN_BU);
+        KpiSourceCreditScale creditScale = creditScaleMap.get(KpiShowConstant.DISTRICT_BEN_BU) == null ? new KpiSourceCreditScale() : creditScaleMap.get(KpiShowConstant.DISTRICT_BEN_BU);
+
+        rrr.setDistrict(KpiShowConstant.DISTRICT_BEN_BU);
+        rrr.setDataDate(dataDate);
+        rrr.setDelFlag("0");
+        rrr.setCreateBy(operName);
+        rrr.setCreateTime(new Date());
+        // 公司贷款
+        rrr.setCompanyBalance(creditScale.getOtherCompany());
+        rrr.setCompanyGrowthM(Arith.sub(creditScale.getOtherCompany(), lastMonthData.getCompanyBalance()));
+        rrr.setCompanyGrowthY(Arith.add(rrr.getCompanyGrowthM(), lastMonthData.getCompanyGrowthY()));
+        // 直贴
+        rrr.setDirectPasteBalance(creditScale.getDirectPaste());
+        rrr.setDirectPasteGrowthM(Arith.sub(creditScale.getDirectPaste(), lastMonthData.getDirectPasteBalance()));
+        rrr.setDirectPasteGrowthY(Arith.add(rrr.getDirectPasteGrowthM(), lastMonthData.getDirectPasteGrowthY()));
+        // 转贴现
+        rrr.setRediscountBalance(creditScale.getRediscount());
+        rrr.setRediscountGrowthM(Arith.sub(creditScale.getRediscount(), lastMonthData.getRediscountBalance()));
+        rrr.setRediscountGrowthY(Arith.add(rrr.getRediscountGrowthM(), lastMonthData.getRediscountGrowthY()));
+        // 供应链
+        rrr.setSupplyChainBalance(creditScale.getSupplyChain());
+        rrr.setSupplyChainGrowthM(Arith.sub(creditScale.getSupplyChain(), lastMonthData.getSupplyChainBalance()));
+        rrr.setSupplyChainGrowthY(Arith.add(rrr.getSupplyChainGrowthM(), lastMonthData.getSupplyChainGrowthY()));
+        // 存放同业
+        rrr.setInterbankBalance(new BigDecimal(0));
+        rrr.setInterbankGrowthM(new BigDecimal(0));
+        rrr.setInterbankGrowthY(new BigDecimal(0));
+        // 合计
+        rrr.setTotalBalance(Arith.add(Arith.add(Arith.add(rrr.getCompanyBalance(), rrr.getDirectPasteBalance()), rrr.getRediscountBalance()), rrr.getSupplyChainBalance()));
+        rrr.setTotalGrowthM(Arith.add(Arith.add(Arith.add(rrr.getCompanyGrowthM(), rrr.getDirectPasteGrowthM()), rrr.getRediscountGrowthM()), rrr.getSupplyChainGrowthM()));
+        rrr.setTotalGrowthY(Arith.add(Arith.add(Arith.add(rrr.getCompanyGrowthY(), rrr.getDirectPasteGrowthY()), rrr.getRediscountGrowthY()), rrr.getSupplyChainGrowthY()));
+
+        return rrr;
+    }
+
+
+    /**
+     * 计算 全行KPI指标表（二） 主表
+     *
+     * @param dataDate
+     * @param operName
+     * @return
+     */
+    private List<KpiShowCredit> calculateCreditMaster(Date dataDate, String operName) {
+        List<KpiShowCredit> rrr = new LinkedList<>();
+
+        // 查询上月和年初(上年12月)的资产业务情况
+        Date lastMonth = DateUtils.addMonths(dataDate, -1);
+        Date beginYear = DateUtils.addYears(dataDate, -1);
+        beginYear = DateUtils.setMonths(beginYear, 11);
+        // 上月
+        List<KpiShowCredit> lastMonthDatas = kpiShowCreditMapper.selectByDataDate(lastMonth);
+        Map<String, KpiShowCredit> lastMonthDataMap = Optional.ofNullable(lastMonthDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), item -> item, (k1, k2) -> k1));
+        // 年初
+        List<KpiShowCredit> beginYearDatas = kpiShowCreditMapper.selectByDataDate(beginYear);
+        Map<String, KpiShowCredit> beginYearDataMap = Optional.ofNullable(beginYearDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(item -> item.getDistrict().replaceAll("\\s*", ""), i -> i, (k1, k2) -> k1));
+
+        // 查询当月的人行报表数据
+        List<KpiSourceOriginalData> originalDatas = kpiSourceOriginalDataMapper.selectByDataDate(dataDate);
+        // 《地区，《指标号，数额》》
+        Map<String, Map<String, BigDecimal>> originalDataMap = originalDatasToMap(originalDatas);
+
+        // 查询代理邮储数据
+        List<KpiSourceSavingData> sourceSavingDatas = kpiSourceSavingDataMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceSavingData> sourceSavingDataMap = Optional.ofNullable(sourceSavingDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceSavingData::getDistrict, i -> i, (k1, k2) -> k1));
+
+//        // 查询当月的信贷规模数据
+//        List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
+//        Map<String, KpiSourceCreditScale> creditScaleMap = Optional.ofNullable(creditScales)
+//                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceCreditScale::getDistrict, i -> i, (k1, k2) -> k1));
+
+        // 查询当月的不良数据
+        List<KpiSourceUnhealthy> unhealthieDatas = kpiSourceUnhealthyMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceUnhealthy> unhealthieMap = Optional.ofNullable(unhealthieDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceUnhealthy::getDistrict, i -> i, (k1, k2) -> k1));
+        // 查询当月的逾期数据
+        List<KpiSourceOverdue> overdueDatas = kpiSourceOverdueMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceOverdue> overdueMap = Optional.ofNullable(overdueDatas)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceOverdue::getDistrict, i -> i, (k1, k2) -> k1));
+        Date dateNow = new Date();
+
+        for (String district : KpiShowConstant.DISTRICT_LIST_KPI_CREDIT) {
+            KpiShowCredit lst = lastMonthDataMap.get(district) == null ? new KpiShowCredit() : lastMonthDataMap.get(district);
+            KpiShowCredit by = beginYearDataMap.get(district) == null ? new KpiShowCredit() : beginYearDataMap.get(district);
+
+            // 《指标号，数额》
+            Map<String, BigDecimal> rhData = originalDataMap.get(district) == null ? new HashMap<>() : originalDataMap.get(district);
+            KpiSourceSavingData savingData = sourceSavingDataMap.get(district) == null ? new KpiSourceSavingData() : sourceSavingDataMap.get(district);
+            //KpiSourceCreditScale creditScale = creditScaleMap.get(district) == null ? new KpiSourceCreditScale() : creditScaleMap.get(district);
+            KpiSourceUnhealthy unhealthy = unhealthieMap.get(district) == null ? new KpiSourceUnhealthy() : unhealthieMap.get(district);
+            KpiSourceOverdue overdue = overdueMap.get(district) == null ? new KpiSourceOverdue() : overdueMap.get(district);
+
+            KpiShowCredit oneR = new KpiShowCredit();
+            oneR.setDistrict(district);
+            oneR.setDataDate(dataDate);
+            oneR.setDelFlag("0");
+            oneR.setCreateBy(operName);
+            oneR.setCreateTime(dateNow);
+
+            // 人行报表总余额 = AA3701R1044（境内个人） + AA370136031（三、个人存款）
+            BigDecimal od_total_saving = Arith.add(rhData.get("AA3701R1044"), rhData.get("AA370136031"));
+
+            // 1. 邮储自营余额 = 人行报表总余额 - 代理余额
+            oneR.setSelfBalance(Arith.sub(od_total_saving, savingData.getDailyBalanceAgent()));
+            oneR.setSelfGrowthM(Arith.sub(oneR.getSelfBalance(), lst.getSelfBalance()));
+            oneR.setSelfGrowthY(Arith.sub(oneR.getSelfBalance(), by.getSelfBalance()));
+
+            // 2. 代理余额
+            oneR.setAgentBalance(savingData.getDailyBalanceAgent());
+            oneR.setAgentGrowthM(Arith.sub(oneR.getAgentBalance(), lst.getAgentBalance()));
+            oneR.setAgentGrowthY(Arith.sub(oneR.getAgentBalance(), by.getAgentBalance()));
+
+            // 3. 公司存款 (目前没加 财政性存款及临时性存款 ，因其全是0； 20201204	)
+            oneR.setCompanyBalance(calculateCompanyDepositBalance(district, rhData));
+            oneR.setCompanyGrowthM(Arith.sub(oneR.getCompanyBalance(), lst.getCompanyBalance()));
+            oneR.setCompanyGrowthY(Arith.sub(oneR.getCompanyBalance(), by.getCompanyBalance()));
+
+            // 存款合计
+            oneR.setDepositBalance(Arith.add(Arith.add(oneR.getSelfBalance(), oneR.getAgentBalance()), oneR.getCompanyBalance()));
+            oneR.setDepositGrowthM(Arith.sub(oneR.getDepositBalance(), lst.getDepositBalance()));
+            oneR.setDepositGrowthY(Arith.sub(oneR.getDepositBalance(), by.getDepositBalance()));
+
+            // 贷款 = 人行报表-- AA370137001（各项贷款）
+            oneR.setLoanBalance(rhData.get("AA370137001"));
+            oneR.setLoanGrowthM(Arith.sub(oneR.getLoanBalance(), lst.getLoanBalance()));
+            oneR.setLoanGrowthY(Arith.sub(oneR.getLoanBalance(), by.getLoanBalance()));
+
+            // 不良率
+            oneR.setUnhealthyRate(unhealthy.getRetailRate());
+
+            // 逾期率
+            oneR.setOverdueRate(overdue.getRetailRate());
+
+            rrr.add(oneR);
+        }
+        return rrr;
+    }
+
+    /**
+     * 计算 全行KPI指标表（二） 附表 (全省)
+     *
+     * @param dataDate
+     * @param operName
+     * @return
+     */
+    private KpiShowCreditSchedule calculateCreditSchedule(Date dataDate, String operName) {
+        KpiShowCreditSchedule r = new KpiShowCreditSchedule();
+
+        r.setDistrict(KpiShowConstant.DISTRICT_QUAN_SHENG);
+        r.setDataDate(dataDate);
+        r.setDelFlag("0");
+        r.setCreateBy(operName);
+        r.setCreateTime(new Date());
+
+        // 查询上月和年初(上年12月)的资产业务情况
+        Date lastMonth = DateUtils.addMonths(dataDate, -1);
+        Date beginYear = DateUtils.addYears(dataDate, -1);
+        beginYear = DateUtils.setMonths(beginYear, 11);
+        // 上月
+        List<KpiShowCreditSchedule> lastMonthDatas = kpiShowCreditScheduleMapper.selectByDataDate(lastMonth);
+        // 年初
+        List<KpiShowCreditSchedule> beginYearDatas = kpiShowCreditScheduleMapper.selectByDataDate(beginYear);
+        // 查询当月的信贷规模数据
+        List<KpiSourceCreditScale> creditScales = kpiSourceCreditScaleMapper.selectByDataDate(dataDate);
+        Map<String, KpiSourceCreditScale> creditScaleMap = Optional.ofNullable(creditScales)
+                .orElse(new ArrayList<>()).stream().collect(Collectors.toMap(KpiSourceCreditScale::getDistrict, i -> i, (k1, k2) -> k1));
+
+        KpiShowCreditSchedule lst = (lastMonthDatas != null && !lastMonthDatas.isEmpty()) ? lastMonthDatas.get(0) : new KpiShowCreditSchedule();
+        KpiShowCreditSchedule by = (beginYearDatas != null && !beginYearDatas.isEmpty()) ? beginYearDatas.get(0) : new KpiShowCreditSchedule();
+        KpiSourceCreditScale cs = creditScaleMap.get(KpiShowConstant.DISTRICT_QUAN_SHENG) == null ? new KpiSourceCreditScale() : creditScaleMap.get(KpiShowConstant.DISTRICT_QUAN_SHENG);
+
+        // 个人零售贷款 = 小额贷款	+ 个商贷款	+ 住房按揭贷款	+ 其他消费贷款	+ 其他贷款
+        r.setRetailBalance(Arith.add(Arith.add(Arith.add(Arith.add(cs.getMicroloans(), cs.getIndividualBusiness()),cs.getHomeMortgage()),cs.getOtherConsumer()),cs.getPersonalOther()));
+        r.setRetailGrowthM(Arith.sub(r.getRetailBalance(), lst.getRetailBalance()));
+        r.setRetailGrowthY(Arith.sub(r.getRetailBalance(), by.getRetailBalance()));
+
+        // 小企业贷款 = 小企业
+        r.setSmallBusinessBalance(cs.getSmallBusiness());
+        r.setSmallBusinessGrowthM(Arith.sub(r.getSmallBusinessBalance(), lst.getSmallBusinessBalance()));
+        r.setSmallBusinessGrowthY(Arith.sub(r.getSmallBusinessBalance(), by.getSmallBusinessBalance()));
+
+        // 公司贷款 = 其他公司贷
+        r.setCompanyBalance(cs.getOtherCompany());
+        r.setCompanyGrowthM(Arith.sub(r.getCompanyBalance(), lst.getCompanyBalance()));
+        r.setCompanyGrowthY(Arith.sub(r.getCompanyBalance(), by.getCompanyBalance()));
+
+        // 供应链 = 供应链
+        r.setSupplyChainBalance(cs.getSupplyChain());
+        r.setSupplyChainGrowthM(Arith.sub(r.getSupplyChainBalance(), lst.getSupplyChainBalance()));
+        r.setSupplyChainGrowthY(Arith.sub(r.getSupplyChainBalance(), by.getSupplyChainBalance()));
+
+        // 票据融资 = 转贴 + 直贴
+        r.setBillFinancingBalance(Arith.add(cs.getRediscount(), cs.getDirectPaste()));
+        r.setBillFinancingGrowthM(Arith.sub(r.getBillFinancingBalance(), lst.getBillFinancingBalance()));
+        r.setBillFinancingGrowthY(Arith.sub(r.getBillFinancingBalance(), by.getBillFinancingBalance()));
+
+        // 合计
+        r.setTotalBalance(Arith.add(Arith.add(Arith.add(Arith.add(r.getRetailBalance(), r.getSmallBusinessBalance()),r.getCompanyBalance()),r.getSupplyChainBalance()),r.getBillFinancingBalance()));
+        r.setTotalGrowthM(Arith.add(Arith.add(Arith.add(Arith.add(r.getRetailGrowthM(), r.getSmallBusinessGrowthM()),r.getCompanyGrowthM()),r.getSupplyChainGrowthM()),r.getBillFinancingGrowthM()));
+        r.setTotalGrowthY(Arith.add(Arith.add(Arith.add(Arith.add(r.getRetailGrowthY(), r.getSmallBusinessGrowthY()),r.getCompanyGrowthY()),r.getSupplyChainGrowthY()),r.getBillFinancingGrowthY()));
+
+        return r;
+    }
+
+    //《地区，《指标号，数额》》
+    private Map<String, Map<String, BigDecimal>> originalDatasToMap(List<KpiSourceOriginalData> originalDatas) {
+        Map<String, Map<String, BigDecimal>> rrr = new HashMap<>();
+        for (KpiSourceOriginalData originalData : originalDatas) {
+            Map<String, BigDecimal> qs = rrr.get(KpiShowConstant.DISTRICT_QUAN_SHENG);
+            if (qs == null) {
+                qs = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_QUAN_SHENG, qs);
+            }
+            qs.put(originalData.getIndicatorNum(), originalData.getQuanSheng());
+
+            Map<String, BigDecimal> cx = rrr.get(KpiShowConstant.DISTRICT_CHENG_XI);
+            if (cx == null) {
+                cx = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_CHENG_XI, cx);
+            }
+            cx.put(originalData.getIndicatorNum(), originalData.getChengXi());
+
+            Map<String, BigDecimal> cz = rrr.get(KpiShowConstant.DISTRICT_CHENG_ZHONG);
+            if (cz == null) {
+                cz = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_CHENG_ZHONG, cz);
+            }
+            cz.put(originalData.getIndicatorNum(), originalData.getChengZhong());
+
+            Map<String, BigDecimal> dt = rrr.get(KpiShowConstant.DISTRICT_DA_TONG);
+            if (dt == null) {
+                dt = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_DA_TONG, dt);
+            }
+            dt.put(originalData.getIndicatorNum(), originalData.getDaTong());
+
+            Map<String, BigDecimal> hd = rrr.get(KpiShowConstant.DISTRICT_HAI_DONG);
+            if (hd == null) {
+                hd = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_HAI_DONG, hd);
+            }
+            hd.put(originalData.getIndicatorNum(), originalData.getHaiDong());
+
+            Map<String, BigDecimal> hx = rrr.get(KpiShowConstant.DISTRICT_HAI_XI);
+            if (hx == null) {
+                hx = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_HAI_XI, hx);
+            }
+            hx.put(originalData.getIndicatorNum(), originalData.getHaiXi());
+
+            Map<String, BigDecimal> grm = rrr.get(KpiShowConstant.DISTRICT_GE_ER_MU);
+            if (grm == null) {
+                grm = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_GE_ER_MU, grm);
+            }
+            grm.put(originalData.getIndicatorNum(), originalData.getGeErMu());
+
+            Map<String, BigDecimal> hn = rrr.get(KpiShowConstant.DISTRICT_HAI_NAN);
+            if (hn == null) {
+                hn = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_HAI_NAN, hn);
+            }
+            hn.put(originalData.getIndicatorNum(), originalData.getHaiNan());
+
+            Map<String, BigDecimal> hb = rrr.get(KpiShowConstant.DISTRICT_HAI_BEI);
+            if (hb == null) {
+                hb = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_HAI_BEI, hb);
+            }
+            hb.put(originalData.getIndicatorNum(), originalData.getHaiNan());
+
+            Map<String, BigDecimal> hnn = rrr.get(KpiShowConstant.DISTRICT_HUANG_NAN);
+            if (hnn == null) {
+                hnn = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_HUANG_NAN, hnn);
+            }
+            hnn.put(originalData.getIndicatorNum(), originalData.getHuangNan());
+
+            Map<String, BigDecimal> gl = rrr.get(KpiShowConstant.DISTRICT_GUO_LUO);
+            if (gl == null) {
+                gl = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_GUO_LUO, gl);
+            }
+            gl.put(originalData.getIndicatorNum(), originalData.getGuoLuo());
+
+            Map<String, BigDecimal> ys = rrr.get(KpiShowConstant.DISTRICT_YU_SHU);
+            if (ys == null) {
+                ys = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_YU_SHU, ys);
+            }
+            ys.put(originalData.getIndicatorNum(), originalData.getYuShu());
+
+            Map<String, BigDecimal> yyb = rrr.get(KpiShowConstant.DISTRICT_YING_YI_BU);
+            if (yyb == null) {
+                yyb = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_YING_YI_BU, yyb);
+            }
+            yyb.put(originalData.getIndicatorNum(), originalData.getYingYiBu());
+
+            Map<String, BigDecimal> bb = rrr.get(KpiShowConstant.DISTRICT_BEN_BU);
+            if (bb == null) {
+                bb = new HashMap<>();
+                rrr.put(KpiShowConstant.DISTRICT_BEN_BU, bb);
+            }
+            bb.put(originalData.getIndicatorNum(), originalData.getBenBu());
+        }
+        return rrr;
+    }
+
+    // 取某地区的公司存款余额
+    private BigDecimal calculateCompanyDepositBalance(String district, Map<String, BigDecimal> rhData) {
+
+        if (KpiShowConstant.DISTRICT_QUAN_SHENG.equals(district) || KpiShowConstant.DISTRICT_CHENG_XI.equals(district)) {
+            // 39 AA370136025(二、单位存款) + 80 AA3701R1045(境内非金融机构) + 32  AA370136021(保险公司及养老基金存放) + 66 AA370136042(七、临时性存款)
+            return Arith.add(Arith.add(Arith.add(rhData.get("AA370136025"), rhData.get("AA3701R1045")), rhData.get("AA370136021")), rhData.get("AA370136042"));
+        } else if (KpiShowConstant.DISTRICT_CHENG_ZHONG.equals(district)) {
+            // 39 AA370136025(二、单位存款) + 80 AA3701R1045(境内非金融机构) + 36  AA3701R1036(3.纳入各项存款的同业存放款项) + 66 AA370136042(七、临时性存款)
+            return Arith.add(Arith.add(Arith.add(rhData.get("AA370136025"), rhData.get("AA3701R1045")), rhData.get("AA3701R1036")), rhData.get("AA370136042"));
+        } else if (KpiShowConstant.DISTRICT_BEN_BU.equals(district)) {
+            // 39 AA370136025(二、单位存款) + 80 AA3701R1045(境内非金融机构)
+            return Arith.add(rhData.get("AA370136025"), rhData.get("AA3701R1045"));
+        } else {
+            // 39 AA370136025(二、单位存款) + 80 AA3701R1045(境内非金融机构) + 66 AA370136042(七、临时性存款)
+            return Arith.add(Arith.add(rhData.get("AA370136025"), rhData.get("AA3701R1045")), rhData.get("AA370136042"));
+        }
+
     }
 }

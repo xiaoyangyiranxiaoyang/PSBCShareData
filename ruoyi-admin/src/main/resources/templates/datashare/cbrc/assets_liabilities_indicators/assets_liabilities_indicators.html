@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('金融机构资产负债主要指标列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search();"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('datashare/cbrc:assets_liabilities_indicators:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('datashare/cbrc:assets_liabilities_indicators:remove')}]];
+    var prefix = ctx + "datashare/cbrc/assets_liabilities_indicators";
+
+    var nowDate = new Date();
+    let year = nowDate.getFullYear();
+    let month = nowDate.getMonth() + 1;
+    let monthStr = year + "-" + (month < 10 ? "0" + month : month);
+    $("#search_month").val(monthStr);
+    // 搜索时间选择器初始化
+    layui.use('laydate', function () {
+        let laydate = layui.laydate;
+        //年月选择器
+        laydate.render({
+            elem: '#search_month',
+            type: 'month',
+            value: new Date()
+        });
+    });
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "金融机构资产负债主要指标",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [
+                [
+                    {
+                        title: '青海省银行业金融机构资产负债主要指标',
+                        align: 'center',
+                        colspan: 9
+                    }
+                ],
+                [
+                    {
+                        field: 'institution',
+                        title: '机构'
+                    },
+                    {
+                        field: 'assetsTotal',
+                        align: 'right',
+                        title: '资产总额'
+                    },
+                    {
+                        field: 'assetsCompateBeginYear',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'liabilitiesTotal',
+                        align: 'right',
+                        title: '负债总额'
+                    },
+                    {
+                        field: 'liabilitiesCompateBeginYear',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'ownerEquity',
+                        align: 'right',
+                        title: '所有者权益'
+                    },
+                    {
+                        field: 'equityCompateBeginYear',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'profitThisYear',
+                        align: 'right',
+                        title: '本年利润'
+                    },
+                    {
+                        field: 'profitCompateLastYear',
+                        align: 'right',
+                        title: '比去年同期'
+                    }
+                ]
+            ]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>

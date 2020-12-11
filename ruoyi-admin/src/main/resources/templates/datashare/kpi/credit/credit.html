@@ -1,150 +1,625 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <th:block th:include="include :: header('全行KPI指标（二）列表')" />
+    <th:block th:include="include :: header('全行KPI指标（二）列表')"/>
+    <th:block th:include="include :: bootstrap-editable-css" />
+    <!--<style type="text/css">
+        table {
+            table-layout: fixed !important;
+        }
+    </style>-->
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-        <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li class="select-time">
-                                <label>数据日期：</label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginDataDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endDataDate]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm"
+                               onclick="$.table.search('formId','bootstrap-table');$.table.search('formId','bootstrap-table1')"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:credit:add">
-                    <i class="fa fa-plus"></i> 添加
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:credit:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:credit:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>-->
-                <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:credit:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>-->
-                <a class="btn btn-info" onclick="$.table.importExcel('import_source_data', 360, 315, '导入KPI源数据')" shiro:hasPermission="datashare/kpi:credit:import">
-                    <i class="fa fa-upload"></i> 导入源数据
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table"></table>
-            </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="datashare/kpi:credit:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="datashare/kpi:credit:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="datashare/kpi:credit:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>-->
+            <!--<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="datashare/kpi:credit:export">
+                <i class="fa fa-download"></i> 导出
+            </a>-->
+            <a class="btn btn-info" onclick="$.table.importExcel('import_source_data', 360, 315, '导入KPI源数据')"
+               shiro:hasPermission="datashare/kpi:credit:import">
+                <i class="fa fa-upload"></i> 导入源数据
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+            <span>附表</span>
+            <table id="bootstrap-table1"></table>
         </div>
     </div>
-    <th:block th:include="include :: footer" />
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('datashare/kpi:credit:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('datashare/kpi:credit:remove')}]];
-        var prefix = ctx + "datashare/kpi/credit";
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js" />
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('datashare/kpi:credit:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('datashare/kpi:credit:remove')}]];
+    var rowEditFlag = [[${@permission.hasPermi('datashare/kpi:credit:import')}]]; // 拥有数据导入权限的人才拥有行编辑权限
+    var prefix = ctx + "datashare/kpi/credit";
+    var prefix1 = ctx + "datashare/kpi/credit_schedule";
 
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
-                importUrl: prefix + "/importData",
-                importTemplateUrl: prefix + "/importTemplate",
-                modalName: "全行KPI指标（二）",
-                columns: [{
-                    checkbox: true
-                },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible: false
-                },
-                {
-                    field: 'district',
-                    title: '地区'
-                },
-                {
-                    field: 'depositBalance',
-                    title: '存款合计-余额'
-                },
-                {
-                    field: 'depositGrowthM',
-                    title: '存款合计-月增'
-                },
-                {
-                    field: 'depositGrowthY',
-                    title: '存款合计-年增'
-                },
-                {
-                    field: 'selfBalance',
-                    title: '邮储自营-余额'
-                },
-                {
-                    field: 'selfGrowthM',
-                    title: '邮储自营-月增'
-                },
-                {
-                    field: 'selfGrowthY',
-                    title: '邮储自营-年增'
-                },
-                {
-                    field: 'agentBalance',
-                    title: '邮储代理-余额'
-                },
-                {
-                    field: 'agentGrowthM',
-                    title: '邮储代理-月增'
-                },
-                {
-                    field: 'agentGrowthY',
-                    title: '邮储代理-年增'
-                },
-                {
-                    field: 'companyBalance',
-                    title: '公司存款-余额'
-                },
-                {
-                    field: 'companyGrowthM',
-                    title: '公司存款-月增'
-                },
-                {
-                    field: 'companyGrowthY',
-                    title: '公司存款-年增'
-                },
-                {
-                    field: 'unhealthyRate',
-                    title: '不良率'
-                },
-                {
-                    field: 'overdueRate',
-                    title: '逾期率'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function(value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }]
-            };
-            $.table.init(options);
+    $(function () {
+        var nowDate = new Date();
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1;
+        var monthStr = year + "-" + (month < 10 ? "0" + month : month);
+        $("#search_month").val(monthStr);
+        // 搜索时间选择器初始化
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //年月选择器
+            laydate.render({
+                elem: '#search_month',
+                type: 'month',
+                value: new Date()
+            });
         });
-    </script>
+
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "全行KPI指标（二）",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [
+                [
+                    {
+                        title: '全行KPI指标（二）',
+                        align: 'center',
+                        colspan: 18
+                    }
+                ],
+                [
+                    {
+                        rowspan: 2,
+                        field: 'district',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '地区'
+                    },
+                    {
+                        title: '存款合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '其中：1.邮储自营',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '2.邮储代理',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '3.公司存款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '贷款合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        field: 'unhealthyRate',
+                        title: '不良率(%)',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2
+                    },
+                    {
+                        field: 'overdueRate',
+                        title: '逾期率(%)',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2
+                    }
+                ],
+                [
+                    {
+                        field: 'depositBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'depositGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'depositGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'selfBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'selfGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'selfGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'agentBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'agentGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'agentGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'loanBalance',
+                        title: '余额'
+                    },
+                    {
+                        field: 'loanGrowthM',
+                        title: '月增'
+                    },
+                    {
+                        field: 'loanGrowthY',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
+        var options_rowEdit = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            importUrl: prefix + "/importData",
+            importTemplateUrl: prefix + "/importTemplate",
+            modalName: "全行KPI指标（二）",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            onEditableSave: onEditableSave,
+            columns: [
+                [
+                    {
+                        title: '全行KPI指标（二）',
+                        align: 'center',
+                        colspan: 18
+                    }
+                ],
+                [
+                    {
+                        rowspan: 2,
+                        field: 'district',
+                        align: 'center',
+                        valign: 'middle',
+                        title: '地区'
+                    },
+                    {
+                        title: '存款合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '其中：1.邮储自营',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '2.邮储代理',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '3.公司存款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '贷款合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        field: 'unhealthyRate',
+                        title: '不良率(%)',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2,
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '不良率数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '不良率数据是数字';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        field: 'overdueRate',
+                        title: '逾期率(%)',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2,
+                        editable : {
+                            type : 'text',
+                            emptytext : "",
+                            validate : function(value) {
+                                if (value.length > 16) {
+                                    return '逾期率数据不能超过16个字符';
+                                }
+                                if(!isNumber(value)){
+                                    return '逾期率数据是数字';
+                                }
+                            }
+                        }
+                    }
+                ],
+                [
+                    {
+                        field: 'depositBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'depositGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'depositGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'selfBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'selfGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'selfGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'agentBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'agentGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'agentGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'loanBalance',
+                        title: '余额'
+                    },
+                    {
+                        field: 'loanGrowthM',
+                        title: '月增'
+                    },
+                    {
+                        field: 'loanGrowthY',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
+        var options1 = {
+            id: "bootstrap-table1",
+            url: prefix1 + "/list",
+            createUrl: prefix1 + "/add",
+            updateUrl: prefix1 + "/edit/{id}",
+            removeUrl: prefix1 + "/remove",
+            exportUrl: prefix1 + "/export",
+            modalName: "全行KPI指标（二）-附表",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [
+                [
+                    {
+                        field: 'district',
+                        title: '地区',
+                        align: 'center',
+                        valign: 'middle',
+                        rowspan: 2
+                    },
+                    {
+                        title: '合计',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '个人零售贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '小企业贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '公司贷款',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '供应链',
+                        align: 'center',
+                        colspan: 3
+                    },
+                    {
+                        title: '票据融资',
+                        align: 'center',
+                        colspan: 3
+                    }
+                ],
+                [
+                    {
+                        field: 'totalBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'totalGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'totalGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'retailBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'retailGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'retailGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'smallBusinessBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'smallBusinessGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'smallBusinessGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'companyBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'companyGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'companyGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'supplyChainBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'supplyChainGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'supplyChainGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    },
+                    {
+                        field: 'billFinancingBalance',
+                        align: 'center',
+                        title: '余额'
+                    },
+                    {
+                        field: 'billFinancingGrowthM',
+                        align: 'center',
+                        title: '月增'
+                    },
+                    {
+                        field: 'billFinancingGrowthY',
+                        align: 'center',
+                        title: '年增'
+                    }
+                ]
+            ]
+        };
+
+
+        $.table.init(options1);
+        if (rowEditFlag !== "hidden"){
+            $.table.init(options_rowEdit);
+        } else {
+            $.table.init(options);
+        }
+
+    });
+
+    function onEditableSave (field, row, rowIndex, oldValue, $el) {
+        console.log("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue);
+        let postData = {"id":row['id']};
+        postData[field] = row[field] ? row[field]/100 : row[field];
+        $.ajax({
+            type: "post",
+            url: prefix + "/edit",
+            data: postData,
+            success: function (result, status) {
+                //成功返回数据，status状态为 success  200
+                if (status == 'success') {
+
+                    if (result.code == web_status.SUCCESS) {
+                        $.modal.closeAll();
+                        //$.modal.alertSuccess(result.msg);
+                    } else if (result.code == web_status.WARNING) {
+                        $el.text(oldValue);//修改失败，还原当前元素的初始值
+                        $.modal.alertWarning(result.msg);
+                        $.table.refresh("bootstrap-table");
+                    } else {
+                        $el.text(oldValue);//修改失败，还原当前元素的初始值
+                        $.modal.alertError(result.msg);
+                        $.table.refresh("bootstrap-table")
+                    }
+                }else{
+                    $.modal.msgError("修改失败！");
+                    $el.text(initValue);//修改失败，还原当前元素的初始值   修改标签文本
+                }
+            },
+
+            error: function () {
+                return '编辑失败';//$.modal.msgError("修改失败！");
+            },
+            complete: function () {
+
+            }
+        });
+    }
+
+    /**
+     * 验证数据 是数字：返回true；不是数字：返回false
+     **/
+    function isNumber(val){
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if(regPos.test(val) || regNeg.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+        // if (parseFloat(val).toString() == "NaN") {
+        //
+        //     return false;
+        // } else {
+        //     return true;
+        // }
+    }
+</script>
 </body>
 <!-- 导入区域 -->
 <script id="import_source_data" type="text/template">
@@ -163,7 +638,8 @@
             </font>
             <hr/>
             <div>
-                <a onclick="$.table.importTemplate(true)" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i>
+                <a onclick="$.table.importTemplate(true)" class="btn btn-default btn-xs"><i
+                        class="fa fa-file-excel-o"></i>
                     下载模板</a>
             </div>
 

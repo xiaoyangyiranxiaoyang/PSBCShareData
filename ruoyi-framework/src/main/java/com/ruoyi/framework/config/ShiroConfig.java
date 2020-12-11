@@ -270,7 +270,9 @@ public class ShiroConfig
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 对静态资源设置匿名访问
         filterChainDefinitionMap.put("/psbc.ico**", "anon");
-        filterChainDefinitionMap.put("/PSBC2.png**", "anon");
+        filterChainDefinitionMap.put("/logo1.jpg**", "anon");
+        filterChainDefinitionMap.put("/logo2.png**", "anon");
+        filterChainDefinitionMap.put("/logo3.jpg**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
         filterChainDefinitionMap.put("/docs/**", "anon");
         filterChainDefinitionMap.put("/fonts/**", "anon");

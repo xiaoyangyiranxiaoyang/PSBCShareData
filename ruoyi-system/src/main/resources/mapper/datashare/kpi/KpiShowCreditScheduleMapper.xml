@@ -154,4 +154,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <select id="selectByDataDate" parameterType="Date" resultMap="KpiShowCreditScheduleResult">
+        <include refid="selectKpiShowCreditScheduleVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from kpi_show_credit_schedule where data_date = #{dataDate}
+    </delete>
+
 </mapper>

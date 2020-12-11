@@ -1,9 +1,13 @@
 package com.ruoyi.web.controller.kpi;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.Arith;
 import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -31,14 +35,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 全行KPI指标（二）Controller
- * 
+ *
  * @author mql
  * @date 2020-11-25
  */
 @Controller
 @RequestMapping("/datashare/kpi/credit")
-public class KpiShowCreditController extends BaseController
-{
+public class KpiShowCreditController extends BaseController {
     private String prefix = "datashare/kpi/credit";
 
     @Autowired
@@ -46,8 +49,7 @@ public class KpiShowCreditController extends BaseController
 
     @RequiresPermissions("datashare/kpi:credit:view")
     @GetMapping()
-    public String credit()
-    {
+    public String credit() {
         return prefix + "/credit";
     }
 
@@ -57,10 +59,34 @@ public class KpiShowCreditController extends BaseController
     @RequiresPermissions("datashare/kpi:credit:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(KpiShowCredit kpiShowCredit)
-    {
-        startPage();
+    public TableDataInfo list(KpiShowCredit kpiShowCredit) {
+        //startPage();
         List<KpiShowCredit> list = kpiShowCreditService.selectKpiShowCreditList(kpiShowCredit);
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    item.setDepositBalance(Arith.round(item.getDepositBalance(), 0));
+                    item.setDepositGrowthM(Arith.round(item.getDepositGrowthM(), 0));
+                    item.setDepositGrowthY(Arith.round(item.getDepositGrowthY(), 0));
+
+                    item.setSelfBalance(Arith.round(item.getSelfBalance(), 0));
+                    item.setSelfGrowthM(Arith.round(item.getSelfGrowthM(), 0));
+                    item.setSelfGrowthY(Arith.round(item.getSelfGrowthY(), 0));
+
+                    item.setAgentBalance(Arith.round(item.getAgentBalance(), 0));
+                    item.setAgentGrowthM(Arith.round(item.getAgentGrowthM(), 0));
+                    item.setAgentGrowthY(Arith.round(item.getAgentGrowthY(), 0));
+
+                    item.setCompanyBalance(Arith.round(item.getCompanyBalance(), 0));
+                    item.setCompanyGrowthM(Arith.round(item.getCompanyGrowthM(), 0));
+                    item.setCompanyGrowthY(Arith.round(item.getCompanyGrowthY(), 0));
+
+                    item.setLoanBalance(Arith.round(item.getLoanBalance(), 0));
+                    item.setLoanGrowthM(Arith.round(item.getLoanGrowthM(), 0));
+                    item.setLoanGrowthY(Arith.round(item.getLoanGrowthY(), 0));
+
+                    item.setUnhealthyRate(Arith.round(Arith.mul(item.getUnhealthyRate(), new BigDecimal(100)), 2));
+                    item.setOverdueRate(Arith.round(Arith.mul(item.getOverdueRate(), new BigDecimal(100)), 2));
+                });
         return getDataTable(list);
     }
 
@@ -71,8 +97,7 @@ public class KpiShowCreditController extends BaseController
     @Log(title = "全行KPI指标（二）", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(KpiShowCredit kpiShowCredit)
-    {
+    public AjaxResult export(KpiShowCredit kpiShowCredit) {
         List<KpiShowCredit> list = kpiShowCreditService.selectKpiShowCreditList(kpiShowCredit);
         ExcelUtil<KpiShowCredit> util = new ExcelUtil<KpiShowCredit>(KpiShowCredit.class);
         return util.exportExcel(list, "credit");
@@ -80,6 +105,7 @@ public class KpiShowCreditController extends BaseController
 
     /**
      * KPI 源数据导入
+     *
      * @param file
      * @param dataMonth
      * @return
@@ -89,21 +115,20 @@ public class KpiShowCreditController extends BaseController
     @RequiresPermissions("datashare/kpi:credit:import")
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file, String dataMonth) throws Exception
-    {
+    public AjaxResult importData(MultipartFile file, String dataMonth) throws Exception {
         String operName = ShiroUtils.getSysUser().getLoginName();
-        String message = kpiShowCreditService.importKpiIncomeShow(file.getInputStream(), dataMonth, operName);
+        String message = kpiShowCreditService.importKpiSourceData(file.getInputStream(), dataMonth, operName);
         return AjaxResult.success(message);
     }
 
     /**
      * KPI 源数据导入模板下载
+     *
      * @param response
      */
     @RequiresPermissions("datashare/kpi:credit:view")
     @GetMapping("/importTemplate")
-    public void importTemplate(HttpServletResponse response)
-    {
+    public void importTemplate(HttpServletResponse response) {
         try {
             File f = new DefaultResourceLoader().getResource("classpath:templates/datashare/kpi/importtemplate/Template-KPI-data_source.xls").getFile();
 
@@ -120,8 +145,7 @@ public class KpiShowCreditController extends BaseController
      * 新增全行KPI指标（二）
      */
     @GetMapping("/add")
-    public String add()
-    {
+    public String add() {
         return prefix + "/add";
     }
 
@@ -132,8 +156,7 @@ public class KpiShowCreditController extends BaseController
     @Log(title = "全行KPI指标（二）", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(KpiShowCredit kpiShowCredit)
-    {
+    public AjaxResult addSave(KpiShowCredit kpiShowCredit) {
         return toAjax(kpiShowCreditService.insertKpiShowCredit(kpiShowCredit));
     }
 
@@ -141,8 +164,7 @@ public class KpiShowCreditController extends BaseController
      * 修改全行KPI指标（二）
      */
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap)
-    {
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
         KpiShowCredit kpiShowCredit = kpiShowCreditService.selectKpiShowCreditById(id);
         mmap.put("kpiShowCredit", kpiShowCredit);
         return prefix + "/edit";
@@ -155,8 +177,7 @@ public class KpiShowCreditController extends BaseController
     @Log(title = "全行KPI指标（二）", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(KpiShowCredit kpiShowCredit)
-    {
+    public AjaxResult editSave(KpiShowCredit kpiShowCredit) {
         return toAjax(kpiShowCreditService.updateKpiShowCredit(kpiShowCredit));
     }
 
@@ -165,10 +186,9 @@ public class KpiShowCreditController extends BaseController
      */
     @RequiresPermissions("datashare/kpi:credit:remove")
     @Log(title = "全行KPI指标（二）", businessType = BusinessType.DELETE)
-    @PostMapping( "/remove")
+    @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
+    public AjaxResult remove(String ids) {
         return toAjax(kpiShowCreditService.deleteKpiShowCreditByIds(ids));
     }
 }

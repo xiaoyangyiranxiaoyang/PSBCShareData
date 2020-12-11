@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.kpi;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.ruoyi.common.utils.Arith;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +55,34 @@ public class KpiShowAssetBusinessScheduleController extends BaseController
     {
         startPage();
         List<KpiShowAssetBusinessSchedule> list = kpiShowAssetBusinessScheduleService.selectKpiShowAssetBusinessScheduleList(kpiShowAssetBusinessSchedule);
+        // 去小数位
+        Optional.ofNullable(list).orElse(new ArrayList<>()).stream()
+                .forEach(item -> {
+                    item.setTotalBalance(Arith.round(item.getTotalBalance(), 0));
+                    item.setTotalGrowthM(Arith.round(item.getTotalGrowthM(), 0));
+                    item.setTotalGrowthY(Arith.round(item.getTotalGrowthY(), 0));
+
+                    item.setCompanyBalance(Arith.round(item.getCompanyBalance(), 0));
+                    item.setCompanyGrowthM(Arith.round(item.getCompanyGrowthM(), 0));
+                    item.setCompanyGrowthY(Arith.round(item.getCompanyGrowthY(), 0));
+
+                    item.setDirectPasteBalance(Arith.round(item.getDirectPasteBalance(), 0));
+                    item.setDirectPasteGrowthM(Arith.round(item.getDirectPasteGrowthM(), 0));
+                    item.setDirectPasteGrowthY(Arith.round(item.getDirectPasteGrowthY(), 0));
+
+                    item.setRediscountBalance(Arith.round(item.getRediscountBalance(), 0));
+                    item.setRediscountGrowthM(Arith.round(item.getRediscountGrowthM(), 0));
+                    item.setRediscountGrowthY(Arith.round(item.getRediscountGrowthY(), 0));
+
+                    item.setSupplyChainBalance(Arith.round(item.getSupplyChainBalance(), 0));
+                    item.setSupplyChainGrowthM(Arith.round(item.getSupplyChainGrowthM(), 0));
+                    item.setSupplyChainGrowthY(Arith.round(item.getSupplyChainGrowthY(), 0));
+
+                    item.setInterbankBalance(Arith.round(item.getInterbankBalance(), 0));
+                    item.setInterbankGrowthM(Arith.round(item.getInterbankGrowthM(), 0));
+                    item.setInterbankGrowthY(Arith.round(item.getInterbankGrowthY(), 0));
+
+                });
         return getDataTable(list);
     }
 

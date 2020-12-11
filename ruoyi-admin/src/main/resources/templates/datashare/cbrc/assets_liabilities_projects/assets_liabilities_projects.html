@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('银行业机构资产负债主要项目统计列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>数据年月：</label>
+                            <input type="text" class="time-input" id="search_month" placeholder="yyyy-MM"
+                                   data-type="month" name="dataDate"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search();"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-bordered">
+            <table id="bootstrap-table"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('datashare/cbrc:assets_liabilities_projects:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('datashare/cbrc:assets_liabilities_projects:remove')}]];
+    var prefix = ctx + "datashare/cbrc/assets_liabilities_projects";
+
+    var nowDate = new Date();
+    let year = nowDate.getFullYear();
+    let month = nowDate.getMonth() + 1;
+    let monthStr = year + "-" + (month < 10 ? "0" + month : month);
+    $("#search_month").val(monthStr);
+    // 搜索时间选择器初始化
+    layui.use('laydate', function () {
+        let laydate = layui.laydate;
+        //年月选择器
+        laydate.render({
+            elem: '#search_month',
+            type: 'month',
+            value: new Date()
+        });
+    });
+
+    $(function () {
+        var options = {
+            id: "bootstrap-table",
+            url: prefix + "/listShow",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "银行业机构资产负债主要项目统计",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            sortable: false,
+            columns: [
+                [
+                    {
+                        title: '资产',
+                        align: 'center',
+                        colspan: 5
+                    },
+                    {
+                        width: '1'
+                    },
+                    {
+                        title: '负债及所有者权益',
+                        align: 'center',
+                        colspan: 5
+                    }
+                ],
+                [
+                    {
+                        field: 'assets_item',
+                        title: '项目'
+                    },
+                    {
+                        field: 'assets_currentIssue',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'assets_compareBeginYear',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'assets_compareLastMonth',
+                        align: 'right',
+                        title: '比上月'
+                    },
+                    {
+                        field: 'assets_compateLastYearPct',
+                        align: 'right',
+                        title: '比去年同期增减%'
+                    },
+                    {
+                        width: '1',
+                    },
+                    {
+                        field: 'liabilities_item',
+                        title: '项目'
+                    },
+                    {
+                        field: 'liabilities_currentIssue',
+                        align: 'right',
+                        title: '本期'
+                    },
+                    {
+                        field: 'liabilities_compareBeginYear',
+                        align: 'right',
+                        title: '比年初'
+                    },
+                    {
+                        field: 'liabilities_compareLastMonth',
+                        align: 'right',
+                        title: '比上月'
+                    },
+                    {
+                        field: 'liabilities_compateLastYearPct',
+                        align: 'right',
+                        title: '比去年同期增减%'
+                    }
+                ]
+
+            ]
+        };
+        $.table.init(options);
+    });
+</script>
+</body>
+</html>
