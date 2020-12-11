@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.datashare.cbrc.mapper.CbrcLoanFiveLevelsDetailMapper">
+
+    <resultMap type="CbrcLoanFiveLevelsDetail" id="CbrcLoanFiveLevelsDetailResult">
+        <result property="id" column="id"/>
+        <result property="institution" column="institution"/>
+        <result property="normalBalance" column="normal_balance"/>
+        <result property="normalGrowthY" column="normal_growth_y"/>
+        <result property="interestBalance" column="interest_balance"/>
+        <result property="interestGrowthY" column="interest_growth_y"/>
+        <result property="secondaryBalance" column="secondary_balance"/>
+        <result property="secondaryGrowthY" column="secondary_growth_y"/>
+        <result property="doubtBalance" column="doubt_balance"/>
+        <result property="doubtGrowthY" column="doubt_growth_y"/>
+        <result property="lossBalance" column="loss_balance"/>
+        <result property="lossGrowthY" column="loss_growth_y"/>
+        <result property="dataDate" column="data_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectCbrcLoanFiveLevelsDetailVo">
+        select id, institution, normal_balance, normal_growth_y, interest_balance, interest_growth_y, secondary_balance, secondary_growth_y, doubt_balance, doubt_growth_y, loss_balance, loss_growth_y, data_date, del_flag, create_by, create_time, update_by, update_time, remark from cbrc_loan_five_levels_detail
+    </sql>
+
+    <select id="selectCbrcLoanFiveLevelsDetailList" parameterType="CbrcLoanFiveLevelsDetail"
+            resultMap="CbrcLoanFiveLevelsDetailResult">
+        <include refid="selectCbrcLoanFiveLevelsDetailVo"/>
+        <where>
+            <if test="dataDate != null ">and data_date = #{dataDate}</if>
+        </where>
+    </select>
+
+    <select id="selectCbrcLoanFiveLevelsDetailById" parameterType="Long" resultMap="CbrcLoanFiveLevelsDetailResult">
+        <include refid="selectCbrcLoanFiveLevelsDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCbrcLoanFiveLevelsDetail" parameterType="CbrcLoanFiveLevelsDetail" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into cbrc_loan_five_levels_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="institution != null">institution,</if>
+            <if test="normalBalance != null">normal_balance,</if>
+            <if test="normalGrowthY != null">normal_growth_y,</if>
+            <if test="interestBalance != null">interest_balance,</if>
+            <if test="interestGrowthY != null">interest_growth_y,</if>
+            <if test="secondaryBalance != null">secondary_balance,</if>
+            <if test="secondaryGrowthY != null">secondary_growth_y,</if>
+            <if test="doubtBalance != null">doubt_balance,</if>
+            <if test="doubtGrowthY != null">doubt_growth_y,</if>
+            <if test="lossBalance != null">loss_balance,</if>
+            <if test="lossGrowthY != null">loss_growth_y,</if>
+            <if test="dataDate != null">data_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="institution != null">#{institution},</if>
+            <if test="normalBalance != null">#{normalBalance},</if>
+            <if test="normalGrowthY != null">#{normalGrowthY},</if>
+            <if test="interestBalance != null">#{interestBalance},</if>
+            <if test="interestGrowthY != null">#{interestGrowthY},</if>
+            <if test="secondaryBalance != null">#{secondaryBalance},</if>
+            <if test="secondaryGrowthY != null">#{secondaryGrowthY},</if>
+            <if test="doubtBalance != null">#{doubtBalance},</if>
+            <if test="doubtGrowthY != null">#{doubtGrowthY},</if>
+            <if test="lossBalance != null">#{lossBalance},</if>
+            <if test="lossGrowthY != null">#{lossGrowthY},</if>
+            <if test="dataDate != null">#{dataDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCbrcLoanFiveLevelsDetail" parameterType="CbrcLoanFiveLevelsDetail">
+        update cbrc_loan_five_levels_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="institution != null">institution = #{institution},</if>
+            <if test="normalBalance != null">normal_balance = #{normalBalance},</if>
+            <if test="normalGrowthY != null">normal_growth_y = #{normalGrowthY},</if>
+            <if test="interestBalance != null">interest_balance = #{interestBalance},</if>
+            <if test="interestGrowthY != null">interest_growth_y = #{interestGrowthY},</if>
+            <if test="secondaryBalance != null">secondary_balance = #{secondaryBalance},</if>
+            <if test="secondaryGrowthY != null">secondary_growth_y = #{secondaryGrowthY},</if>
+            <if test="doubtBalance != null">doubt_balance = #{doubtBalance},</if>
+            <if test="doubtGrowthY != null">doubt_growth_y = #{doubtGrowthY},</if>
+            <if test="lossBalance != null">loss_balance = #{lossBalance},</if>
+            <if test="lossGrowthY != null">loss_growth_y = #{lossGrowthY},</if>
+            <if test="dataDate != null">data_date = #{dataDate},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCbrcLoanFiveLevelsDetailById" parameterType="Long">
+        delete from cbrc_loan_five_levels_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteCbrcLoanFiveLevelsDetailByIds" parameterType="String">
+        delete from cbrc_loan_five_levels_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByDataDate" parameterType="Date" resultMap="CbrcLoanFiveLevelsDetailResult">
+        <include refid="selectCbrcLoanFiveLevelsDetailVo"/>
+        where data_date = #{dataDate}
+    </select>
+
+    <delete id="deleteByDataDate" parameterType="Date">
+        delete from cbrc_loan_five_levels_detail where data_date = #{dataDate}
+    </delete>
+
+    <insert id="insertBatch" parameterType="CbrcLoanFiveLevelsDetail">
+        insert into
+        cbrc_loan_five_levels_detail(id,institution,normal_balance,normal_growth_y,interest_balance,interest_growth_y,secondary_balance,secondary_growth_y,doubt_balance,doubt_growth_y,loss_balance,loss_growth_y,data_date,del_flag,create_by,create_time,update_by,update_time,remark)
+        values
+        <foreach collection="list" item="kk" separator=",">
+            (#{kk.id},#{kk.institution},#{kk.normalBalance},#{kk.normalGrowthY},#{kk.interestBalance},#{kk.interestGrowthY},#{kk.secondaryBalance},#{kk.secondaryGrowthY},#{kk.doubtBalance},#{kk.doubtGrowthY},#{kk.lossBalance},#{kk.lossGrowthY},#{kk.dataDate},#{kk.delFlag},#{kk.createBy},#{kk.createTime},#{kk.updateBy},#{kk.updateTime},#{kk.remark})
+        </foreach>
+    </insert>
+</mapper>

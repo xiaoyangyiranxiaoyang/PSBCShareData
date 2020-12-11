@@ -39,6 +39,10 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
     private CbrcDepositLoanInstitutionMapper cbrcDepositLoanInstitutionMapper;
     @Autowired
     private CbrcDepositLoanMonthlyDailyAvgMapper cbrcDepositLoanMonthlyDailyAvgMapper;
+    @Autowired
+    private CbrcLoanFiveLevelsUnhealthyMapper cbrcLoanFiveLevelsUnhealthyMapper;
+    @Autowired
+    private CbrcLoanFiveLevelsDetailMapper cbrcLoanFiveLevelsDetailMapper;
 
     /**
      * 查询主要监管指标汇总
@@ -147,6 +151,16 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
             Map<Integer, Map<Integer, Object>> excelDataMap_depositLoanMDavg = allSheetDataMap.get("青海省分机构存贷款月日均情况表");
             if (null == excelDataMap_assetsLiabilitiesMajorIndicator) {
                 rrMsg = "导入数据失败，无法获取“青海省分机构存贷款月日均情况表”数据！";
+                new RuntimeException(rrMsg);
+            }
+            Map<Integer, Map<Integer, Object>> excelDataMap_fiveLevelsUnhealthy = allSheetDataMap.get("青海省银行业金融机构贷款五级分类不良情况表");
+            if (null == excelDataMap_assetsLiabilitiesMajorIndicator) {
+                rrMsg = "导入数据失败，无法获取“青海省银行业金融机构贷款五级分类不良情况表”数据！";
+                new RuntimeException(rrMsg);
+            }
+            Map<Integer, Map<Integer, Object>> excelDataMap_fiveLevelsDetail = allSheetDataMap.get("青海省银行业金融机构贷款五级分类明细表");
+            if (null == excelDataMap_assetsLiabilitiesMajorIndicator) {
+                rrMsg = "导入数据失败，无法获取“青海省银行业金融机构贷款五级分类明细表”数据！";
                 new RuntimeException(rrMsg);
             }
 
@@ -352,6 +366,81 @@ public class CbrcMajorRegulatoryIndicatorsServiceImpl implements ICbrcMajorRegul
                 }
                 // 导入当月的数据
                 cbrcDepositLoanMonthlyDailyAvgMapper.insertBatch(datasToInsert_depositLoanMDavg);
+            }
+
+            // 6. 青海省银行业金融机构贷款五级分类不良情况表
+            List<CbrcLoanFiveLevelsUnhealthy> datasToInsert_fiveLevelsUnhealthy = new LinkedList<>();
+            // 获取3~29行，1~7列数据并组装入库
+            for (int rowNum = 3; rowNum <= 29; rowNum++) {
+                Map<Integer, Object> columnDataMap = excelDataMap_fiveLevelsUnhealthy.get(rowNum);
+                if (columnDataMap != null && !columnDataMap.isEmpty()) {
+                    CbrcLoanFiveLevelsUnhealthy one = new CbrcLoanFiveLevelsUnhealthy();
+
+                    one.setInstitution(Convert.toStr(columnDataMap.get(1)));
+
+                    one.setLoanBalance(Convert.toBigDecimal(columnDataMap.get(2)));
+                    one.setLoanGrowthY(Convert.toBigDecimal(columnDataMap.get(3)));
+
+                    one.setLoanUnhealthyBalance(Convert.toBigDecimal(columnDataMap.get(4)));
+                    one.setLoanUnhealthyGrowthY(Convert.toBigDecimal(columnDataMap.get(5)));
+
+                    one.setLoanUnhealthyPct(Convert.toBigDecimal(columnDataMap.get(6)));
+                    one.setLoanUnhealthyPctGrowthY(Convert.toBigDecimal(columnDataMap.get(7)));
+
+                    one.setDataDate(dataDate);
+                    one.setDelFlag("0");
+                    one.setCreateBy(operName);
+                    one.setCreateTime(dateNow);
+
+                    datasToInsert_fiveLevelsUnhealthy.add(one);
+                }
+            }
+            if (!datasToInsert_fiveLevelsUnhealthy.isEmpty()) {
+                // 先删除当月数据
+                List<CbrcLoanFiveLevelsUnhealthy> oldDatas = cbrcLoanFiveLevelsUnhealthyMapper.selectByDataDate(dataDate);
+                if (oldDatas != null && !oldDatas.isEmpty()) {
+                    cbrcLoanFiveLevelsUnhealthyMapper.deleteByDataDate(dataDate);
+                }
+                // 导入当月的数据
+                cbrcLoanFiveLevelsUnhealthyMapper.insertBatch(datasToInsert_fiveLevelsUnhealthy);
+            }
+
+            // 7. 青海省银行业金融机构贷款五级分类明细表
+            List<CbrcLoanFiveLevelsDetail> datasToInsert_fiveLevelsDetail = new LinkedList<>();
+            // 获取 4~30 行，1~13 列数据并组装入库
+            for (int rowNum = 4; rowNum <= 30; rowNum++) {
+                Map<Integer, Object> columnDataMap = excelDataMap_fiveLevelsDetail.get(rowNum);
+                if (columnDataMap != null && !columnDataMap.isEmpty()) {
+                    CbrcLoanFiveLevelsDetail one = new CbrcLoanFiveLevelsDetail();
+
+                    one.setInstitution(Convert.toStr(columnDataMap.get(1)));
+                    one.setNormalBalance(Convert.toBigDecimal(columnDataMap.get(2)));
+                    one.setNormalGrowthY(Convert.toBigDecimal(columnDataMap.get(3)));
+                    one.setInterestBalance(Convert.toBigDecimal(columnDataMap.get(4)));
+                    one.setInterestGrowthY(Convert.toBigDecimal(columnDataMap.get(5)));
+                    one.setSecondaryBalance(Convert.toBigDecimal(columnDataMap.get(6)));
+                    one.setSecondaryGrowthY(Convert.toBigDecimal(columnDataMap.get(7)));
+                    one.setDoubtBalance(Convert.toBigDecimal(columnDataMap.get(8)));
+                    one.setDoubtGrowthY(Convert.toBigDecimal(columnDataMap.get(9)));
+                    one.setLossBalance(Convert.toBigDecimal(columnDataMap.get(10)));
+                    one.setLossGrowthY(Convert.toBigDecimal(columnDataMap.get(11)));
+
+                    one.setDataDate(dataDate);
+                    one.setDelFlag("0");
+                    one.setCreateBy(operName);
+                    one.setCreateTime(dateNow);
+
+                    datasToInsert_fiveLevelsDetail.add(one);
+                }
+            }
+            if (!datasToInsert_fiveLevelsDetail.isEmpty()) {
+                // 先删除当月数据
+                List<CbrcLoanFiveLevelsDetail> oldDatas = cbrcLoanFiveLevelsDetailMapper.selectByDataDate(dataDate);
+                if (oldDatas != null && !oldDatas.isEmpty()) {
+                    cbrcLoanFiveLevelsDetailMapper.deleteByDataDate(dataDate);
+                }
+                // 导入当月的数据
+                cbrcLoanFiveLevelsDetailMapper.insertBatch(datasToInsert_fiveLevelsDetail);
             }
 
         rrMsg = "数据导入成功!";
