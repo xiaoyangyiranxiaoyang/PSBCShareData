@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.psbc.credit.mapper.LoanAccountabilityMapper">
+
+    <resultMap type="com.psbc.credit.domain.LoanAccountability" id="LoanAccountabilityMap">
+        <result property="id" column="id" jdbcType="OTHER"/>
+        <result property="loadRctId" column="load_rct_id" jdbcType="VARCHAR"/>
+        <result property="accountabilityType" column="accountability_type" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="accountabilityState" column="accountability_state" jdbcType="INTEGER"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="serverIp" column="server_ip" jdbcType="VARCHAR"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LoanAccountabilityMap">
+        select
+          id, load_rct_id, accountability_type, remark, accountability_state, create_by, create_time, server_ip, update_by, update_time, del_flag
+        from loan_accountability
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LoanAccountabilityMap">
+        select
+          id, load_rct_id, accountability_type, remark, accountability_state, create_by, create_time, server_ip, update_by, update_time, del_flag
+        from loan_accountability
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="LoanAccountabilityMap">
+        select
+        id, load_rct_id, accountability_type, remark, accountability_state, create_by, create_time, server_ip,
+        update_by, update_time, del_flag
+        from loan_accountability
+        <where>
+            del_flag = 0
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="loadRctId != null and loadRctId != ''">
+                and load_rct_id = #{loadRctId}
+            </if>
+            <if test="accountabilityType != null">
+                and accountability_type = #{accountabilityType}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="accountabilityState != null">
+                and accountability_state = #{accountabilityState}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delFlag != null">
+                and del_flag = #{delFlag}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into loan_accountability(load_rct_id, accountability_type, remark, accountability_state, create_by, create_time, server_ip, update_by, update_time, del_flag)
+        values (#{loadRctId}, #{accountabilityType}, #{remark}, #{accountabilityState}, #{createBy}, #{createTime}, #{serverIp}, #{updateBy}, #{updateTime}, #{delFlag})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update loan_accountability
+        <set>
+            <if test="loadRctId != null and loadRctId != ''">
+                load_rct_id = #{loadRctId},
+            </if>
+            <if test="accountabilityType != null">
+                accountability_type = #{accountabilityType},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="accountabilityState != null">
+                accountability_state = #{accountabilityState},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                server_ip = #{serverIp},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag},
+            </if>
+        </set>
+        where  del_flag = 0 and id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from loan_accountability where id = #{id}
+    </delete>
+
+</mapper>
