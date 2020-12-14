@@ -7,6 +7,7 @@ import com.psbc.credit.service.LoanExemptionService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ import java.util.List;
  * @author wangLin
  * @since 2020-12-11 15:44:39
  */
-@RestController
+@Controller
 @RequestMapping("credit/exemption")
 public class LoanExemptionController extends BaseController {
     /**
