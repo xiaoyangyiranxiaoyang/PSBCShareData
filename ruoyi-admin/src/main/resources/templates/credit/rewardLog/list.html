@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('信贷免责记录列表')" />
+	<th:block th:include="include :: header('信贷异常提醒记录列表')" />
 </head>
 <body class="gray-bg">
 	<div class="container-div">
@@ -12,12 +12,6 @@
 						<ul>
 							<li>
 								借据号：<input type="text" name="loadRctId"/>
-							</li>
-							<li>
-								免责原因：<select name="loanType" th:with="type=${@dict.getType('loan_exemption_type')}">
-								<option value="">所有</option>
-								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-							</select>
 							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -37,7 +31,7 @@
 		var addFlag = [[${@permission.hasPermi('credit:exemption:add')}]];
 		var editFlag = [[${@permission.hasPermi('credit:exemption:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('credit:exemption:remove')}]];
-		var prefix = ctx + "credit/exemption"
+		var prefix = ctx + "credit/reward/log"
 
 		$(function() {
 			var options = {
@@ -56,16 +50,21 @@
 						align: "left"
 					},
 					{
-						field: 'exemptionType',
-						title: '问责原因',
+						field: 'noticeType',
+						title: '异常类型',
 						align: "center",
 						formatter: function(value, item, index) {
 							return $.table.selectDictLabel(datas, item.status);
 						}
 					},
 					{
-						field: 'remark',
-						title: '备注',
+						field: 'noticeReason',
+						title: '异常原因',
+						align: "center"
+					},
+					{
+						field: 'isHandle',
+						title: '是否处理',
 						align: "center"
 					},
 					{

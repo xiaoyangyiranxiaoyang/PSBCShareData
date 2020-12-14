@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020-12-11 15:44:39
  */
 @RestController
-@RequestMapping("loan/exemption/")
+@RequestMapping("credit/exemption/")
 public class LoanExemptionController extends BaseController {
     /**
      * 服务对象

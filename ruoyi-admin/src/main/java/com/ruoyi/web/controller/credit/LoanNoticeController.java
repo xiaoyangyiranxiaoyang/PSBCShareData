@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2020-12-11 15:45:19
  */
 @RestController
-@RequestMapping("loan/notice/")
+@RequestMapping("credit/notice/")
 public class LoanNoticeController extends BaseController {
     /**
      * 服务对象
