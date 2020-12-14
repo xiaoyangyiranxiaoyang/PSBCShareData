@@ -42,7 +42,7 @@ public class LoanRewardLogController extends BaseController {
      * @param loanRewardLog 查询参数
      * @return 多条数据`
      */
-    @PostMapping("list")
+    @PostMapping("/list")
     @RequiresPermissions("credit:reward:log:list")
     @ResponseBody
     public TableDataInfo list(LoanRewardLog loanRewardLog)

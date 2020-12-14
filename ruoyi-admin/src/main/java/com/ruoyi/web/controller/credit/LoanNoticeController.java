@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2020-12-11 15:45:19
  */
 @RestController
-@RequestMapping("credit/notice/")
+@RequestMapping("credit/notice")
 public class LoanNoticeController extends BaseController {
     /**
      * 服务对象
@@ -46,7 +46,7 @@ public class LoanNoticeController extends BaseController {
      * @param loanNotice 查询参数
      * @return 多条数据`
      */
-    @PostMapping("list")
+    @PostMapping("/list")
     @RequiresPermissions("credit:notice:list")
     @ResponseBody
     public TableDataInfo list(LoanNotice loanNotice)

@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020-12-11 14:37:53
  */
 @RestController
-@RequestMapping("/credit/accountability/")
+@RequestMapping("/credit/accountability")
 public class LoanAccountabilityController extends BaseController {
     private String prefix = "credit/accountability/";
     /**
@@ -44,7 +44,7 @@ public class LoanAccountabilityController extends BaseController {
      * @param loanAccountability 查询参数
      * @return 多条数据`
      */
-    @PostMapping("list")
+    @PostMapping("/list")
     @RequiresPermissions("credit:accountability:list")
     @ResponseBody
     public TableDataInfo list(LoanAccountability loanAccountability)

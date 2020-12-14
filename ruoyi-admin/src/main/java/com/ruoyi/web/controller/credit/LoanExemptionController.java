@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2020-12-11 15:44:39
  */
 @RestController
-@RequestMapping("credit/exemption/")
+@RequestMapping("credit/exemption")
 public class LoanExemptionController extends BaseController {
     /**
      * 服务对象
@@ -44,7 +44,7 @@ public class LoanExemptionController extends BaseController {
      * @param loanExemption 查询参数
      * @return 多条数据`
      */
-    @PostMapping("list")
+    @PostMapping("/list")
     @RequiresPermissions("credit:exemption:list")
     @ResponseBody
     public TableDataInfo list(LoanExemption loanExemption)
